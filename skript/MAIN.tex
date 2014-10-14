@@ -1,0 +1,146 @@
+\documentclass[11pt,a4paper,ngerman]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+%\usepackage{MyriadPro}
+\usepackage[scaled]{beramono}
+\newcommand\Small{\fontsize{10.5}{10.5}\selectfont}
+\newcommand*\LSTfont{\Small\ttfamily\SetTracking{encoding=*}{-20}\lsstyle}
+\usepackage{microtype}
+\usepackage{geometry}
+\usepackage{caption}
+\usepackage{calc} 
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{paralist}
+\usepackage{stmaryrd}
+\usepackage{units}
+\usepackage{fancyref}
+\usepackage{fancyhdr} 
+\usepackage{makeidx}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{float}
+\usepackage[flushleft]{threeparttable}
+\usepackage{marginnote}
+% http://latextutorials.co.uk/documentation/theorems-and-definitions/
+\usepackage{amsthm}
+\newtheoremstyle{defn}  % follow `plain` defaults but change HEADSPACE.
+  {\topsep}   % ABOVESPACE
+  {\topsep}   % BELOWSPACE
+  {\itshape}  % BODYFONT
+  {0pt}       % INDENT (empty value is the same as 0pt)
+  {\bfseries} % HEADFONT
+  {.}         % HEADPUNCT
+  {\newline}  % HEADSPACE. `plain` default: {5pt plus 1pt minus 1pt}
+  {}          % CUSTOM-HEAD-SPEC
+\theoremstyle{defn}
+% Theorem Styles
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Vorschlag}
+\newtheorem{corollary}[theorem]{Folge}
+% Definition Styles
+\theoremstyle{defn}
+\newtheorem{defn}{Definition}[section]
+\newtheorem{exap}{Beispiel}[section]
+\theoremstyle{rem}
+\newtheorem{rem}{Bemerkung}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+% http://www.texample.net/tikz/examples/simple-flow-chart/
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,automata}
+\tikzset{
+	treenode/.style = {align=center, inner sep=1pt, text centered,font=\sffamily},
+	node/.style = {treenode, font=\sffamily\bfseries, text width=1.5em},
+	cloud/.style = {draw, circle, fill=red!20, node distance=3cm, minimum height=2em},
+	decision/.style = {diamond, draw, fill=blue!20, text width=6em, text badly centered, node distance=3cm, inner sep=0pt},
+	block/.style = {rectangle, draw, fill=green!20, text width=6em, text centered, rounded corners, minimum height=4em},
+	line/.style = {draw, -latex'}
+}
+
+% Custom Codecaptions
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{%
+  \parbox{\textwidth}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}\vskip 2pt}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white,font={bf,footnotesize}}
+
+% Code Listing Style
+%TODO MATHESCAPE für Indizes!
+\definecolor{darkblue}{rgb}{0,0,.6}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{darkred}{rgb}{0.5,0,0}
+\lstset{%
+	language=C, 
+	basicstyle=\LSTfont,
+	commentstyle=\color{darkgreen}, 
+	keywordstyle=\color{darkblue}\bfseries, 
+	breaklines=true,
+	tabsize=2,
+	xleftmargin=\fboxsep,
+	xrightmargin=-\fboxsep,
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	stepnumber=1,
+	numbersep=5pt,
+	frame=bt,
+	stringstyle=\color{darkred},
+	showstringspaces=false,
+	rulecolor= \color{gray},
+	emph=[1]%
+	{%  
+	    then, PUSH, READ, ADD, LOAD, SUB, STORE, GOTO, MULT, OP, BOP, not, output%
+	},
+	emphstyle=[1]{\color{darkblue}\bfseries},
+	emph=[2]%
+	{%  Datatypes
+	    %
+	},
+	emphstyle=[2]{\color{darkblue}\bfseries},
+	emph=[3]%
+	{%  
+	    MAX, MIN, TRUE, FALSE, skip%
+	},
+	emphstyle=[3]{\color{darkred}\bfseries},
+	literate=%
+	{Ö}{{\"O}}1
+	{Ä}{{\"A}}1
+	{Ü}{{\"U}}1
+	{ß}{{\ss}}2
+	{ü}{{\"u}}1
+	{ä}{{\"a}}1
+	{ö}{{\"o}}1
+}
+%\newcommand{\xRightarrow}[2][]{\ext@arrow 0359\Rightarrowfill@{#1}{#2}}
+\renewcommand{\familydefault}{\sfdefault}
+
+
+\author{Tobias Höppner}
+\title{Vorlesungsmitschrift\\\Huge{Höhere Algorithmik}\\ \small gelesen von Prof. Dr. Günter Rote}
+\date{Wintersemester 2014/2015}
+
+\begin{document}
+\maketitle
+\pagestyle{empty}
+\clearpage\pagenumbering{gobble}
+\tableofcontents
+\clearpage\pagenumbering{arabic}
+% Doku: http://en.wikibooks.org/wiki/LaTeX/Footnotes_and_Margin_Notes
+\newgeometry{top=2.5cm, bottom=2.5cm, outer=4cm, inner=2cm, heightrounded, marginparwidth=3.4cm, marginparsep=0.6cm}
+\include{vl1}
+%\include{demo} % frequently used patterns
+
+\end{document}
