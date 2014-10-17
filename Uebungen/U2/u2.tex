@@ -1,0 +1,99 @@
+\documentclass[ngerman,a4paper]{report}
+\usepackage[ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+%\usepackage{MyriadPro}
+\usepackage[scaled]{beramono}
+\newcommand\Small{\fontsize{10.5}{10.5}\selectfont}
+\newcommand*\LSTfont{\Small\ttfamily\SetTracking{encoding=*}{-20}\lsstyle}
+\usepackage{microtype}
+\usepackage{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{listings}
+\usepackage{stmaryrd}
+\usepackage{paralist}
+\usepackage{array}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{accents}
+\usepackage{tikz}
+\usetikzlibrary{plotmarks}
+
+% Code Listing Style
+\definecolor{darkblue}{rgb}{0,0,.6}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{darkred}{rgb}{0.5,0,0}
+\lstset{%
+	language=C, 
+	basicstyle=\LSTfont,
+	commentstyle=\color{darkgreen}, 
+	keywordstyle=\color{darkblue}\bfseries, 
+	breaklines=true,
+	tabsize=2,
+	xleftmargin=\fboxsep,
+	xrightmargin=-\fboxsep,
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	stepnumber=1,
+	numbersep=5pt,
+	frame=bt,
+	stringstyle=\color{darkred},
+	showstringspaces=false,
+	rulecolor= \color{gray},
+	emph=[1]%
+	{%  
+	    then, not%
+	},
+	emphstyle=[1]{\color{darkblue}\bfseries},
+	emph=[2]%
+	{%  Datatypes
+	    %
+	},
+	emphstyle=[2]{\color{darkblue}\bfseries},
+	emph=[3]%
+	{%  
+	    %
+	},
+	emphstyle=[3]{\color{darkred}\bfseries},
+	literate=%
+	{Ö}{{\"O}}1
+	{Ä}{{\"A}}1
+	{Ü}{{\"U}}1
+	{ß}{{\ss}}2
+	{ü}{{\"u}}1
+	{ä}{{\"a}}1
+	{ö}{{\"o}}1
+}
+\providecommand{\tabularnewline}{\\}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage{lastpage}
+\makeatletter
+
+\lhead{\textbf{\@title} \\ \@author}
+\chead{}
+\rhead{\@date \\ \thepage \ von \pageref{LastPage} }
+\cfoot{}
+
+\renewcommand{\maketitle}{}
+\newcommand{\utilde}[1]{\underaccent{\tilde}{#1}}
+\renewcommand{\familydefault}{\sfdefault}
+ 
+\author{Tobias Höppner}
+\title{HA - Übung 02. }
+\date{Wintersemester 2014/2015}
+
+\begin{document} 
+\maketitle 
+\section*{10.  Schmutzige Tricks im Einheitskostenmaß,  10 Punkte}
+
+Für drei ganzzahlige Vektoren $x=(x_1,x_2,\dots,x_n)$ $y=(y_1,y_2,\dots,y_n)$ und $z=(z_1,z_2,\dots,z_n)$ mit $|x_i|,|y_i|,|z_i| \leq M$ und einen Wert $u > 4M$ betrachten wir die Zahlen $a = x_1u^{n-1}+x_2u^{n-2}+\dots+x_{n-1}u+x_n$,$b = y_1u^{n-1}+y_2u^{n-2}+\dots+y_{n-1}u+y_n$ und $c = z_1u^{n-1}+z_2u^{n-2}+\dots+z_{n-1}u+z_n$.\\
+Zeigen Sie: $a+b=c$ genau dann, wenn $x_i + y_i = z_i$ für alle $i$.
+
+\section*{11.  Programmieren einer Registermaschine, 10 Punkte}
+
+\end{document}
