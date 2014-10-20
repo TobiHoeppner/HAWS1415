@@ -1,0 +1,102 @@
+\section{Einführung Teil 2 \tiny (Vorlesung 2 am 20.10.)}
+\subsection{Ziele der Vorlesung}
+%\footnote{test}[1cm]
+\marginnote{\small\emph{(Stromverbrauch ist zunehmend wichtig, aber nicht Teil der Vorlesung. Allgemein sind Algorithmen mit weniger Laufzeit besser.)}}[3.5cm]
+\begin{compactitem}
+\item Algorithmen nach den wichtigsten Entwurfsprinzipien entwerfen:
+	\begin{itemize}
+	\item Devide and Conquer
+	\item dynamisches Programmieren
+	\item bound and bound
+	\item greedy-Algorithmen
+	\end{itemize}
+\item Algorithmen mit Analysetechniken analysieren im Bezug auf Laufzeit und Speicherbedarf (Stromverbrauch)
+	\begin{itemize}
+	\item randomisierte Analyse
+	\item amortisierte randomisierte Analyse
+	\item Rekursionsgleichungen
+	\end{itemize}
+\item Vergleich und Beurteilung von Algorithmen nach Einsatzzweck
+\item Theorie der NP Vollständigkeit verstehen und einfache Vollständigkeitsbeweise führen
+\end{compactitem}
+\subsection{Rechnermodelle}
+\subsubsection{Turing-Maschine}
+Eine Turing-Maschine ist ein theoretisches Modell. Es handelt sich um ein unendliches Band mit Symbolen aus einem endlichen Alphabet mit endlichem Zustandsraum. In jedem Schritt wird ein Symbol gelesen, das Band entsprechend der Eingabe beschrieben und der Zustand verändert. Prinzipiell ist alles mit einer Turing-Maschine berechenbar, jedoch teilweise sehr umständlich, weil immer nur ein Symbol gelesen werden kann.
+\marginnote{\small\emph{RAM ist auch als random access memory als Arbeitsspeicher bekannt}}[1cm]
+\subsubsection{Registermaschine (RAM - random access machine)}
+Eine RAM funktioniert nach einem ähnlichen Prinzip wie moderne Rechner arbeiten. Es gibt eine potentiell unendliche (unbeschränkte) Anzahl von Registern \lstinline!R0, R1, R2, ...! wobei jedes Register eine ganze Zahl enthalten kann. Die Programmiersprache ist ähnlich wie Assembler.\\
+\subsubsection*{1. Befehle}
+\begin{enumerate}
+\item[Zuweisung] \lstinline!R4 = R17!
+\item[Rechenbefehl] \lstinline!R1 = R2 + R3!\\\lstinline!R1 = R2 - R3!\\\lstinline!R1 = R2 * R3!\\\lstinline!R1 = R2 / R3!
+\end{enumerate}
+\subsubsection*{Operanden der Befehle}
+\marginnote{\small\emph{den Inhalt des Registers, dessen Nummer in Register \lstinline!R1! steht.}}[1.5cm]
+\begin{enumerate}
+\item Register \lstinline!R17!
+\item direkte Operanden (Zahlen) \lstinline!250!
+\item indirekte Adressen: \lstinline!(R1)!
+\end{enumerate}
+\subsubsection*{2. Sprünge}
+\marginnote{\small\emph{Es sind nur die drei Vergleichsoperationen \lstinline!GLZ: < 0 , GGZ: > 0 , GZ: = 0! erlaubt!}}[0cm]
+\begin{lstlisting}[mathescape]
+GOTO x
+IF R$_i$ = 0 THEN GOTO x
+
+GZ R1, label ;if R1 is greater 0, goto label
+
+\end{lstlisting}
+x ist eine Sprungmarke im Programm.
+\begin{lstlisting}
+loop:
+	\\ some commands
+	GOTO loop
+\end{lstlisting}
+
+\subsubsection*{3. \lstinline!HALT!}
+Ein Programm endet immer mit \lstinline!HALT!
+\subsubsection*{Ein- und Ausgabe}
+Eingabe: \lstinline!R0 = n!= die Länge der Eingabe \lstinline!R1, R2, ... Rn!. Alle andere Zellen sind auf \lstinline!0! initialisiert.\\
+Ausgabe steht am Ende im Speicher!\\
+
+\subsubsection{Berechnung der Laufzeit}
+\subsubsection*{a) Einheitskostenmaß (EKM)}
+Jede Operation dauert eine Zeiteinheit.\\unfair, weil es Operationen gibt, die offensichtlich komplizierter sind.
+\subsubsection*{b) logarithmisches Kostenmaß (LKM)}
+Laufzeit = Summe der Längen aller vorkommenden Adressen und Operanden.
+\begin{align*}
+l (x) &= \lfloor \log_2 \max \{|x|,1\} \rfloor +1\\
+\\
+\text{\lstinline!R2!} &= (\text{\lstinline!R0!}) + 250\\
+\text{...Kosten} &= l(2) + l(0) + \underbrace{l(\text{\lstinline!R0!})}_\text{Adresse} + \underbrace{l((\text{\lstinline!R0!}))}_\text{Operand}+\underbrace{l(250)}_\text{Operanden}
+\end{align*}
+
+Im EKM kann man schwindeln:\\
+Operationen auf langen Daten können in einem Schritt erledigt werden.\\
+Andererseits ist das EKM näher an einem tatsächlichen Prozessor. Sofern die Operanden in ein Wort eines konventionellen Speichers (64 Bit) passen.\\
+Abschätzung: LKM $\leq$ $O$(EKM . $l$(längster vorkommender Operand oder Adresse))\\
+Wenn die größten vorkommenden Zahlen nicht zu groß sind, dann ist das EKM realistisch.\\
+LKM ist fairer, wenn es um sehr unterschiedliche Operanden geht (verschieden lang)\\
+
+\subsection{Laufzeit eines Algorithmus}
+Man muss den möglichen Eingaben eine \underline{Länge} zuordnen.\\
+$x$.. Eingabe $L(x)$\\
+\underline{Bsp.} $n$ Zahlen $x_1,x_2,...,x_n$ sortieren: $L = \underline{n}$\\
+\underline{Bsp.} Multiplikation von langen Zahlen $x,y$: $L = \#$ Bits in der Eingabe.\\
+\marginnote{\small\emph{Tendenziell kompliziertes Beispiel, um zu illustrieren, dass LKM nicht immer leicht zu berechnen ist.}}[0cm]
+\underline{Bsp.} Lösen eines linearen Gleichungssystems: $A x = b A \in \mathbb{Z}^{n\times x} b \in \mathbb{Z}^n x\in \mathbb{Q}^n$\\
+Länge der Eingabe: $n^2$\\
+Gauß-Elimination $O(n^3)$ Zeit, erfordert Rechnen mit rationalen Zahlen.\\
+Man kann Zeigen, dass die Länge der Zähler und Nenner in den Zwischenergebnissen höchstens $n$-Mal ($\leq n$) ist, wenn man Brüche immer kürzt.\\
+Laufzeit im LKM: $O(n^4, l(\text{größte Eingabezahl}))$\\
+
+Was ist die Laufzeit eines Algorithmus?\\
+\begin{align*}
+T(x) &= \text{Laufzeit des Algorithmus bei Eingabe} x\\
+\\
+& \text(Analyse im schlimmsten Fall).
+T(n) = \max \{T(x) | L(x) = n \}
+\end{align*}
+\subsubsection*{Andere Möglichkeiten}
+Analyse im Durchschnitt, Erwartungswert der Laufzeit\\
+Benötigt eine Wahrscheinlichkeitsverteilung auf der Menge der Eingaben.\\

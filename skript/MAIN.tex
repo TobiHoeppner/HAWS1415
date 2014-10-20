@@ -84,7 +84,7 @@
 \definecolor{darkgreen}{rgb}{0,0.5,0}
 \definecolor{darkred}{rgb}{0.5,0,0}
 \lstset{%
-	language=C, 
+	language=[x86masm]Assembler, 
 	basicstyle=\LSTfont,
 	commentstyle=\color{darkgreen}, 
 	keywordstyle=\color{darkblue}\bfseries, 
@@ -102,7 +102,7 @@
 	rulecolor= \color{gray},
 	emph=[1]%
 	{%  
-	    then, PUSH, READ, ADD, LOAD, SUB, STORE, GOTO, MULT, OP, BOP, not, output%
+	    HALT%
 	},
 	emphstyle=[1]{\color{darkblue}\bfseries},
 	emph=[2]%
@@ -141,6 +141,7 @@
 % Doku: http://en.wikibooks.org/wiki/LaTeX/Footnotes_and_Margin_Notes
 \newgeometry{top=2.5cm, bottom=2.5cm, outer=4cm, inner=2cm, heightrounded, marginparwidth=3.4cm, marginparsep=0.6cm}
 \include{vl1}
+\include{vl2}
 %\include{demo} % frequently used patterns
 
 \end{document}
