@@ -18,6 +18,7 @@
 \usepackage{caption}
 \usepackage{url}
 \usepackage{amsmath}
+\usepackage{amsfonts}
 \usepackage{accents}
 \usepackage{tikz}
 \usetikzlibrary{plotmarks}
@@ -27,7 +28,7 @@
 \definecolor{darkgreen}{rgb}{0,0.5,0}
 \definecolor{darkred}{rgb}{0.5,0,0}
 \lstset{%
-	language=C, 
+	language=[x86masm]Assembler, 
 	basicstyle=\LSTfont,
 	commentstyle=\color{darkgreen}, 
 	keywordstyle=\color{darkblue}\bfseries, 
@@ -45,7 +46,7 @@
 	rulecolor= \color{gray},
 	emph=[1]%
 	{%  
-	    then, not%
+	    HALT%
 	},
 	emphstyle=[1]{\color{darkblue}\bfseries},
 	emph=[2]%
@@ -55,7 +56,7 @@
 	emphstyle=[2]{\color{darkblue}\bfseries},
 	emph=[3]%
 	{%  
-	    %
+	    MAX, MIN, TRUE, FALSE, skip%
 	},
 	emphstyle=[3]{\color{darkred}\bfseries},
 	literate=%
@@ -87,98 +88,127 @@
 \title{HA - Übung 01. }
 \date{Wintersemester 2014/2015}
 
-\begin{filecontents}{div_soft.data}
-#MOPS 	Power [mW]
-1.33E-02	10.403432
-1.33E-01	12.53108
-2.66E-01	14.90265
-3.99E-01	17.22483
-5.31E-01	19.58292
-6.64E-01	21.89876
-7.97E-01	24.44624
-9.30E-01	26.6708
-\end{filecontents}
-
-\begin{filecontents}{div_ciu.data}
-# MOPS 	Power [mW]
-4.35E-02	9.562436
-4.35E-01	10.845494
-8.69E-01	12.24356
-1.30E+00	13.66974
-1.74E+00	15.13008
-2.17E+00	16.57845
-2.61E+00	17.97894
-3.04E+00	19.41534
-\end{filecontents}
-
-\begin{filecontents}{div_ciu_oscar.data}
-#MOPS 	Power [mW]
-8.57E-01	11.255013
-9.99E-01	11.4804
-1.14E+00	11.718
-1.29E+00	11.9916
-1.64E+00	12.65854
-2.00E+00	13.308
-2.64E+00	14.484
-3.85E+00	16.8
-\end{filecontents}
-
-\begin{filecontents}{div_ciu_oscar_extrapolated.data}
-# MOPS 	Power [mW]
-4.28E+00	17.56312023
-5.71E+00	20.21127914
-7.14E+00	22.85943805
-8.57E+00	25.50759696
-9.99E+00	28.15575587
-\end{filecontents}
-
 \begin{document} 
 \maketitle 
-\section*{Aufgabe 1}
+\section*{Aufgabe 2}
+\begin{align*}
+A \quad	f(n)\\
+B \quad 	g(n)\\
+g(n) = O (f(n)\log n)\\
+\end{align*}
+\begin{enumerate}
+\item[\textbf{a)}] Beispiele \\
+	\begin{enumerate}
+	\item[\textbf{i)}] A schneller B
+		\begin{align*}
+		f(n) &= n^2\\
+		g(n) &= n \log n\\
+		n \log n = O (n^2 \log n)
+		\end{align*}
+	\item[\textbf{ii)}] B schneller A
+		\begin{align*}
+		f(n) = n\\
+		g(n) = n \log n\\
+		n \log n = O(n^2 \log n)
+		\end{align*}
+	\end{enumerate}
+\item[\textbf{b)}]
+	\begin{align*}
+	g(n) &= \Omega (f(n) \log n)
+	\end{align*}
+	$\Rightarrow$ \textbf{i)} gilt laut Definition.\\
+\item[\textbf{c)}] ja, $x$ Eingabe und $T(x)$ Laufzeit\\
+	\begin{align*}
+	T(n) &= \max T(x)\\
+	|x| &= n \quad \text{Laufzeit im schlimmsten Fall}\\
+	T(n) = \Theta(n^2)\\
+	\end{align*}
+	$\Rightarrow$ Bubblesort!\\
+	$x_i$ Folge von $i$ sortierten Elementen $\rightarrow T(n) = \Theta (n^2)$\\
+	$T(x_i) = O(i)$\\
+	\begin{align*}
+	T(n) &= \Omega (n^2)\\
+	y_n = \text{Permutation} &= \{1, 2, 3, ..., n, n-1, n-2, ..., \underline{1}\}\\
+	T(y_n) &= \Omega(n^2)\\
+	\end{align*}
+	Für alle Funktionen f,g in der Vorlesung gilt entweder $f = O(g)$ oder $g = O(f)$, aber: Es gibt Funktionen, für die wir es nicht machen können.\\
+\item[\textbf{d)}] A hat Laufzeit $\Theta (n^2)$, kann es sein, dass $\forall x |x|=n = T(x) = O(n)$?\\
+	$\Rightarrow$ Nein. Die Laufzeit im schlimmsten Fall von $\Omega (n^2)$ bedeutet, dass es für jedes $n$ eine Eingabe der Länge $n$ gibt, bei der der Algorithmus $n^2$ Zeit benötigt.\\
+	A hat Laufzeit $O(n^2)$, kann es sein, dass $\forall x |x|=n = T(x) = O(n)$?
+	$\Rightarrow$ ja.\\
+	A hat Laufzeit $\Omega (n^2)$, kann es sein, dass $\forall x |x|=n = T(x) = O(n)$?
+	$\Rightarrow$ nein.\\
+\item[\textbf{e)}]
+	\begin{enumerate}
+	\item[a)] $3^n = O(2^n)$ Wahr oder Falsch? $\Rightarrow$ Falsch!\\
+	$4^n = 2^n * 2^n$, wobei $2^n \underbrace{=}_\text{unmöglich!} O(2^n)$\\
+	\item[b)] $\underbrace{\log 3^n}_{n \log 3} = \underbrace{O(\log 2^n)}_{n \log 2} \Rightarrow $ Wahr!\\
+	\item[c)] $3^n = \Omega(2^n) \Rightarrow 3^n > 2^n$\\
+	\item[d)] $log 3^n = \Omega (log 2^n) \Rightarrow \log 3^n > log 2^n$\\ 
+	\end{enumerate}
+\item[\textbf{f)}] $4^n + n^2 \simeq 2^{2n} \geq 2^n \geq 2^{\sqrt{n}} \geq n^2 \log_2(n^2) \simeq n^2 \log n \geq n \log 2^n \simeq 5n^2 + n \log n \simeq n^2 + n-1 \geq (\log n)^2 \geq \log_3 n \simeq \log_2 n$\\ 
+\end{enumerate}
 
-% Laufzeit für n = 0 ist die Laufzeit inkl. Entwicklungsaufwand.
+\textbf{Einschub: }Laufzeitvergleich\\
+\begin{align*}
+5n^2 + n log n &= \Theta (n^2 + n -1)\\
+\\
+\text{z.z.:} \quad \quad O(n^2 +n-1)\\
+&= \{f | \exists n_0 \in \mathbb{N}, c \in \mathbb{R}^+ \forall n > n_0 \quad f(n)\leq c(n^2)+n-1\}\\
+5n^2 + n* \log n &< 100(n^2 + n-1)\\
+5 n^2 &< 10n^2\\
+n \log n &< n^2 \quad \forall n\\
+\end{align*}
 
-\begin{tikzpicture}[y=.2cm, x=.7cm,font=\sffamily]
- 	%axis
-	\draw (0,0) -- coordinate (x axis mid) (20,0);
-    	\draw (0,0) -- coordinate (y axis mid) (0,30);
-    	%ticks
-    	\foreach \x in {0,...,20}
-     		\draw (\x,1pt) -- (\x,-3pt)
-			node[anchor=north] {\x};
-    	\foreach \y in {0,5,...,30}
-     		\draw (1pt,\y) -- (-3pt,\y) 
-     			node[anchor=east] {\y}; 
-	%labels      
-	\node[below=0.8cm] at (x axis mid) {Tage};
-	\node[rotate=90, above=0.8cm] at (y axis mid) { Eingabe [N]};
+\section{RAM}
+Ziel ist es eine RAM zu bauen, die eine RAM bekommt und diese dann um 10 Plätze nach unten verschiebt.\\
+\textbf{Idee:} Von hinten nach vorne Verschieben. Die Programmlänge ist in \lstinline!R0! gegeben. Es braucht dann zwei freie Register.\\
+Zwei freie Register bekommt man so:\\
+\begin{lstlisting}[mathescape]
+R0 = R0 + 12 	; R_0 = n + 12
+(R0) = R2 		; R_{n+12} = x_2
+R0 = R0 -1 		; R_0 = n+11
+(R0) = R1 		; R_{n+11} = x_1
+\end{lstlisting}
+Verschieben des Programms (Umschaufeln)
+\begin{lstlisting}
+R1 = R0 - 11
+R2 = R0 -1
+loop:
+	GZ R1, end
+	(R2) = (R1)
+	R2 = R2 -1
+	R1 = R1-1
+	GOTO loop
+\end{lstlisting}
+Aufräumen...
+\begin{lstlisting}
+end:
+	R11 = R0
+	R0 = R0 + 1
+	R12 =  (R0)
+	R 0 =  R0 - 12
+	HALT
+\end{lstlisting}
+\section*{EKM}
+Einheitskostenmaß, jede Operation kostet $1$.\\Schritt:
+\begin{enumerate}
+\item $8$ bzw. Konstant
+\item $4 + \underbrace{8}_\text{Kosten pro Schleife} * \underbrace{n}_\text{Schleifendurchläufe}$
+\item Konstant
+\end{enumerate}
+$\Rightarrow \Theta(n)$\\
 
-	%plots
-	\draw plot[mark=*, mark options={fill=white}] 
-		file {div_soft.data};
-	\draw plot[mark=triangle*, mark options={fill=white} ] 
-		file {div_ciu.data};
-	\draw plot[mark=square*, mark options={fill=white}]
-		file {div_ciu_oscar.data};
-	\draw plot[mark=square*]
-		file {div_ciu_oscar_extrapolated.data};  
-    
-	%legend
-	\begin{scope}[shift={(4,4)}] 
-	\draw (0,0) -- 
-		plot[mark=*, mark options={fill=white}] (0.25,0) -- (0.5,0) 
-		node[right]{soft};
-	\draw[yshift=\baselineskip] (0,0) -- 
-		plot[mark=triangle*, mark options={fill=white}] (0.25,0) -- (0.5,0)
-		node[right]{ciu};
-	\draw[yshift=2\baselineskip] (0,0) -- 
-		plot[mark=square*, mark options={fill=white}] (0.25,0) -- (0.5,0)
-		node[right]{ciu + oscar};
-	\draw[yshift=3\baselineskip] (0,0) -- 
-		plot[mark=square*, mark options={fill=black}] (0.25,0) -- (0.5,0)
-		node[right]{ciu + oscar extrapolated};
-	\end{scope}
-\end{tikzpicture}
-
+\section*{LKM}
+Logarithmisches Kostenmaß. Zeilenweise ansehen...\\
+1. $l(n) + c$\\
+2. $l(n) + l(x_1)$\\
+3. $l(n) + c$\\
+4. $l(n) + l(x_2)$\\
+5. $l(n) + c$\\
+6. $l(n) + c$\\
+8 - 12. $l(n)*5n$ für Zeilen 8, 10, 11 $+ l(x_3)+...+l(x_n)$ fürs kopieren\\
+13 - 17. $c+l(n)+l(x_0) + l(x_2)$\\
+$\Rightarrow O(n*l(n) + \sum n _ i = 1 (l(x_i)))$
 
 \end{document}
