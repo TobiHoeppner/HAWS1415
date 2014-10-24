@@ -1,0 +1,96 @@
+\section{Rechnermodelle (Fortsetzung) \tiny (Vorlesung 3 am 24.10.)}
+\subsection{Warum nicht die Turingmaschine?}
+Die Registermaschine ist näher am heutigen Rechnermodell. Die Turingmaschine ist viel primitiver. \\
+\textbf{Satz:}
+\begin{enumerate}
+\item[a)] Ein Alogrithmus, der auf einer Registermaschine Laufzeit $T(n)$ im logarithmischen Kosteneinheitsmaß hat, kann auf einer Turingmaschine in Laufzeit $O((T(n))^3)$ simuliuert werden.\\
+\item[b)] Ein Alogirhtmus mit Laufzeit $U(n)$ auf einer Turingmaschine kann mit Laufzeit $O(U(n)\log U(n))$ auf einer Registermaschine im LKM simuliert werden.\\
+\end{enumerate}
+\begin{enumerate}
+\item[zu b)] In Zeit $U(n)$ kann die Maschine höchstens die Felder $-U(n)...+U(n)$ beschreiben. Adressen sind durch $2U(n)$ beschränkt jeden Schritt der TM kann in konstant vielen Operationen der Registermaschine simuliert werden.\\
+$\rightarrow O(\log U(n)$ 
+% Bild I: Band einer Turingmaschine vs. Register einer Registermaschine
+\item[zu a)] Speicherinhalt auf dem Band notieren.\\ 
+% Bild II
+$i :$ (Inhalt von Register $i$)$.$($i+1:$Inhalt von Register($i+1$). ...\\
+Register mit Inhalt $0$ können weggelassen werden. Register werden in natürlicher Reihenfolge aufgeschrieben. Alle Zahlen binär oder dezimal (nach Belieben).
+\end{enumerate}
+Die Länge des Bandes $= L$ ist durch $T(n)$ beschränkt.\\
+Jede Adresse, jede Registereinheit wurde bei der letzten Benutzung in voller Länge bei $T(n)$ berücksichtigt.
+\subsection{Elementare Operationen}
+\begin{enumerate}
+\item Adresse im Speicher suchen; (Adresse steht im linken Zwischenbereich)
+\item entsprechenden Inhalt zwischen Speicher und Zwischenbereich übertragen
+\item Rechenoperationen im Zwischenbereich
+\begin{lstlisting}
+R2 = (R17)
+\end{lstlisting}
+Jede Stelle die verglichen wird, erfordert im schlimmsten Fall ein Wandern über das gesamte Band.\\
+\begin{enumerate}
+\item[Operation 1] dauert $O(L^2)$ Schritte, wobei $L$ die Länge des Bandes ist.\\
+\item[Operation 2] ist ähnlich. Gegebenenfalls muss man den rechten Teil des Bandinhalts verschieben (Um eine Stelle verschieben dauert $O(L)$ Zeit, $\leq O(L^2)$ insgesamt).
+\item[Operation 3] $\leq O(L^2)$
+\end{enumerate}
+\end{enumerate}
+$O(L^2)$ für 1 Schritt der Registermaschine $= O(T(n))^2$\\
+
+\subsection{Teile und Herrsche}
+(eng. divide and conquer) (lat. divide et impera)\\
+\begin{enumerate}
+\item Zerlege das Problem $P$ in Teilprobleme $P_1,P2,...,P_k$ (typischerweise $k=2$)
+\item Löse die Teilprobleme rekursiv.
+\item Füge die Teillösung zur Lösung von $P$ zusammen.
+\end{enumerate}
+\subsubsection{Beispiel A: Quicksort}
+\begin{enumerate}
+\item Wahl eines Pivotelementes $a$:\\
+Zerlegung in Elemente $\underbrace{<a}_\text{Teilproblem}, =a, >a$
+\item[3.] Teilfolgen aneinanderhängen.\\
+\end{enumerate}
+\marginnote{\small\emph{Bei Quicksort ist der erste Schritt aufwändiger, bei Mergesort der letzte Schritt.}}[0cm]
+\subsubsection{Beispiel B: Mergesort \tiny (Sortieren durch Verschmelzen)}
+\begin{enumerate}
+\item Zerlegung in 2 gleich große Teile
+\item[3.] Verschmelzen der beiden sortierten Teillisten.\\
+\item[Laufzeit] $T(n) = T(\lfloor \frac{n}{2} \rfloor) + T(\lceil\frac{n}{2}\rceil) + \Theta(n)$\\
+\item[$n$ gerade] $T(n) = 2T(\frac{n}{2}) + \Theta(n)$\\
+\item[Lösung] $T(n) = O(n \log n)$
+\end{enumerate}
+\subsubsection{Analysemöglichkeiten}
+\begin{enumerate}
+\item[I.] Lösung \underline{erraten} und durch vollständige Induktion beweisen.
+\item[II.] Wiederholtes einsetzen auf der rechten Seite:
+\begin{align*}
+T(n) &\leq 2T(\frac{n}{2})+ c n \quad (c > 0)\\
+T(\frac{n}{2}) &\leq 2 T(\frac{n}{4}) + c * \frac{n}{2}\\
+T(n) &\leq 2(2T(\frac{n}{4}) + c \frac{n}{2})+c n\\
+&= 4 \underbrace{T(\frac{n}{4})}_{= 2T(\frac{n}{8})+c\frac{n}{4}}+cn+cn\\
+&\leq 8T(\frac{n}{8})+cn+cn+cn\\
+&\leq 2^k T(\frac{n}{2^k})+k.c.n
+\end{align*}
+Annahme $n=2^l$ ist eine Zweierpotenz $l = \log_2 n$
+\begin{align*}
+T(n)&= \underbrace{2^l}_n \underbrace{T(1)}_{\text{konst.}} +\underbrace{l}_{\log_2 n}.c.n = O(n \log n)\\
+ &= O(n) + O(n \log n)
+\end{align*}
+nur gültig für Zweierpotenzen.
+\begin{enumerate}
+\item[Möglichkeit a)] $n$ auf die nächste $n' = 2^l$ aufrunden.\\
+$n \leq n' < 2n$\\
+Sortieren von n Elementen kann nicht länger dauern als Sortieren von $n'$ Elementen. (zu beweisen! z.B. mit vollst. Indunktion anhand der Rekursion)\\
+$T(n) \leq T(n') = O(n' \log n') = O(2n. \log(2n)) = O(n \log n) \checkmark$
+\item[Möglichkeit b)] Als Inspiration, um auf die Vermutung $O(n \log n)$ zu bekommen. Beweis mit Methode I.
+\end{enumerate}
+\item[III.] Rekursionsbaum $\lfloor \frac{\lfloor \frac{n}{2} \rfloor}{2}\rfloor = \lfloor \frac{n}{4} \rfloor$
+% Bild III Rekursionsbaum
+Laufzeit: $2^l$ Probleme konstanter Größe. $T(1), T(2) \leq c'$
+\begin{align*}
+\text{Ebene 0}: &\leq \Theta(n)\\
+\text{Ebene 1}: &\leq 2 \Theta(\lceil \frac{n}{2} \rceil)\\
+\text{Ebene 2}: &\leq 4 \Theta(\lceil \frac{n}{4} \rceil)\\
+\Theta(n) &\leq c.n\\
+\text{Summe} &\leq c n + 2 c \lceil \frac{n}{2} \rceil + 4 c \lceil \frac{n}{4} \rceil + ... + 2^{l-1} c \lceil \frac{n}{2^{l-1}} \rceil + 2^l c'\\
+&\leq cn + 2c(\frac{n}{2} +1) + 4c(\frac{n}{4} +1)+....\\
+&=  \underbrace{cn + cn + ... + cn}_\text{l-mal} + \underbrace{2c + 4c + 8c + ... + 2^{l-1}c}_{(2^l -2)c} + 2^l c'\\
+\end{align*}
+\end{enumerate}

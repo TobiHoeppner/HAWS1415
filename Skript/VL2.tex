@@ -71,6 +71,8 @@ l (x) &= \lfloor \log_2 \max \{|x|,1\} \rfloor +1\\
 \text{...Kosten} &= l(2) + l(0) + \underbrace{l(\text{\lstinline!R0!})}_\text{Adresse} + \underbrace{l((\text{\lstinline!R0!}))}_\text{Operand}+\underbrace{l(250)}_\text{Operanden}
 \end{align*}
 
+Das LKM ist gerechter, als das EKM.\\
+
 Im EKM kann man schwindeln:\\
 Operationen auf langen Daten können in einem Schritt erledigt werden.\\
 Andererseits ist das EKM näher an einem tatsächlichen Prozessor. Sofern die Operanden in ein Wort eines konventionellen Speichers (64 Bit) passen.\\

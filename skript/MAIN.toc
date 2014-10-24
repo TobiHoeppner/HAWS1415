@@ -1,3 +1,26 @@
 \select@language {ngerman}
-\contentsline {section}{\numberline {1}Einf\IeC {\"u}hrung \relax \fontsize {6}{7}\selectfont (Vorlesung 1 am 14.10.)}{1}{section.1}
-\contentsline {subsection}{\numberline {1.1}Betriebsysteme}{1}{subsection.1.1}
+\contentsline {section}{\numberline {1}Einf\IeC {\"u}hrung \relax \fontsize {6}{7}\selectfont (Vorlesung 1 am 17.10.)}{1}{section.1}
+\contentsline {subsection}{\numberline {1.1}Organisatorisches}{1}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}Kuchen teilen}{1}{subsection.1.2}
+\contentsline {subsubsection}{\numberline {1.2.1}1. Algorithmus (f\IeC {\"u}r 2 Personen)}{1}{subsubsection.1.2.1}
+\contentsline {subsubsection}{\numberline {1.2.2}2. Algorithmus (f\IeC {\"u}r 3 Personen)}{1}{subsubsection.1.2.2}
+\contentsline {subsubsection}{\numberline {1.2.3}3. Teilen und Trimmen}{2}{subsubsection.1.2.3}
+\contentsline {subsubsection}{\numberline {1.2.4}4. Teilen mit bewegtem Messer}{2}{subsubsection.1.2.4}
+\contentsline {subsubsection}{\numberline {1.2.5}5. Simuliertes bewegtes Messer}{2}{subsubsection.1.2.5}
+\contentsline {subsubsection}{\numberline {1.2.6}6. Simuliertes Messer + Zufall}{2}{subsubsection.1.2.6}
+\contentsline {subsubsection}{\numberline {1.2.7}7. Divide \& Conquer}{3}{subsubsection.1.2.7}
+\contentsline {subsubsection}{\numberline {1.2.8}8. Divde \& Conquer + Zufall}{3}{subsubsection.1.2.8}
+\contentsline {section}{\numberline {2}Einf\IeC {\"u}hrung Teil 2 \relax \fontsize {6}{7}\selectfont (Vorlesung 2 am 20.10.)}{4}{section.2}
+\contentsline {subsection}{\numberline {2.1}Ziele der Vorlesung}{4}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Rechnermodelle}{4}{subsection.2.2}
+\contentsline {subsubsection}{\numberline {2.2.1}Turing-Maschine}{4}{subsubsection.2.2.1}
+\contentsline {subsubsection}{\numberline {2.2.2}Registermaschine (RAM - random access machine)}{4}{subsubsection.2.2.2}
+\contentsline {subsubsection}{\numberline {2.2.3}Berechnung der Laufzeit}{5}{subsubsection.2.2.3}
+\contentsline {subsection}{\numberline {2.3}Laufzeit eines Algorithmus}{6}{subsection.2.3}
+\contentsline {section}{\numberline {3}Rechnermodelle (Fortsetzung) \relax \fontsize {6}{7}\selectfont (Vorlesung 3 am 24.10.)}{7}{section.3}
+\contentsline {subsection}{\numberline {3.1}Warum nicht die Turingmaschine?}{7}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Elementare Operationen}{7}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Teile und Herrsche}{8}{subsection.3.3}
+\contentsline {subsubsection}{\numberline {3.3.1}Beispiel A: Quicksort}{8}{subsubsection.3.3.1}
+\contentsline {subsubsection}{\numberline {3.3.2}Beispiel B: Mergesort \relax \fontsize {6}{7}\selectfont (Sortieren durch Verschmelzen)}{8}{subsubsection.3.3.2}
+\contentsline {subsubsection}{\numberline {3.3.3}Analysem\IeC {\"o}glichkeiten}{8}{subsubsection.3.3.3}
