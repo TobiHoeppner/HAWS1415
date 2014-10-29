@@ -2,7 +2,7 @@
 \usepackage[ngerman]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-%\usepackage{MyriadPro}
+\usepackage{MyriadPro}
 \usepackage[scaled]{beramono}
 \newcommand\Small{\fontsize{10.5}{10.5}\selectfont}
 \newcommand*\LSTfont{\Small\ttfamily\SetTracking{encoding=*}{-20}\lsstyle}
@@ -27,7 +27,7 @@
 \definecolor{darkgreen}{rgb}{0,0.5,0}
 \definecolor{darkred}{rgb}{0.5,0,0}
 \lstset{%
-	language=C, 
+	language=[x86masm]Assembler, 
 	basicstyle=\LSTfont,
 	commentstyle=\color{darkgreen}, 
 	keywordstyle=\color{darkblue}\bfseries, 
@@ -45,7 +45,7 @@
 	rulecolor= \color{gray},
 	emph=[1]%
 	{%  
-	    then, not%
+	    then, not, for, return%
 	},
 	emphstyle=[1]{\color{darkblue}\bfseries},
 	emph=[2]%
@@ -90,10 +90,95 @@
 \begin{document} 
 \maketitle 
 \section*{10.  Schmutzige Tricks im Einheitskostenmaß,  10 Punkte}
+Gegeben:
+\begin{align*}
+x &= (x_1,...,x_n)\\
+y &= (y_1,...,y_n)\\
+z &= (z_1,...,z_n)\\
+\\
+M &=\max \{|x_i|,|y_i|,|z_i| \; |i=\{1,..,n\}\}\\
+u &> 4M\\
+a &=\sum\limits_{i=1}^n u^{n-1} x_i\\
+b &=\sum\limits_{i=1}^n u^{n-1} y_i\\
+c &=\sum\limits_{i=1}^n u^{n-1} z_i\\
+\end{align*}
 
-Für drei ganzzahlige Vektoren $x=(x_1,x_2,\dots,x_n)$ $y=(y_1,y_2,\dots,y_n)$ und $z=(z_1,z_2,\dots,z_n)$ mit $|x_i|,|y_i|,|z_i| \leq M$ und einen Wert $u > 4M$ betrachten wir die Zahlen $a = x_1u^{n-1}+x_2u^{n-2}+\dots+x_{n-1}u+x_n$,$b = y_1u^{n-1}+y_2u^{n-2}+\dots+y_{n-1}u+y_n$ und $c = z_1u^{n-1}+z_2u^{n-2}+\dots+z_{n-1}u+z_n$.\\
-Zeigen Sie: $a+b=c$ genau dann, wenn $x_i + y_i = z_i$ für alle $i$.
+zu Zeigen:\\
+$(a+b=c) \Leftrightarrow x+y=z$\\
 
+a.) $\Leftarrow$ - Einfach einsetzen...\\
+\begin{align*}
+a+b &\overset{Def}{=} \sum\limits_{i=0}^n x_i u^{n-i} + \sum\limits_{i=0}^n y_i u^{n-i}\\
+&= \sum\limits_{i=0}^n (x_i+y_i) u^{n-i} \\
+&\overset{Def}{=} \sum\limits_{i=0}^n z_i u^{n-i} \\
+&= c\\
+\end{align*}
+c.) $\Rightarrow$\\
+Wissen: $a + b = c$\\
+Idee: $\Rightarrow a+b = c \mod u$, also irgendwie versuchen die $u$-Werte zu lösen.\\
+\begin{align*}
+a + b &= u (\sum ...) + (x_n + y_n)\\
+c &= u (\sum ...) + (z_n)\\
+&\Rightarrow x_n+y_n = z_n \mod U
+\end{align*}
+%Wir wissen ebenfalls $|x_n+y_n|<u$\\
+%und $|z_n| < u$\\
+%also $\Rightarrow x_n + y_n = z_n$\\
+
+%$a' = (a-x_n)/u$\\
+%$b' = (b-y_n)/u$\\
+%$c' = (c-z_n)/u$\\
+
+%$\Rightarrow a'+b' = c'$\\
+%$\underset{per Induktion}{\Rightarrow} x_{n-1}+y_{n_1} = z_{n-1}$\\
+\newpage
 \section*{11.  Programmieren einer Registermaschine, 10 Punkte}
+\subsection*{Pseudocode}
+\begin{lstlisting}
+in (n, x[1,...,n])
+    max = x[1]
+    tmp = x[1]
+    for i = 2, i < n, i++
+        tmp = x[i]
+        if tmp > max
+            tmp = max
+    return max
+\end{lstlisting}
+
+\subsection*{RAM}
+\begin{lstlisting}
+; r0 = n
+; r1-r5 sind frei (siehe letztes Tutorium)
+; r6-r(n+5) enthalten die Eingabe
+r1 = 1      ; max_i
+r2 = r6    	; max
+r3 = r6    	; tmp
+r4 = r6     ; i
+r5 = 0      ; 
+loop:
+    r4 = r4 + 1     ; ++i
+    r5 = r0 + 6     ; abbruch wenn n+6-i 
+    r5 = r5 - r4
+    GZ r5, halt
+
+    r3 = r3 + (r4)  ; tmp aktualisieren
+    r5 = r3 - r2    
+    GGZ R5, newmax
+    GOTO loop
+newmax:
+    r2 = r3         ; neues max setzen
+    r1 = r4 - 5     ; neues max_i setzen
+    GOTO loop
+halt:
+	HALT
+\end{lstlisting}
+\subsection*{Laufzeitanalyse}
+\textbf{EKM:} In der Summe $\Theta(n)$\\
+\textbf{LKM:} $\mathcal{O} (n L)$\\
+L = längster vorkommender Eintrag in einem Register.
+\subsection*{Speicherbedarf}
+\textbf{EKM:} $\Theta(n)$ - wir benutzen $\Theta(n)$ Register\\
+\textbf{LKM:} $\mathcal{O}(nL)$ laut Vorlesung\\
+$\Rightarrow n$ Register mit Inhalt $\Omega(L)$\\
 
 \end{document}
