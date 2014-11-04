@@ -83,7 +83,7 @@
 \newcommand{\utilde}[1]{\underaccent{\tilde}{#1}}
 \renewcommand{\familydefault}{\sfdefault}
  
-\author{Tobias Höppner}
+\author{Tobias Höppner, Marian Sigler}
 \title{HA - Übung 03. }
 \date{Wintersemester 2014/2015}
 
@@ -98,10 +98,50 @@
 \end{enumerate}
 \section*{20. Verschiebung des Parameter- und Wertebereichs}
 \begin{enumerate}
-\item[a)] $A = 5$
-\item[b)] $B = -3$
+\item[a)] $A = -5$
+\begin{align*}
+f(n)&=2f(\lfloor \frac{n+3}{2}\rfloor)-5\\
+g(n)&=f(n)+A\\
+&=f(n)-5\\
+&=2f(\lfloor \frac{n+3}{2}\rfloor)-5-5\\
+&=2(f(\lfloor \frac{n+3}{2}\rfloor)-5)\\
+&=2(g(\lfloor \frac{n+3}{2}\rfloor))\\
+\end{align*}
+\item[b)] $B = 3$
+\begin{align*}
+g(n)&=2g(\lfloor \frac{n+3}{2}\rfloor)\\
+g(n+3)&=2g(\lfloor \frac{n+6}{2}\rfloor)\\
+&=2g(\lfloor \frac{n}{2}\rfloor+3)\\
+\Rightarrow h(n) &= g(n+3)\\
+&= 2h(\lfloor \frac{n}{2}\rfloor)
+\end{align*}
+(Test-)Werte berechnen...
+\begin{align*}
+\Rightarrow h(0) &= g(0+3) = f(1) - 5 = 1\\
+h(1) &= 2h(0) = 2\\
+h(2) &= 2h(1) = 4\\
+h(3) &= 2h(1) = 4\\
+h(4) &= 2h(2) = 8\\
+h(5) &= 2h(2) = 8\\
+h(6) &= 2h(3) = 8\\
+h(7) &= 2h(3) = 8\\
+h(8) &= 2h(4) =16\\
+\end{align*}
+Formel für $h(n) = 2^{\lfloor \log_2 n+1 \rfloor}$ ergibt sich aus den Werten.\\
+\begin{align*}
+h(n) &= 2^{\lfloor \log_2 n \rfloor} = 2^{\lfloor \log_2 \frac{n}{2} +1\rfloor}\\
+&= 2 * 2^{\lfloor \log_2 \frac{n}{2}\rfloor}\\
+&= 2 * 2^{\lfloor \log_2 n-1\rfloor}\\
+&= 2^{\lfloor \log_2 n\rfloor}
+\end{align*}
+Formel für
+\begin{align*}
+g(n) &= h(n)-3 = 2^{\lfloor \log_2 n\rfloor}-3\\
+f(n) &= g(n)+5 = h(n) + 2 = 2^{\lfloor \log_2 n\rfloor} + 2\\
+\end{align*}
 \item[c)] \begin{align*}
 q(n) = q (\lfloor \frac{n+3}{2} \rfloor) +1 (\text{für} n > 4), q(1) = q(2) = q (3) = 1
 \end{align*}
 \end{enumerate}
 \end{document}
+
