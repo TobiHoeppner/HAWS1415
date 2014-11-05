@@ -23,3 +23,11 @@
 \BOOKMARK [3][-]{subsubsection.3.3.1}{Beispiel A: Quicksort}{subsection.3.3}% 23
 \BOOKMARK [3][-]{subsubsection.3.3.2}{Beispiel B: Mergesort \(Sortieren durch Verschmelzen\)}{subsection.3.3}% 24
 \BOOKMARK [3][-]{subsubsection.3.3.3}{Analysem\366glichkeiten}{subsection.3.3}% 25
+\BOOKMARK [1][-]{section.4}{Rekursion \(Fortsetzung\) \(Vorlesung 4 am 31.10.\)}{}% 26
+\BOOKMARK [2][-]{subsection.4.1}{ Motivation Master-Theorem}{section.4}% 27
+\BOOKMARK [2][-]{subsection.4.2}{Master-Theorem f\374r divide and conquer-Rekursion}{section.4}% 28
+\BOOKMARK [3][-]{subsubsection.4.2.1}{Bemerkungen}{subsection.4.2}% 29
+\BOOKMARK [2][-]{subsection.4.3}{Beweis: Master-Theorem}{section.4}% 30
+\BOOKMARK [1][-]{section.5}{Master Theorem \(Fortsetzung\) \(Vorlesung 6 am 3.11.\)}{}% 31
+\BOOKMARK [2][-]{subsection.5.1}{Beweis Fortsetzung}{section.5}% 32
+\BOOKMARK [2][-]{subsection.5.2}{Z\344hlen von Fehlst\344nden \(Inversion\)}{section.5}% 33

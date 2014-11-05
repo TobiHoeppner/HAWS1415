@@ -1,0 +1,114 @@
+\section{Master Theorem (Fortsetzung) \tiny (Vorlesung 6 am 3.11.)}
+\subsection{Beweis Fortsetzung}
+\begin{enumerate}
+\item[Fall (+)]
+\begin{align*}
+T(n) & \leq T(\lceil \frac{n}{b} \rceil)+f(n)\\
+T(n) &\geq T(\lfloor \frac{n}{b} \rfloor)+f(n)\\
+f(n) &= \Theta(n^{\gamma + \epsilon})\\
+\gamma &= \log_b a\\
+\text{oder: } & \forall n > n_0: \quad a.f(\lceil \frac{n}{b} \rceil) < c.f(n)\\
+c<1 \text{ ist eine Konstante }\\
+\Rightarrow T(n) &= \Theta(f(n))\\
+\end{align*}
+\end{enumerate}
+\subsection*{Beweis (Induktion)}
+untere Schranke $T(n) \geq f(n)$ (aus der Rekursion) $\Rightarrow T(n) = \Omega(f(n))$\\
+obere Schranke: Ansatz: $T(n) \leq D.f(n)$\\
+Versuch eines Beweises durch Induktion.\\
+$n_0$ groß genug machen, dass $\frac{n_0}{b} \leq n_0 -1\Rightarrow \frac{n}{b} \leq n-1 \forall n \geq n_0$\\
+$\Rightarrow \lceil \frac{n}{b} \rceil < n$ Induktion kann funktionieren.\\
+Induktionsschritt: $n \geq n_0$ für $i < n$ sei $T(i) \leg D.f(i)$ schon bewiesen.\\
+\begin{align*}
+T(n) & \leq a T(\lceil \frac{n}{b} \rceil) + f(n)\\
+& \leq a.D.f(\lceil \frac{n}{b} \rceil) + f(a) \quad \text{ nach I.V.}\\
+& \leq D.cf(n) + f(n) \quad \text{Regularitätsbedingung}\\
+& \leq D.f(n)\\
+\end{align*}
+% ! über dem letzen \leq
+\begin{align*}
+\underbrace{Dc+1 \leq D}_{\text{notwendig}}\\
+\leftrightarrow D(1-c) \leftrightarrow D \geq \frac{1}{1-c}\\
+\end{align*}
+Induktionsbasis: Wähle D groß genug, dass $T(i) \leq Df(i)$ für $i=1,2,...,n_0-1$ gilt.\\
+(Voraussetzung: $f(i) > 0$)\\
+$D = \max\{\frac{T(1)}{f(1)},\frac{T(2)}{f(2)},\dots,\frac{T(n_0)}{f(n_0)},\frac{1}{1-c}\}$\\
+2. Fall: $f(n)=\Theta(n{\gamma + \epsilon}), \epsilon > 0$
+\begin{enumerate}
+\item[Obere Schranke]
+\begin{enumerate}
+\item Ersetze $f(n)$ durch $u.n^{\gamma + \epsilon}$\\
+Beweise, dass $f(n) = u.n^{\gamma + \epsilon}$ die Regularitätsbedingung erfüllt. (zunächst ohne Aufrunden, weil leichter).\\%f -schlange (tilde über f)
+$a.f(\frac{n}{b}) < c.f(n)$
+L.S. $= a.u.(\frac{n}{b})^{\gamma + \epsilon} = \frac{a.u n^{\gamma + \epsilon}}{b^\gamma . b^\epsilon}$\\
+R.S. $= c.u.n^{\gamma + \epsilon}$
+\end{enumerate}
+$n_0$ so groß wählen, dass $\frac{(\frac{n}{b}+1)^{\gamma + \epsilon}}{(\frac{n}{b})^{\gamma + \epsilon}}$ nahe genug bei 1 ist, sodass die L.S. immer noch $< cf(n)$ ist.\\
+\end{enumerate}
+$\Leftarrow (1+\frac{b}{n_0})^{\gamma	+ \epsilon} < b^\epsilon \leftarrow n_0$ groß genug wählen.  
+\subsection{Zählen von Fehlständen (Inversion)}
+Ein Fehlstand ist ein Paar $a_i > a_j$ mit $i>j$.\\
+$(7,3,17,12,16,20) = (a_1,\dots,a_n)$\\% eckige Klammern über 17,..,16; eckige Klammern unter 7,3 und 17,12
+\underline{$0\leq \#$Fehlstände $\leq \binom{n}{2}$}
+\subsubsection{Divide and Conquer - oder - Warum Mergesort so wichtig ist!}
+Fehlstände können zwischen linker und rechter Hälfte leicht bestimmt werden, wenn man die beiden sortierten Listen verschmelzt.\\
+$(1 5 6 10)(2 4 7 9)$ 
+% siehe Bild
+Anzahl der Fehlstände = Anzahl der Fehlstände links + Anzahl der Fehlstände rechts\\
+$F((a_1,\dots,a_n)\dots$ Ausgabe: Sortierte Liste$(b_1,\dots,b_n),k$ wobei $k=\#$Fehlstände\\
+\begin{lstlisting}[mathescape]
+if n=0:return (a_1),0
+n'=\lfloor \frac{n}{2} \rfloor; n'' = n-n'
+(b_1,...,b_n),F_L = F(a_1,...,a_n')
+(c1,...,c_n''),F_R = F(a_{n'+1},...,a_n)
+k = F_L + F_R
+i = j = 1;
+for l = 1,2,...,n
+	if (b_i \leq c_j or j = n'' +1) and i \leq n'
+		d_l = b_i; k = k + (j-1)
+		i ++
+	else
+		d_l = c_j
+		j++
+	return (d_1,...,d_n),k
+\end{lstlisting}
+\subsubsection{Variante}
+Länge des Fehlstands ist $j-i (a_i > a_j, j>i)$\\
+$p =$ Gesamtlänge alle Fehlstände; wir brauchen zusätzlich zu jeden Element die Position in der ursprünglichen Liste.\\
+Eingabe: $a_1,...,a_n$... Ausgabe ist $(b_1,...,b_n),(q1,...,q_n),k,p$ \\
+$q_i$ ist die Position von $b_i$ in der Liste $(a_1,...,a_n)$... $(q_i)$ ist eine Permutation von $(1,...,n)$\\
+Rekursive Aufrufe....\\
+$(b_1,...,b_n),(q1,...,q_n'),F_L,P_L$ = rekursiv
+$(c_1,...,c_n),(r1,...,r_n''),F_R,P_R$ = 
+\begin{lstlisting}[mathescape]
+i = j = 1
+for l = 1,...,n
+	if i <= n' and (j = n''+1 or b_i \leq c_j)
+		d_l = b_i
+		s_l = q_i
+		k = k + j -1
+		// eckige klammer rechts neben die oberen 3 ausdrücken
+		p = p + (j-1) (n'-q_i)+T
+		// ende
+		i++
+	else
+		d_l = c_j
+		s_l = r_j + n'
+		// eckige Klammer rechts neben der beiden oberen ausdrücke:
+		T = T + r_j
+		// ende
+		j ++
+return (d_1,...,d_n)(s_1,...,s_n),k,p
+\end{lstlisting}
+
+\subsubsection{Laufzeit}
+Nach Master-Theorem:
+\begin{align*}
+T(n) = T (\lfloor \frac{n}{2} \lfloor) + T(\rceil \frac{n}{2} \lceil) + \Theta(\underbrace{n}_{n^\gamma (=)})\\
+a = 2, b= 2, \gamma = \log_2 2 = 1\\
+T(n) = \Theta (n \log n)\\
+\end{align*}
+
+Oft teilt das Problem auf, dass man Größen in zwei (ungefähre) gleich große Teile zerlegen möchte, einen Teil mit den kleineren Werten, und einen Teil mit den größeren Werten. \\
+Der \textbf{Median} (= $\frac{n}{2}$) - größtes Element ist der ideale Trennungspunkt.
+%Bild III

@@ -24,3 +24,11 @@
 \contentsline {subsubsection}{\numberline {3.3.1}Beispiel A: Quicksort}{8}{subsubsection.3.3.1}
 \contentsline {subsubsection}{\numberline {3.3.2}Beispiel B: Mergesort \relax \fontsize {6}{7}\selectfont (Sortieren durch Verschmelzen)}{8}{subsubsection.3.3.2}
 \contentsline {subsubsection}{\numberline {3.3.3}Analysem\IeC {\"o}glichkeiten}{8}{subsubsection.3.3.3}
+\contentsline {section}{\numberline {4}Rekursion (Fortsetzung) \relax \fontsize {6}{7}\selectfont (Vorlesung 4 am 31.10.)}{10}{section.4}
+\contentsline {subsection}{\numberline {4.1} Motivation Master-Theorem}{10}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Master-Theorem f\IeC {\"u}r divide and conquer-Rekursion}{10}{subsection.4.2}
+\contentsline {subsubsection}{\numberline {4.2.1}Bemerkungen}{11}{subsubsection.4.2.1}
+\contentsline {subsection}{\numberline {4.3}Beweis: Master-Theorem}{11}{subsection.4.3}
+\contentsline {section}{\numberline {5}Master Theorem (Fortsetzung) \relax \fontsize {6}{7}\selectfont (Vorlesung 6 am 3.11.)}{13}{section.5}
+\contentsline {subsection}{\numberline {5.1}Beweis Fortsetzung}{13}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}Z\IeC {\"a}hlen von Fehlst\IeC {\"a}nden (Inversion)}{14}{subsection.5.2}

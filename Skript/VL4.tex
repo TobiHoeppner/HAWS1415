@@ -1,0 +1,125 @@
+\section{Rekursion (Fortsetzung) \tiny (Vorlesung 4 am 31.10.)}
+\subsection{ Motivation Master-Theorem}
+\begin{align*}
+T(n) &= \underbrace{ T(\frac{n}{b}) }_{T( \lfloor \frac{n}{b} \rfloor) + \dots + T(\lceil \frac{n}{b}\rceil)}* a + f(n)
+\end{align*}
+Für Probleme $\leq n_0$ wird das Problem irgendwie direkt gelöst.\\
+Startbedingung: $1 \leq T(n) \leq M$ für $n\leq n_0$\\
+
+In der Praxis muss man natürlich irgendwann das $n_0$ ausrechnen und kann nicht beliebig lange aufteilen.\\
+Die Konstanten $a \geq 1$ und $b > 1$ müssen erfüllt sein und außerdem müssen wir fordern:
+\begin{align*}
+\lceil \frac{n}{b} \rceil &\leq n-1 \text{ für } n > n_0\\
+\Leftrightarrow \frac{n}{b} &\leq n-1\\
+n(1-\frac{1}{b}) &\geq 1\\
+n \geq \frac{b}{b-1}\\
+\Rightarrow n_0 &\geq \frac{b}{b-1}
+\end{align*}
+sonst werden die Probleme nicht kleiner und die Rekursion kann nicht gelöst werden.\\
+$n \log_b n$ Elemente
+$\begin{cases}
+1 \text{ Problem der Größe } n & \text{Aufwand }  1f(n)  n^k \text{ Annahme }f(n)=n^k\\
+2 \text{ Probleme der Größe } \frac{n}{b} &\text{Aufwand }  a*f(\frac{n}{b})  a(\frac{n}{b})^k\\
+3 \text{ Probleme der Größe } \frac{n}{b^2} &\text{Aufwand }  a^2*f(\frac{n}{b^2})  a^2(\frac{n}{b})^k\\
+\vdots & \vdots \\
+
+\end{cases}$
+\subsection*{Beispiel: Mergesort}
+\begin{align*}
+a = b = 2\\
+\gamma = \log_2 2  =1\\
+\end{align*}
+
+\subsection{Master-Theorem für divide and conquer-Rekursion}
+\begin{align*}
+a \geq 1, b > 1, M, n_0 \geq 1 (\frac{n_0}{b} \leq n_0 -1)\\
+f(n),T(n) \text{Funktionen auf den natürlichen Zahlen}\\
+f(n) \geq 0\\
+\end{align*}
+Es gelten die Rekursionsbedingungen 
+\begin{align*}
+T(n) & \leq a T(\lceil \frac{n}{b} \rceil) + f(n) & (n > n_0)\\
+T(n) & \geq a T(\lfloor \frac{n}{b} \rfloor) + f(n) & (n > n_0)\\
+1 & \leq T(n) \leq M\\
+\end{align*}
+Dann definieren wir den kritischen Exponenten
+\begin{align*}
+n = \log a > 0
+\end{align*}
+\begin{enumerate}
+\item[(-)] Wenn $f(n) = \mathcal{O}(n^{\gamma - \epsilon})$ für ein $\epsilon > 0$, dann\\
+% im Kasten, mittig!
+$T(n) = \Theta (n^\gamma)$
+\item[(=)] Wenn $f(n) = \Theta(n^\gamma)$ ist, dann \\
+% kasten, mittig
+$T(n) = \Theta (n^\gamma \log n)$
+\item[(+)] Wenn $f(n) = \Theta (n^{\gamma + \epsilon})$ für ein $\epsilon > 0$ ist oder wenn die Reularitätsbedingung erfüllt ist $\exists c < ^1$:\\
+(*) $a.f(\rceil \frac{n}{b}) \lceil < c.f(n)$ für alle $n>n_0$\\
+dann gilt:
+%kasten, mittig
+$T(n) = \Theta(f(n))$
+\end{enumerate}
+\subsubsection{Bemerkungen}
+\begin{enumerate}
+\item Wenn $f$ monoton ist, dann gelten die Schlussfolgerungen auch für beliebig gemischtes Auf- und Abrunden.
+\item Mit (*) kann man auch Funktionen wie $f(n) = 2^n$ oder $f(n) = 2^{\sqrt{n}}$ erfassen.
+\item $\Omega (n^{\gamma + \epsilon})$ im Fall (+) reicht leider nicht.
+\item $f(n) = n\log n, \gamma = 1$ wird nicht erfasst.
+\end{enumerate}
+\subsection{Beweis: Master-Theorem}
+\begin{enumerate}
+\item[a.)] Wir betrachten die oberen Schranken für die Fälle (-) und (=)
+\begin{enumerate}
+\item Ersetze $f(n)$ durch die oberen Schranke $\underline{u}.n^k$\\
+$f(n) \leq u.n^k$
+Finde eine Funktion $P(n)$ mit %P = T mit Dach\\
+$(***) P(n) \geq  a P(\lceil \frac{n}{b} \lceil) + u n^k$ für $n \geq n_0$\\
+und $P(n) \geq M$ für $n \geq n_0$\\
+Dann ergibt sich durch vollständige Induktion: $T(n) \leq P(n)$\\
+Basis: $(n \leq n_0) $\\%checkmark
+\begin{align*}
+T(n) &\leq a T(\lceil \frac{n}{b} \rceil) + f(n) \leq \text{(I.V.)}\\
+& \leq a P(\lceil \frac{n}{b} \rceil) + f(n)\\
+& \leq a P(\lceil \frac{n}{b} \rceil) + u n^k \leq P(n)\\
+\end{align*}
+\item Verschiebung des Definitionsbereiches, um $\lceil \rceil$ los zu werden.\\
+$v = \frac{b}{b-1} \Rightarrow -\frac{v}{b} = 1-v$\\
+$P(n) = T'(n-v)$ bzw. $T'(n) = P(n+v)$\\
+$T' ist jetzt auf \mathbb{R}_{>0}$ definiert.\\
+Wir bestimmten dann $T'$ so, dass \\
+$(**) T'(n) = a T'(\frac{n}{b}) + u' n^k$ ($u$ ist eine Konstante)\\
+\textbf{Behauptung:} aus $(**)$ folgt $(***)$, falls $T'$ monoton wächst
+\begin{align*}
+\underbrace{P(n)} &\geq a P(\lceil \frac{n}{b} \rceil) + un^k\\
+\text{L.S.}&=P(n) = T'(n-v) = a T'(\frac{n}{b} - \frac{v}{b})+u'(n-v)^k\\
+\text{R.S.}&= a P(\lceil \frac{n}{b} \rceil) + un^k\\
+&= a T'(\lceil \frac{n}{b} \rceil - v) + un^k\\
+&< a T'(\frac{n}{b} +1 - v) + un^k\\
+&= a T'(\frac{n-v}{b}) + un^k
+\end{align*} 
+Jetzt müssen wir nur noch $u'$ so wählen, dass $u'(n-v)^k \geq u n^k$ für $n \geq n_0 u'\geq u \frac{n_{0}^k}{(n_0-v)^k}$\\
+Lösen von $(**)$ durch Ansatz:
+\begin{enumerate}
+\item[Fall (-)] $k = \gamma - \epsilon: T'(n) = D n^\gamma + En^k$
+Einsetzen in $(**)$
+\begin{align*}
+Dn^\gamma + En^k &= aD(\frac{n}{b})^\gamma + aE(\frac{n}{b})^k + u'n^k\\
+&= Dn^\gamma \underbrace{\frac{a}{b^\gamma}}_{1} + n^k(aE \frac{1}{b^k} + u')\\
+\\
+E(1-\frac{a}{b^k} = u', E = \frac{u'}{1-\frac{a}{b^2}})&\\
+E(1-\frac{b^\gamma}{b^{\gamma - \epsilon}}) &= u'\\
+E (1-b^\epsilon) = u'\\
+\underline{E} = \frac{-u'}{b^\epsilon -1} < 0\\
+\end{align*}
+$D$ ist noch frei: Wähle $D$ groß genug, dass $P(n) = T'(n-v) = D(n-v)^\gamma + E(n-v)^k \geq M$ für $n \leq n_0$ ist.
+\item[Fall (=)]
+\begin{align*}
+T'(n) &= D n^\gamma + En^\gamma \log_b n\\
+\dots \Rightarrow E &= u'\text{, D bleibt frei. - D groß genung.}
+\end{align*}
+\item[Ergebnis im Fall (-)]$T(n) \leq D(n-v)^\gamma + E(n-v)^{\gamma-k} = \mathcal{O(n^\gamma)}$
+\item[Ergebnis im Fall (=)] $= \mathcal{O(n^\gamma \log \frac{n}{\gamma})}$
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+
