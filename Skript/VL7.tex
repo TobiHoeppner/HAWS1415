@@ -1,0 +1,117 @@
+\section{Median \tiny (Vorlesung 7 am 7.11.)}
+\subsection{Bestimmung des k-kleinsten Elements (Medians)}
+
+Eingabe: $(a_1, a_2, \dots	, a_n)$ Liste mit Werten, $k$, $1\leq k \leq n$\\
+Bestimme das k-kleinste Element in sortierter Reihenfolge.\\
+Sortierte Reihenfolge $a^{(1)} \leq a^{(2)} \leq \dots \leq a^{(n)}$\\
+Gesucht ist $a^{(k)}$; $k=$ Stelle in der sortierten Reihenfolge heißt der \underline{\textbf{Rang}} des Elements\\
+Beispiel: $(\underline{4},2,1,7,9)$ Rang von $a_r 4 $ ist $3$.\\
+Das Element, das in der Mitte steht heißt der Median.\\
+Oft hat man versucht das Element in der Mitte zu bestimmen, in dem man alle Werte aufsummiert und dann durch die Anzahl der Werte teilt. Das Ergebnis sollte dann der Mittelwert sein. Das Problem sind allerdings Werte, die im Verhältnis zu allen anderen deutlich größer sind (bsp. $(1,2,3,4,2,3,9000)$), weil sie den Mittelwert ungünstig verschieben, sodass er keinen Sinn ergibt.\\
+
+Der \textbf{Median} kann wie folgt bestimmt werden:\\
+für ungerade $n$
+\begin{align*}
+a^{\frac{n+1}{2}}
+\end{align*}
+für gerade $n$
+\begin{align*}
+\frac{1}{2}(a^{\frac{n}{2}} + a^{\frac{n}{2}+1})
+\end{align*}
+
+\subsection{Quickselect}
+Algorithmus: \lstinline!Quickselect(k,l)! mit $l=(a_1,...,a_n)$
+\begin{enumerate}
+\item Wähle Pivotelement $a$
+\item Zähle, wie viele Elemente $<,=,> a$ sind.
+Der Rang von $a$ ist zwischen $n_< +1$ und $n_< + n_=$
+\item \lstinline!if! $k\leq n_<$ \lstinline!then Quickselect(k,l_kleiner)!, wobei $|l_<| = n_<$ und \lstinline!l_kleiner! enthält die Elemente $<a$.
+\item \lstinline!if! $k > n_< + n_=$ \lstinline!then Quickselect(k-nkleiner-ngleich, l_groesser)!
+\item return a
+\end{enumerate}
+\subsubsection{Laufzeit}
+\begin{enumerate}
+\item[Laufzeit im schlimmsten Fall:] Pivotelement immer das kleinste Element oder größte.\\
+Liste wird nur um 1 kleiner in jeder Rekursion $\rightarrow \Theta(n^2)$\\
+\item[Laufzeit im besten Fall:] \begin{enumerate}
+\item[•] Rang($a$)$=k$, keine Rekursion notwendig $\rightarrow \Theta(n)$ (GLÜCK!)\\
+\item[•] Teilung in der Mitte: $n_<,n_> \leq \frac{n}{2}: T(n) = T(\frac{n}{2}) + \Theta(n)$
+Ein bisschen Mastertheorem:
+\begin{align*}
+T(n) &= 1*T(\frac{n}{2}) + \Theta(n)\\
+a &= 1\\
+b &= 2 \\
+f(n) &= \Theta(n^1) 1>0\\
+\gamma &= \log_b a = 0 \rightarrow \text{ Fall(+) } \Rightarrow T(n) = \Theta(f(n)) = \Theta(n)\\ 
+\end{align*}
+Alternative (Einsetzen:)
+\begin{align*}
+T(n) = \Theta(n) + \Theta(\frac{n}{2}) + \Theta(\frac{n}{4}) \dots =  \Theta(n)\\
+\end{align*}
+\end{enumerate}
+\end{enumerate}
+Der Algorithmus ist also stark davon abhängig welches Pivotelement wir wählen. Ideal wäre es den Median zu finden. Da wir aber hier versuchen den Median zu finden ist das ein Zirkelschluss. Dabei muss es nicht mal genau das Element genau in der Mitte sein, es reicht, wenn es nahe genug dran ist. \\
+\subsection{randomisiertes Quickselect}
+Wähle $a$ zufällig aus der Liste.\\
+Rang(a) ist gleich verteilt auf ${1,2,...,n}$.
+\subsubsection{Laufzeit}
+Analyse der erwarteten Laufzeit:\\
+Wir nennen den Aufruf von Quickselect erfolgreich, wenn:
+\begin{align*}
+n_< + n_= &= \frac{1}{4	}n\\
+n_> + n_= &= \frac{1}{4	}n\\
+\end{align*}
+in der obersten Aufrufebene ist.\\
+\begin{align*}
+[\frac{1}{4}n \leq \text{rang}(a) \leq \frac{3}{4}n]\\
+\end{align*}
+wenn ($a$) eindeutig ist.\\
+Wahrscheinlichkeit(erfolgreich) $\geq \frac{1}{2}$\\
+Bei einem erfolgreichen Aufruf wird die Liste auf höchstens $\frac{3}{4}n$ reduziert.\\
+$T(n)=$erwartete Laufzeit.\\
+\begin{align*}
+T(n)&\leq E(\#\text{Läufe bis zu einem erfoglreichen Lauf}).\mathcal{O}(n) + T(\frac{3}{4})\\
+&= \frac{1}{p} \text{ wobei } p = \frac{1}{2} \text{ die Erfolgswahrscheinlichkeit ist.}\\
+&= \leq 2\\
+T(n) \leq T(\frac{3}{4}n) + \mathcal{O}(n) &\Rightarrow T(n) = \mathcal{O}(n)\\
+\end{align*}
+\subsection{Quickselect nach Blum, Floyd, Pratt, Rivest, Tarjan (1973)}
+Determinitische Auswahl in $\mathcal{O}(n)$ Zeit.\\
+\begin{enumerate}
+\item Falls $n\leq n_0$, sortiere\\
+\item Andernfalls zerlege Folge in 5er-Gruppen und bestimme in jeder Gruppe den Median $m_1,m_2,...m_{\lfloor \frac{n}{5} \rfloor}$\\
+\item Bestimme den Median $m^*$ dieser Mediane rekursiv.\\
+\item Wähle das Pivotelement $a := m^*$ und verfahre weiter wie bei Quickselect.
+\end{enumerate}
+\subsubsection{Laufzeit}
+Welche Aussagen treffen jetzt auf $n_<+n_=$ und $n_> + n_=$zu?
+\begin{align*}
+n_< + n_= &\geq 3\frac{\lfloor \frac{n}{5}}{2}\\
+n_> + n_= &\geq 3\frac{\lfloor \frac{n}{5}}{2}\\
+n_< &= n-(n_< + n_=)\\
+&= n- \frac{3}{2} * \lfloor \frac{n}{5} \rfloor\\
+\text{Annahme } n&=5l\\
+n_< & \leq n - 0,3 = 0,7n\\
+n &= 5l + i &| i = 0,1,2,3,4 \quad l = \lfloor \frac{n}{5} \rfloor\\
+n_< &\leq n-\frac{3}{2}l = n-\frac{3}{2}(\frac{n-i}{5})\\
+&=n-\frac{3}{10}n + \frac{3}{10}i\\
+&\leq \frac{7}{10}n + \frac{12}{10} \leq \frac{7}{10}n+3\\
+n_< &\leq \frac{7}{10	}n+3
+\end{align*}
+Behauptung: $T(n) = \mathcal{O}(n)$\\
+Beweis: Annahme:
+\begin{align*}
+T(n) \leq \mathcal{C}n+T(\lfloor \frac{n}{5} \rfloor) + T(\lfloor 0,7n \rfloor + 3) \text{ für } n \geq 100
+\end{align*}
+Behauptung $T(n) \leq \mathcal{C}'n$, wenn $\mathcal{C}'\geq 20C$ ist und $\mathcal{C}'$ so groß ist, dass $T(n) \leq \mathcal{C}'n$ für $n \geq 100$ ist.\\
+Beweis mit vollständiger Induktion: $n \geq 100$ geht!\\
+für $n > 100$:
+\begin{align*}
+T(n) &\leq \mathcal{C} n + T(\lfloor \frac{n}{5} \rfloor) + T(\lfloor 0,7n \rfloor+3)\\
+&\leq \mathcal{C}n + \mathcal{C}' \frac{n}{5} + \mathcal{C}' * 0,7n + \mathcal{C}'3\\
+&\leq \mathcal{C'}\frac{n}{20}\\
+&\leq \mathcal{C}'n(0,05 + 0,2 + 0,7) + \mathcal{C'}.3\\
+&=\mathcal{C}'(0,95n + 3) \leq \mathcal{C}'n\\
+0,95n + 3 &\leq n\\
+3 &\leq n.0,05 \quad (n \geq 100 \rightarrow n0,05 \geq 5)\\
+\end{align*}
