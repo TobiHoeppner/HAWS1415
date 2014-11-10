@@ -1,0 +1,90 @@
+\section{Das Rucksackproblem \tiny (Vorlesung 8 am 10.11.)}
+Gegeben sind $n$ Gegenstände.\\
+Jeder Gegenstand hat einen Wert $w$ und ein Gewicht $g_i$.\\
+Es gibt eine Gewichtsschranke $G$.\\
+\subsection*{Problem}
+Finde eine Teilmenge mit möglichst großem Wert und Gesamtgewicht $\leq G$\\
+\subsubsection*{Beispiel n = 5, G = 12}
+\begin{tabular}{c|c|c|c|c|c}
+$i$ & 1 & 2 & 3 & 4 & 5\\
+\hline
+$g_i$ & 4 & 3 & 5 & 2 & 6\\
+$w_i$ & 7 & 8 & 6 & 3 & 9\\
+\end{tabular}
+% Tabelle
+Formulierung mit Variablen:
+\begin{align*}
+\text{maximiere} \quad &\sum_{i=1}^{n} x_i w_i &|x_i \text{ gibt an, ob Gegenstand ausgewählt wird}\\
+\text{unter} \quad &\sum_{i=1}^{n} x_i g_i \leq G\\
+x_i &\in \{0,1\}
+\end{align*}
+$\rightarrow 2^n$ Möglichkeiten.
+\begin{enumerate}
+\item[•] ganzzahliges RP: $x_i \in \mathbb{N}$
+\item[•] gebrochenes RP: $0\leq x_i \leq 1$
+\end{enumerate}
+\subsection{Lösung: Dynamisches Programmierung / Optimierung}
+Löse das Problem durch \emph{systematisches Lösen von Teilproblemen.}\\
+Große Teilprobleme werden auf kleinere zurückgeführt, die man schon vorher gelöst hat.\\
+\subsection*{Teilprobleme?}
+Betrachte nur die ersten $i$ Gegenstände. \\
+zusätzlich: muss man das zulässige Gesamtgewicht variieren.\\
+\begin{align*}
+f(i,b) &= \text{optimaler Wert mit den ersten } i \text{ Gegenständen und das Gesamtgewicht }\leq b\\
+&= \max\{\sum_{j=1}^{i} w_jx_j | \sum_{j=1}^{i}g_jx_j \leq b, x_j \in \{0,1\}\}\\
+\\
+f(i,b) &= \max\{f(i-1,b), f(i-1,b-g_i) + w_i \text{, falls } b \geq g_i\}\\
+&= f(i-1,b)\text{, falls } g_i > b\\
+\end{align*}
+Lösung mit Tabelle: $f(i,b)$ mit $i = 0,...,n $ und $b = 0,..., G$\\
+\begin{tabular}{c|cccccc|}
+$g_i$ & & 4 & 3 & 5 & 2 & 6\\
+$i$ & 0 & 1 & 2 & 3 & 4 & 5\\
+\hline
+$b=$ 0 &  0& 0 &  0& 0 &0 &0\\
+1 & 0 &  0& 0 &  0& 0&0\\
+2 &  0&  0&  0&  0& 0&0\\
+3 &  0&  0&  8&  8& 8&8\\
+4 &  0&  $7^+$&  8&  8& 8&8\\
+5 &  0&  7&  8&  8& 11&11\\
+6 &  0&  7&  8&  $8^-$& 11&\\
+7 &  0&  7&  $15^+$&  $15^-$& 15&\\
+8 &  0&  7&  15&  15& 15&\\
+9 &  0&  7&  15&  15& 18&\\
+10 &  0& 7 &  15&  15& 18&\\
+11 &  0&  7&  15&  15& 18&\\
+12 &  0&  7&  15&  $21^+$& $21^-$&$21^-$\\
+\hline
+\end{tabular}
+\\
+Mit $^+$ markierte Einträge in der Tabelle werden zur optimalen Gesamtlösung hinzugefügt.\\
+$x_5 = 0\rightarrow x_4 = 0 \rightarrow x_3 = 1 \rightarrow x_2 = 1 \rightarrow x_1 = 1$
+Tabelle liefert $f(5,12) = 21 = f(n,G)$ den Wert der Optimallösung.\\
+Um die Lösung selbst zu finden, müssen wir zurückverfolgen, wie dieser Wert zustande gekommen ist.\\
+\subsubsection*{Zurückverfolgen der Lösung}
+\begin{enumerate}
+\item[a)] man merkt sich bloß die Tabelle und rechnet beim Zurückgehen jeden Eintrag noch einmal nach. (Programmieraufwand)
+\item[b)] man speichert sich schon beim Berechnen Zusatzinformationen, wie der Wert zustande gekommen ist. (viel zusätzlicher Speicheraufwand)\\
+\end{enumerate} 
+\subsubsection{Laufzeit und Speicherbedarf}
+$\Theta(nG) = $ Größe der Tabelle $= $Speicherbedarf\\
+Der Speicher lässt sich auf $\Theta(G)$ reduzieren (allerdings verliert man die Möglichkeit der Rücknachvollziehbarkeit)  
+\subsection{Dynamische Programmierung}
+\begin{enumerate}
+\item[•] Definition der Teilprobleme\\
+nicht eindeutig vorgegeben.\\
+\item[•] Rekursion (+ Anfangsbedingungen)\\
+Variante mit Gesamtgewicht $=b$\\
+($f(i,b) = -\infty$ falls es keine Lösung gibt.)\\
+(Rekursion bleibt unverändert, Anfangsbedingung ändert sich. Optimallösung in der ganzen Spalte suche)\\
+\item[•] systematisches Ausfüllen(Zeilen- oder Spaltenweise) der Tabelle aller Teilprobleme
+\item[•] Rückverfolgen der Lösung
+\end{enumerate}
+\subsection{Die Tabelle als Netzwerk}
+Betrachte die Tabelle als gerichteten Graphen. Jeder Eintrag = 1 Knoten.\\
+Vorgänger = Einträge, von denen der Knoten abhängt.\\
+Kantengewicht = Wert, der in Rekursion addiert und Knotenwert = $ f(i,b)$ = Längster Weg von der linken oberen Ecke $(0,0)$ zum Knoten $(i,b)$.\\
+Sehr oft lässt sich eine DP-Rekursion als Wegeproblem in einem azyklischen Graphen modellieren. (kürzeste / längste Wege von einer Ecke zur anderen)\\
+\subsection{Speicheroptimierung}
+Der Speicher lässt sich optimieren(?) in dem man einen Faktor $\log n$ zur Laufzeit hinzufügt.\\
+(unklar...)
