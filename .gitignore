@@ -14,3 +14,7 @@
 *.out
 
 *.toc
+
+skript/MAIN.out
+
+skript/MAIN.toc

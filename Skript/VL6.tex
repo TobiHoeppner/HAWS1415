@@ -18,7 +18,7 @@ obere Schranke: Ansatz: $T(n) \leq D.f(n)$\\
 Versuch eines Beweises durch Induktion.\\
 $n_0$ groß genug machen, dass $\frac{n_0}{b} \leq n_0 -1\Rightarrow \frac{n}{b} \leq n-1 \forall n \geq n_0$\\
 $\Rightarrow \lceil \frac{n}{b} \rceil < n$ Induktion kann funktionieren.\\
-Induktionsschritt: $n \geq n_0$ für $i < n$ sei $T(i) \leg D.f(i)$ schon bewiesen.\\
+Induktionsschritt: $n \geq n_0$ für $i < n$ sei $T(i) \leq D.f(i)$ schon bewiesen.\\
 \begin{align*}
 T(n) & \leq a T(\lceil \frac{n}{b} \rceil) + f(n)\\
 & \leq a.D.f(\lceil \frac{n}{b} \rceil) + f(a) \quad \text{ nach I.V.}\\
