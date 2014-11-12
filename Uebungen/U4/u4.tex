@@ -112,7 +112,7 @@ in: e[0,..,i]					; Werte
 var: i = 0						; Laufvariable
 array: hist = []			; Leeres Array, mit 0 iniziert
 var: n = len(a) 			; laenge von Eingabe
-var: B = n*0.3			; Abschlussbedingung
+var: B = n*0.3				; Abschlussbedingung
 ; Histogramm befüllen
 for i=0, i<n, i++:
 	; eingelesener Wert entspricht der Position im Histogramm
@@ -132,8 +132,7 @@ Zeile 7-9: $\mathcal{O}(n)$\\
 Zeile 11-15: $\mathcal{O}(l(hist))$\\
 
 Obere und untere Schranke unterscheiden sich nicht wesentlich und sind abhängig in der Größe vom Histogramm. Allgemein reicht es allerdings aus sich die Eingabe nur einmal $\Theta(n)$ anzusehen. Im schlimmsten Fall (alles verschiedene Werte) beträgt die Laufzeit $\mathcal{O}(2n)$.\\
-Dieser Algorithmus verlagert das Laufzeitproblem auf die verwendete Datenstruktur, die man für das Histogramm \lstinline!hist! annimmt. Empfehlen würden sich eine (Hash-)Map, da sie fürs suchen und einfügen (amortisiert) nur jeweils $\mathcal{O}(1)$ benötigen. 
-\lstinline!B = n*0.3!.
+Dieser Algorithmus verlagert das Laufzeitproblem auf die verwendete Datenstruktur, die man für das Histogramm \lstinline!hist! annimmt. Empfehlen würden sich eine (Hash-)Map, da sie fürs suchen und einfügen (amortisiert) nur jeweils $\mathcal{O}(1)$ benötigen.
 \end{enumerate}
 
 \subsection*{25. Lokales Maximum in Bäumen, 10 Punkte}
