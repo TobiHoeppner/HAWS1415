@@ -2,7 +2,7 @@
 \usepackage[ngerman]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-%\usepackage{MyriadPro}
+\usepackage{MyriadPro}
 \usepackage[scaled]{beramono}
 \newcommand\Small{\fontsize{10.5}{10.5}\selectfont}
 \newcommand*\LSTfont{\Small\ttfamily\SetTracking{encoding=*}{-20}\lsstyle}
@@ -93,18 +93,29 @@
 \subsection*{23. Bestimmen der Mehrheit, 10 Punkte}
 
 \begin{enumerate}
-\item[\textbf{a)}] nix, weil 0 Punkte. :)
-\item[\textbf{b)}] \textbf{Idee:}\\
+\item[\textbf{b)}]
+Sofern ein Mehrheitselement existiert, dann muss es auch in mindestens einer der Teilmengen existieren.\\
+Ab hier rekursiv:
+\begin{enumerate}
+\item[-] Wenn Menge leer, brich ab.
+\item[-] Wenn mehr als zwei Elemente vorhanden sind, dann entferne alle Elemente, die paarweise verschieden sind. Wenn ein Paar gleich ist, dann streiche nur ein Element.
+\item[-] Wenn Menge nur noch aus einem Element besteht, gebe Element zurück.
+\item[-] Halbiere Menge und suche in Teilmengen weiter. 
+\end{enumerate}
+\subsubsection*{Laufzeit}
+Da man jedes Element mindestens einmal ansieht $\rightarrow \Theta (n)$. Im schlimmsten Fall kommt dann nochmal $\log n$ dazu.\\
+\item[\textbf{c)}] Mit dem Algorithmus aus b) geht es nicht.\\
+\textbf{Idee:} für $\mathcal{O}(n)$\\
 Liste durchlaufen, Histogramm(Wert, Anzahl) erstellen, Histogramm durchlaufen, wenn Wert Bedingung \lstinline!B! erfüllt ausgeben
 \begin{lstlisting}
 in: e[0,..,i]					; Werte
 var: i = 0						; Laufvariable
 array: hist = []			; Leeres Array, mit 0 iniziert
 var: n = len(a) 			; laenge von Eingabe
-var: B = (n+1)/2 +1		; Abschlussbedingung
+var: B = n*0.3			; Abschlussbedingung
 ; Histogramm befüllen
 for i=0, i<n, i++:
-	;eingelesener Wert entspricht der Position im Histogramm
+	; eingelesener Wert entspricht der Position im Histogramm
 	hist[e[i]]++
 ; Histogramm durchlaufen
 for val in hist:
@@ -121,13 +132,14 @@ Zeile 7-9: $\mathcal{O}(n)$\\
 Zeile 11-15: $\mathcal{O}(l(hist))$\\
 
 Obere und untere Schranke unterscheiden sich nicht wesentlich und sind abhängig in der Größe vom Histogramm. Allgemein reicht es allerdings aus sich die Eingabe nur einmal $\Theta(n)$ anzusehen. Im schlimmsten Fall (alles verschiedene Werte) beträgt die Laufzeit $\mathcal{O}(2n)$.\\
-Im schlimmsten Fall könnte man die Laufzeit optimieren in dem die Größe (Anzahl der Einträge) des Histogramms im Bezug zur Bedingung betrachtet.\\ 
-\item[\textbf{c)}] Nehme Algorithmus aus \textbf{b)} und wähle \lstinline!B = n*0.3!.
+Dieser Algorithmus verlagert das Laufzeitproblem auf die verwendete Datenstruktur, die man für das Histogramm \lstinline!hist! annimmt. Empfehlen würden sich eine (Hash-)Map, da sie fürs suchen und einfügen (amortisiert) nur jeweils $\mathcal{O}(1)$ benötigen. 
+\lstinline!B = n*0.3!.
 \end{enumerate}
 
 \subsection*{25. Lokales Maximum in Bäumen, 10 Punkte}
 \begin{enumerate}
-\item[a)] Ja. Tiefen oder Breitensuche.
-\item[b)] Wissen: die Höhe eines (entarteten) Binärbaums kann $n$ sein.
+\item[a)] Ja. Tiefen oder Breitensuche. Dadurch traversiert man den Baum, wodurch man in linearer Zeit ein Maximum bestimmen kann. Alternativ nehme Vorgehen aus b) weil $\mathcal{O}(h) \in \mathcal{O}(n)$.
+\item[b)] Man folgt nur dem größten Pfad im Baum. D.h. wenn sich zwei Kindknoten unterscheiden dann wählt man den Teilbaum mit den größeren Wert im Kindknoten. In diesem Teilbaum muss es dann ein lokales Maximum geben. Die Höhe $h$ eines Baumes ist dabei als längster Weg im Baum definiert. 
 \end{enumerate}
+
 \end{document}
