@@ -2,7 +2,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman]{babel}
-%\usepackage{MyriadPro}
+\usepackage{MyriadPro}
 \usepackage[scaled]{beramono}
 \newcommand\Small{\fontsize{10.5}{10.5}\selectfont}
 \newcommand*\LSTfont{\Small\ttfamily\SetTracking{encoding=*}{-20}\lsstyle}
@@ -39,18 +39,18 @@
   {.}         % HEADPUNCT
   {\newline}  % HEADSPACE. `plain` default: {5pt plus 1pt minus 1pt}
   {}          % CUSTOM-HEAD-SPEC
-\theoremstyle{defn}
+%\theoremstyle{defn}
 % Theorem Styles
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{proposition}[theorem]{Vorschlag}
-\newtheorem{corollary}[theorem]{Folge}
+%\newtheorem{theorem}{Theorem}[section]
+%\newtheorem{lemma}[theorem]{Lemma}
+%\newtheorem{proposition}[theorem]{Vorschlag}
+%\newtheorem{corollary}[theorem]{Folge}
 % Definition Styles
-\theoremstyle{defn}
-\newtheorem{defn}{Definition}[section]
-\newtheorem{exap}{Beispiel}[section]
-\theoremstyle{rem}
-\newtheorem{rem}{Bemerkung}
+%\theoremstyle{defn}
+%\newtheorem{defn}{Definition}[section]
+%\newtheorem{exap}{Beispiel}[section]
+%\theoremstyle{rem}
+%\newtheorem{rem}{Bemerkung}
 
 \usepackage{hyperref}
 \hypersetup{
@@ -144,6 +144,7 @@
 \include{vl2}
 \include{vl3}
 \include{vl4}
+\include{vl5}
 \include{vl6}
 \include{vl7}
 \include{vl8}
