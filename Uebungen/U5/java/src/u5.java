@@ -11,7 +11,7 @@ public class u5 {
     public static int low = 100000000;
 
 
-    private static String generateNumber(int n){
+    private static BigInteger nextBigInt (int n){
         String b = "";
         int a = 0;
         // generates a String with n digits
@@ -30,10 +30,10 @@ public class u5 {
                 }
             }
         }
-        return b;
+        return new BigInteger(b);
     }
 
-    public static Double tsubamul(String x, String y){
+    public static double tsubamul(String x, String y){
         if ((x.length() < 10) || (y.length() < 10)){
             Double r = Double.parseDouble(x) * Double.parseDouble(y);
             return r;
@@ -78,19 +78,19 @@ public class u5 {
     }
 
     public static void main(String[] args){
-        // some tests
-        String x = generateNumber(15);
-        String y = generateNumber(15);
-
-        System.out.println(x);
-        System.out.println(y);
-
-        System.out.println(tsubamul(x,y));
-
-        BigInteger xk = new BigInteger(x);
-        BigInteger yk = new BigInteger(y);
-        System.out.println(xk.multiply(yk));
-
+        for(int i=1; i<100; i++){
+            System.out.println(nextBigInt(i));
+        }
+        int k = Integer.MAX_VALUE;
+        System.out.println(k);
+        System.out.println((double)k);
+        double o = Math.sqrt((double)k);
+        System.out.println(o);
+        System.out.println((int)o);
+        int z = (int) o;
+        System.out.println(Integer.bitCount(z)+", "+Integer.toString(z).length());
+        System.out.println((int)(o*o));
+        System.out.println(Integer.MAX_VALUE);
     }
 
 }
