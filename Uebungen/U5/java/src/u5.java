@@ -10,7 +10,6 @@ public class u5 {
     public static int high = 999999999;
     public static int low = 100000000;
 
-
     private static BigInteger nextBigInt (int n){
         String b = "";
         int a = 0;
@@ -33,64 +32,45 @@ public class u5 {
         return new BigInteger(b);
     }
 
-    public static double tsubamul(String x, String y){
-        if ((x.length() < 10) || (y.length() < 10)){
-            Double r = Double.parseDouble(x) * Double.parseDouble(y);
-            return r;
-        }
-        int m = Math.max(x.length(), y.length());
-        int m2 = m/2;
-        String h1 = x.substring(0,m2);
-        String l1 = x.substring(m2,x.length());
-        String h2 = y.substring(0,m2);
-        String l2 = y.substring(m2,y.length());
-        System.out.println("x: "+x+"\ty: "+y);
-        System.out.println("l1:\t"+l1+", "+l1.length()+";\th1:\t"+h1+", "+h1.length()+";\tl2:\t"+l2+", "+l2.length()+";\th2:\t"+h2+", "+h2.length());
-        Double z0 = tsubamul(l1, l2);
-        // bignumber addition?!
-        int l1int = Integer.decode(l1);
-        int l2int = Integer.decode(l2);
-        int h1int = Integer.decode(h1);
-        int h2int = Integer.decode(h2);
-        int l1h1 = l1int + h1int;
-        System.out.println("l1+h1= "+l1h1 );
-        int l2h2 = l2int + h2int;
-        System.out.println("l2+h2= "+l2h2 );
-        Double z1 = tsubamul(Integer.toString(l1h1), Integer.toString(l1h1));
-        Double z2 = tsubamul(h1, h2);
-/*        procedure karatsuba(num1, num2)
-        if (num1 < 10) or (num2 < 10)
-        return num1*num2
-  *//* calculates the size of the numbers *//*
-        m = max(size_base10(num1), size_base10(num2))
-        m2 = m/2
-  *//* split the digit sequences about the middle *//*
-        high1, low1 = split_at(num1, m2)
-        high2, low2 = split_at(num2, m2)
-  *//* 3 calls made to numbers approximately half the size *//*
-        z0 = karatsuba(low1,low2)
-        z1 = karatsuba((low1+high1),(low2+high2))
-        z2 = karatsuba(high1,high2)
-        return (z2*10^(2*m2))+((z1-z2-z0)*10^(m2))+(z0)*/
-        System.out.println(Math.pow(10,m2));
-        Double k = Math.pow(10,m2);
-        return (z2*k)+((z1-z2-z0)*k)+(z0);
+    public static BigInteger mul (BigInteger x, BigInteger y){
+        /*
+        Idea by Robert Sedgewick and Kevin Wayne (c) 2000-2011
+        Algorithm by Karatsuba
+         */
+        int n = Math.max(x.bitLength(), y.bitLength());
+        if (n <= 10) return x.multiply(y);
+        n = (n/2) + (n % 2);
+        BigInteger b = x.shiftRight(n);
+        BigInteger a = sub(x, b.shiftLeft(n));
+        BigInteger d = y.shiftRight(n);
+        BigInteger c = sub(y, d.shiftLeft(n));
+
+        BigInteger ac = mul(a, c);
+        BigInteger bd = mul(b, d);
+        BigInteger abcd = mul(add(a,b), add(c,d));
+
+        BigInteger m = sub(abcd, ac);
+        BigInteger h = sub(m, bd).shiftLeft(n);
+        BigInteger l = add(ac, h);
+        BigInteger k = add(l,bd.shiftLeft(2*n));
+        return k;
+    }
+
+    public static BigInteger add(BigInteger a, BigInteger b){
+        return a.add(b);
+    }
+
+    public static BigInteger sub(BigInteger a, BigInteger b){
+        return a.subtract(b);
     }
 
     public static void main(String[] args){
-        for(int i=1; i<100; i++){
-            System.out.println(nextBigInt(i));
-        }
-        int k = Integer.MAX_VALUE;
-        System.out.println(k);
-        System.out.println((double)k);
-        double o = Math.sqrt((double)k);
-        System.out.println(o);
-        System.out.println((int)o);
-        int z = (int) o;
-        System.out.println(Integer.bitCount(z)+", "+Integer.toString(z).length());
-        System.out.println((int)(o*o));
-        System.out.println(Integer.MAX_VALUE);
+        BigInteger a = nextBigInt(90);
+        BigInteger b = nextBigInt(90);
+        System.out.println(a+", "+a.toString().length());
+        System.out.println(b+", "+b.toString().length());
+        System.out.println(mul(a, b));
+        System.out.println(a.multiply(b));
     }
 
 }
