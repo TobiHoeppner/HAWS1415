@@ -95,10 +95,10 @@ public class u5 {
     }
 
     public static void main(String[] args){
-        BigInteger a = nextBigInt(150);
-        BigInteger b = nextBigInt(150);
-        System.out.println(a+", "+a.toString().length());
-        System.out.println(b+", "+b.toString().length());
+        BigInteger a = nextBigInt(10);
+        BigInteger b = nextBigInt(10);
+        System.out.println(add(a,b));
+        System.out.println(a.add(b));
         BigInteger ab = mul(a,b);
         System.out.println(ab+", "+ab.toString().length());
         BigInteger ba = a.multiply(b);
