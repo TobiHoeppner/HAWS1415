@@ -72,7 +72,7 @@ public class u5 {
     }
 
     public static void test(int n){
-        int A = 100;
+        int A = 10;
         long start,stop, elapsed;
         long[] times = new long[A];
         BigInteger a,b,c;
@@ -83,7 +83,7 @@ public class u5 {
             c = mul(a, b);
             stop = System.currentTimeMillis();
             times[i] = (stop - start);
-            if (c.equals(a.multiply(b))){;}else{System.out.println("FAIL! "+i);}
+            //if (c.equals(a.multiply(b))){;}else{System.out.println("FAIL! "+i);}
         }
         elapsed = 0;
         for (int k=0; k < A; k++){
@@ -95,17 +95,7 @@ public class u5 {
     }
 
     public static void main(String[] args){
-        BigInteger a = nextBigInt(10);
-        BigInteger b = nextBigInt(10);
-        System.out.println(add(a,b));
-        System.out.println(a.add(b));
-        BigInteger ab = mul(a,b);
-        System.out.println(ab+", "+ab.toString().length());
-        BigInteger ba = a.multiply(b);
-        System.out.println(ba+", "+ba.toString().length());
-        if (ab.equals(ba)) System.out.println("True!");
-
-        for (int i = 1000; i < 100001; i += 1000){test(i);}
+        System.out.println(mul(new BigInteger(args[0]),new BigInteger(args[1])));
     }
 
 }
