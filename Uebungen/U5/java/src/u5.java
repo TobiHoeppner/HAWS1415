@@ -34,7 +34,7 @@ public class u5 {
 
     public static BigInteger mul (BigInteger x, BigInteger y){
         /*
-        Idea by Robert Sedgewick and Kevin Wayne (c) 2000-2011
+        Implementation Idea by Robert Sedgewick and Kevin Wayne (c) 2000-2011
         Algorithm by Karatsuba
          */
         int n = Math.max(x.bitLength(), y.bitLength());
@@ -45,10 +45,12 @@ public class u5 {
         BigInteger d = y.shiftRight(n);
         BigInteger c = sub(y, d.shiftLeft(n));
 
+        // subcalls
         BigInteger ac = mul(a, c);
         BigInteger bd = mul(b, d);
         BigInteger abcd = mul(add(a,b), add(c,d));
 
+        // final operations
         BigInteger m = sub(abcd, ac);
         BigInteger h = sub(m, bd).shiftLeft(n);
         BigInteger l = add(ac, h);
@@ -57,20 +59,53 @@ public class u5 {
     }
 
     public static BigInteger add(BigInteger a, BigInteger b){
-        return a.add(b);
+        while (!b.equals(BigInteger.ZERO)){
+            BigInteger carry = a.and(b);
+            a = a.xor(b);
+            b = carry.shiftLeft(1);
+        }
+        return a;
     }
 
     public static BigInteger sub(BigInteger a, BigInteger b){
         return a.subtract(b);
     }
 
+    public static void test(int n){
+        int A = 100;
+        long start,stop, elapsed;
+        long[] times = new long[A];
+        BigInteger a,b,c;
+        for (int i=0; i < A; i++){
+            a = nextBigInt(n);
+            b = nextBigInt(n);
+            start = System.currentTimeMillis();
+            c = mul(a, b);
+            stop = System.currentTimeMillis();
+            times[i] = (stop - start);
+            if (c.equals(a.multiply(b))){;}else{System.out.println("FAIL! "+i);}
+        }
+        elapsed = 0;
+        for (int k=0; k < A; k++){
+            elapsed += times[k];
+        }
+        elapsed = elapsed / A;
+        System.out.println(n+" & "+elapsed+"\\\\");
+        System.out.println("\\hline");
+    }
+
     public static void main(String[] args){
-        BigInteger a = nextBigInt(90);
-        BigInteger b = nextBigInt(90);
+        BigInteger a = nextBigInt(150);
+        BigInteger b = nextBigInt(150);
         System.out.println(a+", "+a.toString().length());
         System.out.println(b+", "+b.toString().length());
-        System.out.println(mul(a, b));
-        System.out.println(a.multiply(b));
+        BigInteger ab = mul(a,b);
+        System.out.println(ab+", "+ab.toString().length());
+        BigInteger ba = a.multiply(b);
+        System.out.println(ba+", "+ba.toString().length());
+        if (ab.equals(ba)) System.out.println("True!");
+
+        for (int i = 1000; i < 100001; i += 1000){test(i);}
     }
 
 }
