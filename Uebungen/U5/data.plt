@@ -1,6 +1,6 @@
 set grid
-set xlabel 'Zeit [ms]'
-set ylabel 'Zahlenlänge N'
+set ylabel 'Zeit [ms]'
+set xlabel 'Zahlenlänge N'
 set title "Java BigInteger Mulitply tests"
 set autoscale xfixmax
 set autoscale yfixmax

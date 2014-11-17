@@ -2,7 +2,7 @@
 \usepackage[ngerman]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-%\usepackage{MyriadPro}
+\usepackage{MyriadPro}
 \usepackage[scaled]{beramono}
 \newcommand\Small{\fontsize{10.5}{10.5}\selectfont}
 \newcommand*\LSTfont{\Small\ttfamily\SetTracking{encoding=*}{-20}\lsstyle}
@@ -90,594 +90,413 @@
 \begin{document} 
 \maketitle 
 
-\subsection*{29. Programmieraufgabe: Multiplikation langer Zahlen nach Karatsuba, 20 Punkte}
-Daten:
-\begin{tabular}{|c|c|}
-\hline
-N & ms\\
-\hline
-1000 & 20\\
-\hline
-2000 & 27\\
-\hline
-3000 & 25\\
-\hline
-4000 & 41\\
-\hline
-5000 & 44\\
-\hline
-6000 & 67\\
-\hline
-7000 & 121\\
-\hline
-8000 & 124\\
-\hline
-9000 & 125\\
-\hline
-10000 & 132\\
-\hline
-11000 & 145\\
-\hline
-12000 & 203\\
-\hline
-13000 & 302\\
-\hline
-14000 & 357\\
-\hline
-15000 & 370\\
-\hline
-16000 & 369\\
-\hline
-17000 & 371\\
-\hline
-18000 & 372\\
-\hline
-19000 & 376\\
-\hline
-20000 & 396\\
-\hline
-21000 & 403\\
-\hline
-22000 & 433\\
-\hline
-23000 & 509\\
-\hline
-24000 & 610\\
-\hline
-25000 & 747\\
-\hline
-26000 & 909\\
-\hline
-27000 & 1034\\
-\hline
-28000 & 1104\\
-\hline
-29000 & 1127\\
-\hline
-30000 & 1175\\
-\hline
-31000 & 1143\\
-\hline
-32000 & 1216\\
-\hline
-33000 & 1152\\
-\hline
-34000 & 1183\\
-\hline
-35000 & 1187\\
-\hline
-36000 & 1190\\
-\hline
-37000 & 1205\\
-\hline
-38000 & 1246\\
-\hline
-39000 & 1192\\
-\hline
-40000 & 1217\\
-\hline
-41000 & 1223\\
-\hline
-42000 & 1237\\
-\hline
-43000 & 1273\\
-\hline
-44000 & 1305\\
-\hline
-45000 & 1413\\
-\hline
-46000 & 1528\\
-\hline
-47000 & 1672\\
-\hline
-48000 & 1833\\
-\hline
-49000 & 2027\\
-\hline
-50000 & 2291\\
-\hline
-51000 & 2527\\
-\hline
-52000 & 2778\\
-\hline
-53000 & 3000\\
-\hline
-54000 & 3150\\
-\hline
-55000 & 3182\\
-\hline
-56000 & 3238\\
-\hline
-57000 & 3291\\
-\hline
-58000 & 3308\\
-\hline
-59000 & 3331\\
-\hline
-60000 & 3354\\
-\hline
-61000 & 3356\\
-\hline
-62000 & 3358\\
-\hline
-63000 & 3374\\
-\hline
-64000 & 3361\\
-\hline
-65000 & 3360\\
-\hline
-66000 & 3369\\
-\hline
-67000 & 3364\\
-\hline
-68000 & 3359\\
-\hline
-69000 & 3389\\
-\hline
-70000 & 3366\\
-\hline
-71000 & 3353\\
-\hline
-72000 & 3371\\
-\hline
-73000 & 3382\\
-\hline
-74000 & 3389\\
-\hline
-75000 & 3396\\
-\hline
-76000 & 3414\\
-\hline
-77000 & 3446\\
-\hline
-78000 & 3493\\
-\hline
-79000 & 3558\\
-\hline
-80000 & 3609\\
-\hline
-81000 & 3580\\
-\hline
-82000 & 3600\\
-\hline
-83000 & 3593\\
-\hline
-84000 & 3636\\
-\hline
-85000 & 3675\\
-\hline
-86000 & 3746\\
-\hline
-87000 & 3801\\
-\hline
-88000 & 3915\\
-\hline
-89000 & 4070\\
-\hline
-90000 & 4221\\
-\hline
-91000 & 4404\\
-\hline
-92000 & 4580\\
-\hline
-93000 & 4819\\
-\hline
-94000 & 5033\\
-\hline
-95000 & 5256\\
-\hline
-96000 & 5533\\
-\hline
-97000 & 5776\\
-\hline
-98000 & 6037\\
-\hline
-99000 & 6406\\
-\hline
-100000 & 6831\\
-\hline
-\end{tabular}
+\subsubsection*{29. Programmieraufgabe: Multiplikation langer Zahlen nach Karatsuba, 20 Punkte}
+Anmerkung zum Programmstart:
+\begin{lstlisting}
+java -jar Uebung.jar <ZAHL1> <ZAHL2>
+\end{lstlisting}
+Multipliziert \lstinline!ZAHL1! mit \lstinline!ZAHL2!.\\
 
-\begin{tabular}{|c|c|}
-\hline
-N & ms\\
-\hline
-1000 & 35\\
-\hline
-2000 & 54\\
-\hline
-3000 & 83\\
-\hline
-4000 & 148\\
-\hline
-5000 & 173\\
-\hline
-6000 & 250\\
-\hline
-7000 & 412\\
-\hline
-8000 & 443\\
-\hline
-9000 & 464\\
-\hline
-10000 & 515\\
-\hline
-11000 & 569\\
-\hline
-12000 & 744\\
-\hline
-13000 & 1052\\
-\hline
-14000 & 1232\\
-\hline
-15000 & 1297\\
-\hline
-16000 & 1343\\
-\hline
-17000 & 1360\\
-\hline
-18000 & 1396\\
-\hline
-19000 & 1452\\
-\hline
-20000 & 1556\\
-\hline
-21000 & 1604\\
-\hline
-22000 & 1715\\
-\hline
-23000 & 1970\\
-\hline
-24000 & 2257\\
-\hline
-25000 & 2700\\
-\hline
-26000 & 3195\\
-\hline
-27000 & 3589\\
-\hline
-28000 & 3759\\
-\hline
-29000 & 3861\\
-\hline
-30000 & 3994\\
-\hline
-31000 & 4025\\
-\hline
-32000 & 4095\\
-\hline
-33000 & 4155\\
-\hline
-34000 & 4178\\
-\hline
-35000 & 4230\\
-\hline
-36000 & 4206\\
-\hline
-37000 & 4261\\
-\hline
-38000 & 4371\\
-\hline
-39000 & 4523\\
-\hline
-40000 & 4689\\
-\hline
-41000 & 4776\\
-\hline
-42000 & 4856\\
-\hline
-43000 & 5014\\
-\hline
-44000 & 5211\\
-\hline
-45000 & 5556\\
-\hline
-46000 & 5918\\
-\hline
-47000 & 6273\\
-\hline
-48000 & 6752\\
-\hline
-49000 & 7384\\
-\hline
-50000 & 8133\\
-\hline
-51000 & 8923\\
-\hline
-52000 & 9737\\
-\hline
-53000 & 10240\\
-\hline
-54000 & 10696\\
-\hline
-55000 & 11062\\
-\hline
-56000 & 11289\\
-\hline
-57000 & 11510\\
-\hline
-58000 & 11675\\
-\hline
-59000 & 11921\\
-\hline
-60000 & 11978\\
-\hline
-61000 & 11898\\
-\hline
-62000 & 11986\\
-\hline
-63000 & 12030\\
-\hline
-64000 & 12139\\
-\hline
-65000 & 12338\\
-\hline
-66000 & 12301\\
-\hline
-67000 & 12423\\
-\hline
-68000 & 12372\\
-\hline
-69000 & 12548\\
-\hline
-70000 & 12556\\
-\hline
-71000 & 12654\\
-\hline
-72000 & 12692\\
-\hline
-73000 & 12788\\
-\hline
-74000 & 12859\\
-\hline
-75000 & 12970\\
-\hline
-76000 & 13182\\
-\hline
-77000 & 13370\\
-\hline
-78000 & 13633\\
-\hline
-79000 & 14024\\
-\hline
-80000 & 14812\\
-\hline
-85000 & 15452\\
-\hline
-90000 & 17154\\
-\hline
-95000 & 20241\\
-\hline
-100000 & 25033\\
-\hline
-\end{tabular}
+Quellenangabe zur verwendeten Karatsuba Implementierung: \url{http://introcs.cs.princeton.edu/java/78crypto/Karatsuba.java.html}
+Autoren:  Robert Sedgewick, Kevin Wayne.\\
 
-\begin{tabular}{|c|c|}
-\hline
-N & ms\\
-\hline
-1000 & 0\\
-\hline
-2000 & 0\\
-\hline
-3000 & 0\\
-\hline
-4000 & 0\\
-\hline
-5000 & 0\\
-\hline
-6000 & 0\\
-\hline
-7000 & 0\\
-\hline
-8000 & 1\\
-\hline
-9000 & 1\\
-\hline
-10000 & 1\\
-\hline
-11000 & 1\\
-\hline
-12000 & 2\\
-\hline
-13000 & 2\\
-\hline
-14000 & 2\\
-\hline
-15000 & 3\\
-\hline
-16000 & 4\\
-\hline
-17000 & 4\\
-\hline
-18000 & 5\\
-\hline
-19000 & 5\\
-\hline
-20000 & 6\\
-\hline
-21000 & 6\\
-\hline
-22000 & 7\\
-\hline
-23000 & 8\\
-\hline
-24000 & 8\\
-\hline
-25000 & 9\\
-\hline
-26000 & 10\\
-\hline
-27000 & 11\\
-\hline
-28000 & 11\\
-\hline
-29000 & 12\\
-\hline
-30000 & 13\\
-\hline
-31000 & 14\\
-\hline
-32000 & 15\\
-\hline
-33000 & 16\\
-\hline
-34000 & 17\\
-\hline
-35000 & 18\\
-\hline
-36000 & 19\\
-\hline
-37000 & 20\\
-\hline
-38000 & 22\\
-\hline
-39000 & 23\\
-\hline
-40000 & 24\\
-\hline
-41000 & 25\\
-\hline
-42000 & 27\\
-\hline
-43000 & 27\\
-\hline
-44000 & 29\\
-\hline
-45000 & 30\\
-\hline
-46000 & 31\\
-\hline
-47000 & 33\\
-\hline
-48000 & 34\\
-\hline
-49000 & 35\\
-\hline
-50000 & 38\\
-\hline
-51000 & 39\\
-\hline
-52000 & 43\\
-\hline
-53000 & 42\\
-\hline
-54000 & 47\\
-\hline
-55000 & 46\\
-\hline
-56000 & 47\\
-\hline
-57000 & 50\\
-\hline
-58000 & 50\\
-\hline
-59000 & 51\\
-\hline
-60000 & 57\\
-\hline
-61000 & 57\\
-\hline
-62000 & 57\\
-\hline
-63000 & 59\\
-\hline
-64000 & 61\\
-\hline
-65000 & 63\\
-\hline
-66000 & 64\\
-\hline
-67000 & 66\\
-\hline
-68000 & 68\\
-\hline
-69000 & 70\\
-\hline
-70000 & 73\\
-\hline
-71000 & 75\\
-\hline
-72000 & 77\\
-\hline
-73000 & 79\\
-\hline
-74000 & 81\\
-\hline
-75000 & 83\\
-\hline
-76000 & 86\\
-\hline
-77000 & 88\\
-\hline
-78000 & 90\\
-\hline
-79000 & 93\\
-\hline
-80000 & 95\\
-\hline
-81000 & 98\\
-\hline
-82000 & 100\\
-\hline
-83000 & 104\\
-\hline
-84000 & 106\\
-\hline
-85000 & 108\\
-\hline
-86000 & 113\\
-\hline
-87000 & 115\\
-\hline
-88000 & 116\\
-\hline
-89000 & 118\\
-\hline
-90000 & 121\\
-\hline
-91000 & 124\\
-\hline
-92000 & 127\\
-\hline
-93000 & 129\\
-\hline
-94000 & 132\\
-\hline
-95000 & 135\\
-\hline
-96000 & 137\\
-\hline
-97000 & 141\\
-\hline
-98000 & 144\\
-\hline
-99000 & 148\\
-\hline
-100000 & 150\\
-\hline
-\end{tabular}
+Der Code wurde noch etwas angepasst. Da die Additionsoperation nicht von \lstinline!java.math.BigInteger! verwendet werden durfte. Ich habe mich entschieden diesen Code zu verwenden, weil er in der Länge und Struktur sehr kurz war und damit wenig Fehleranfällig. Im Quelltext finden sich noch zwei weitere Funktionen(\lstinline!nextBigInt(int n)! und \lstinline!test(int n)!) die ich zu Testzwecken selbst geschrieben habe. Die verwendete Additionsmethode stellte sich als wenig effizient heraus. 
+\subsubsection*{Messdaten}
+%Daten:
+%\begin{tabular}{|c|c|}
+%\hline
+%N & ms\\
+%\hline
+%1000 & 20\\
+%\hline
+%2000 & 27\\
+%\hline
+%3000 & 25\\
+%\hline
+%4000 & 41\\
+%\hline
+%5000 & 44\\
+%\hline
+%6000 & 67\\
+%\hline
+%7000 & 121\\
+%\hline
+%8000 & 124\\
+%\hline
+%9000 & 125\\
+%\hline
+%10000 & 132\\
+%\hline
+%11000 & 145\\
+%\hline
+%12000 & 203\\
+%\hline
+%13000 & 302\\
+%\hline
+%14000 & 357\\
+%\hline
+%15000 & 370\\
+%\hline
+%16000 & 369\\
+%\hline
+%17000 & 371\\
+%\hline
+%18000 & 372\\
+%\hline
+%19000 & 376\\
+%\hline
+%20000 & 396\\
+%\hline
+%21000 & 403\\
+%\hline
+%22000 & 433\\
+%\hline
+%23000 & 509\\
+%\hline
+%24000 & 610\\
+%\hline
+%25000 & 747\\
+%\hline
+%26000 & 909\\
+%\hline
+%27000 & 1034\\
+%\hline
+%28000 & 1104\\
+%\hline
+%29000 & 1127\\
+%\hline
+%30000 & 1175\\
+%\hline
+%31000 & 1143\\
+%\hline
+%32000 & 1216\\
+%\hline
+%33000 & 1152\\
+%\hline
+%34000 & 1183\\
+%\hline
+%35000 & 1187\\
+%\hline
+%36000 & 1190\\
+%\hline
+%37000 & 1205\\
+%\hline
+%38000 & 1246\\
+%\hline
+%39000 & 1192\\
+%\hline
+%40000 & 1217\\
+%\hline
+%41000 & 1223\\
+%\hline
+%42000 & 1237\\
+%\hline
+%43000 & 1273\\
+%\hline
+%44000 & 1305\\
+%\hline
+%45000 & 1413\\
+%\hline
+%46000 & 1528\\
+%\hline
+%47000 & 1672\\
+%\hline
+%48000 & 1833\\
+%\hline
+%49000 & 2027\\
+%\hline
+%50000 & 2291\\
+%\hline
+%51000 & 2527\\
+%\hline
+%52000 & 2778\\
+%\hline
+%53000 & 3000\\
+%\hline
+%54000 & 3150\\
+%\hline
+%55000 & 3182\\
+%\hline
+%56000 & 3238\\
+%\hline
+%57000 & 3291\\
+%\hline
+%58000 & 3308\\
+%\hline
+%59000 & 3331\\
+%\hline
+%60000 & 3354\\
+%\hline
+%61000 & 3356\\
+%\hline
+%62000 & 3358\\
+%\hline
+%63000 & 3374\\
+%\hline
+%64000 & 3361\\
+%\hline
+%65000 & 3360\\
+%\hline
+%66000 & 3369\\
+%\hline
+%67000 & 3364\\
+%\hline
+%68000 & 3359\\
+%\hline
+%69000 & 3389\\
+%\hline
+%70000 & 3366\\
+%\hline
+%71000 & 3353\\
+%\hline
+%72000 & 3371\\
+%\hline
+%73000 & 3382\\
+%\hline
+%74000 & 3389\\
+%\hline
+%75000 & 3396\\
+%\hline
+%76000 & 3414\\
+%\hline
+%77000 & 3446\\
+%\hline
+%78000 & 3493\\
+%\hline
+%79000 & 3558\\
+%\hline
+%80000 & 3609\\
+%\hline
+%81000 & 3580\\
+%\hline
+%82000 & 3600\\
+%\hline
+%83000 & 3593\\
+%\hline
+%84000 & 3636\\
+%\hline
+%85000 & 3675\\
+%\hline
+%86000 & 3746\\
+%\hline
+%87000 & 3801\\
+%\hline
+%88000 & 3915\\
+%\hline
+%89000 & 4070\\
+%\hline
+%90000 & 4221\\
+%\hline
+%91000 & 4404\\
+%\hline
+%92000 & 4580\\
+%\hline
+%93000 & 4819\\
+%\hline
+%94000 & 5033\\
+%\hline
+%95000 & 5256\\
+%\hline
+%96000 & 5533\\
+%\hline
+%97000 & 5776\\
+%\hline
+%98000 & 6037\\
+%\hline
+%99000 & 6406\\
+%\hline
+%100000 & 6831\\
+%\hline
+%\end{tabular}
+%
+%\begin{tabular}{|c|c|}
+%\hline
+%N & ms\\
+%\hline
+%1000 & 35\\
+%\hline
+%2000 & 54\\
+%\hline
+%3000 & 83\\
+%\hline
+%4000 & 148\\
+%\hline
+%5000 & 173\\
+%\hline
+%6000 & 250\\
+%\hline
+%7000 & 412\\
+%\hline
+%8000 & 443\\
+%\hline
+%9000 & 464\\
+%\hline
+%10000 & 515\\
+%\hline
+%11000 & 569\\
+%\hline
+%12000 & 744\\
+%\hline
+%13000 & 1052\\
+%\hline
+%14000 & 1232\\
+%\hline
+%15000 & 1297\\
+%\hline
+%16000 & 1343\\
+%\hline
+%17000 & 1360\\
+%\hline
+%18000 & 1396\\
+%\hline
+%19000 & 1452\\
+%\hline
+%20000 & 1556\\
+%\hline
+%21000 & 1604\\
+%\hline
+%22000 & 1715\\
+%\hline
+%23000 & 1970\\
+%\hline
+%24000 & 2257\\
+%\hline
+%25000 & 2700\\
+%\hline
+%26000 & 3195\\
+%\hline
+%27000 & 3589\\
+%\hline
+%28000 & 3759\\
+%\hline
+%29000 & 3861\\
+%\hline
+%30000 & 3994\\
+%\hline
+%31000 & 4025\\
+%\hline
+%32000 & 4095\\
+%\hline
+%33000 & 4155\\
+%\hline
+%34000 & 4178\\
+%\hline
+%35000 & 4230\\
+%\hline
+%36000 & 4206\\
+%\hline
+%37000 & 4261\\
+%\hline
+%38000 & 4371\\
+%\hline
+%39000 & 4523\\
+%\hline
+%40000 & 4689\\
+%\hline
+%41000 & 4776\\
+%\hline
+%42000 & 4856\\
+%\hline
+%43000 & 5014\\
+%\hline
+%44000 & 5211\\
+%\hline
+%45000 & 5556\\
+%\hline
+%46000 & 5918\\
+%\hline
+%47000 & 6273\\
+%\hline
+%48000 & 6752\\
+%\hline
+%49000 & 7384\\
+%\hline
+%50000 & 8133\\
+%\hline
+%51000 & 8923\\
+%\hline
+%52000 & 9737\\
+%\hline
+%53000 & 10240\\
+%\hline
+%54000 & 10696\\
+%\hline
+%55000 & 11062\\
+%\hline
+%56000 & 11289\\
+%\hline
+%57000 & 11510\\
+%\hline
+%58000 & 11675\\
+%\hline
+%59000 & 11921\\
+%\hline
+%60000 & 11978\\
+%\hline
+%61000 & 11898\\
+%\hline
+%62000 & 11986\\
+%\hline
+%63000 & 12030\\
+%\hline
+%64000 & 12139\\
+%\hline
+%65000 & 12338\\
+%\hline
+%66000 & 12301\\
+%\hline
+%67000 & 12423\\
+%\hline
+%68000 & 12372\\
+%\hline
+%69000 & 12548\\
+%\hline
+%70000 & 12556\\
+%\hline
+%71000 & 12654\\
+%\hline
+%72000 & 12692\\
+%\hline
+%73000 & 12788\\
+%\hline
+%74000 & 12859\\
+%\hline
+%75000 & 12970\\
+%\hline
+%76000 & 13182\\
+%\hline
+%77000 & 13370\\
+%\hline
+%78000 & 13633\\
+%\hline
+%79000 & 14024\\
+%\hline
+%80000 & 14812\\
+%\hline
+%85000 & 15452\\
+%\hline
+%90000 & 17154\\
+%\hline
+%95000 & 20241\\
+%\hline
+%100000 & 25033\\
+%\hline
+%\end{tabular}
 
-Diagramm:
+\begin{figure}[h]
+    \begin{center}
+        %TODO
+        \includegraphics[width=360px]{testdaten.png}
+    \end{center}
+\end{figure}
+Es wurden 3 Messreihen durchgeführt. Man erkennt deutlich, dass die Java internen Funktionen deutlich besser sind. \\
+\newpage
+\subsubsection*{Laufzeit}
+Für die Laufzeit habe ich folgendes Datenpaar gewählt: $n = 100000 = 25033$ms.\\
+Für $\alpha = 1$ ergibt sich:
+\begin{align*}
+25033 &= C * 100000^1\\
+C &= 0.25033\\
+\end{align*}
 
 \end{document}
