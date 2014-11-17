@@ -1,0 +1,57 @@
+\section{Dynamische Programmierung (Fortsetzung)\tiny (Vorlesung 10 am 17.11.)}
+
+\subsection{Optimale Triangulierung eines konvexen Polygons}
+%Bild: Beispiel nicht konvexes Polygon und konvexes Polygon
+$P=(p_1,p_2,...,p_n) | p_i \in \mathbb{R}^2s$ ein Polygon in der Ebene. (konvex: Alle Innenwinkel $<180^\circ$)\\
+\subsubsection{Triangulierung}
+Zerlegung einer Polygonfläche in Dreiecke durch Diagonale Strecken $p_i p_j$, die im inneren verlaufen. Diagonalen dürfen sich nicht kreuzen. (erster Vorverarbeitungsschritt für viele geometische Algorithmen)\\
+kürzeste Triangulierung $=$ kleinste Gesamtlänge aller Diagonalen\\
+\textbf{Teilprobleme}: $f_{ij}=$kürzeste Triangulierung des Polygons $p_i,p_{i+1},...,p_j$ für $1\leq i < j \leq n$\\
+Also... $j = i +2$... Dreieck.\\
+$j = i +1$... Zweieck?!\\
+\textbf{Rekursion!}
+\begin{align*}
+f_{ij} &\rightarrow \text{ besteht aus einem Dreieck} p_i p_k p_j &| i < k < j\\
+&\text{optimale Triangulierungen }(p_i,...,p_k) \text{ und } (p_k,...,p_j)\\
+f_{ij} &= \min\{ f_{ik} + f_{kj} + ||p_i - p_k|| + ||p_k - p_j|| \quad | \; i<k<j \}\\
+&1 \leq j, j \leq n, j \geq i +2\\
+\end{align*}
+Damit die Formel auch für $k =+1$ oder $k=j-1$ stimmt, müssen wir $f_{i,i+1} = - || p_i - p_{i+1} ||$ setzen.\\
+Beispiel: $f_{3,5} = f_{34} + f_{45} + ||p_3-p_4||+||p_4-p_5|| = 0$
+Endergebnis = $f_{1n}$
+\subsubsection{Laufzeit}
+$\binom{n}{2} = \mathcal{O}(n^2)$ Teilprobleme, jedes Teilproblem benötigt $\mathcal{O}(n)$ Zeit.\\ $\rightarrow \mathcal{O}(n^3)$ Laufzeit, $\mathcal{O}(n^2)$ Speicher. 
+\subsection{Isotone Regression}
+% Bild Diagramm mit Punkte Wolke durch die ein Mittelwert gezogen wird.
+Zum Vergleich lineare Regression. Messwerte $(x_i, y_i)$ gesucht ist eine Gerade $y = ax + b$, sodass $\sum_{i=1}^n |y_i (a x_i + b)|$ oder $\sum (y_i - (a x_i + b))^2$\\
+Gegeben ist eine Folge von Messwerten: $a_1,a_2,..., a_n \in \mathbb{R}$\\
+Gesucht ist eine monoton wachsende Folge: $x_1 \leq x_2 \leq ... \leq x_n$, die $\sum_{i=1}^n w_i * |x_i - a_i|$ minimiert.($w_i > 0$ sind gewichtete Daten.)\\
+\subsubsection{Teilprobleme}
+\begin{align*}
+f_k(z) &= \min \{ \sum_{i=1}^k w_i |x_i -a_i| : x_1 \leq x_2 \leq ... \leq x_k = z \} & k=0,...,n; z \in \mathbb{R}\\
+f_k(z) &= \min \{ f_{k-1} (x) : x \leq z \} + w_k |z-a_k| & k \geq 1, z \in \mathbb{R}\\
+f_0(z) &= 0 \quad \text{ für alle } z&\\
+\end{align*}
+\subsubsection*{Beispiel}
+\begin{align*}
+a_1 = 5, w_1 = 1,3\\
+f_1(z) = \min \{ f_0(x) | x \leq z\} + 1.3 |z-5|\\
+f_2(z) = \underbrace{ \min \{ f_1(x) | x \leq z \}}_{g_1(z)} + 0,7 * |z-1|\\
+g_2(z) = \min \{f_1(x) | x \leq z \} 
+\end{align*}
+\subsubsection*{Lemma}
+\begin{enumerate}
+\item[(a)] $f_k(z)$ ist eine stückweise lineare konvexe Funktion
+\item[(b)] Die Knicke liegen an einr Telmenge der Eingabewerte $a_1,...,a_k$
+\item[(c)] Die Steigung des ersten Stücks ist $-w_1-w_2-...-w_k$ 
+\item[(d)] Die Steigung des letzten Stücks ist $w_k$
+\end{enumerate}
+Beweis durch Induktion.\\
+Wie kommt man von $f_{k1}$ auf $g_{k-1}$? Lösche alle aufsteigende Stücke und ersetze sie durch ein horizontales Stück.\\
+Möglichkeiten der Speicherung einer stückweise linearen Funktion: Koordinaten der Knicke $+$ Steigung des ersten und letzten Astes $\rightarrow \mathbb{O}(n)$ Werte.\\
+$\rightarrow $ Addition zwei solcher Funktionen: $\mathcal{O}(n)$\\
+\subsubsection{Optimallösung}
+Wie bestimmt man die Optimallösung?\\
+Das Minimum von $f_{k-1}(z)$ sei an der Stelle $p_{k-1}$\\
+Optimalwert $x_{k-1}^*$, wenn $x_k^*$ gegeben ist.\\
+$x_{k-1}^* = \min\{p_k, x_k^*\}
