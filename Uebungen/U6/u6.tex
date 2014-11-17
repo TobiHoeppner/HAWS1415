@@ -1,0 +1,134 @@
+\documentclass[ngerman,a4paper]{report}
+\usepackage[ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+%\usepackage{MyriadPro}
+\usepackage[scaled]{beramono}
+\newcommand\Small{\fontsize{10.5}{10.5}\selectfont}
+\newcommand*\LSTfont{\Small\ttfamily\SetTracking{encoding=*}{-20}\lsstyle}
+\usepackage{microtype}
+\usepackage{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{listings}
+\usepackage{stmaryrd}
+\usepackage{paralist}
+\usepackage{array}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{accents}
+\usepackage{tikz}
+\usetikzlibrary{plotmarks}
+
+% Code Listing Style
+\definecolor{darkblue}{rgb}{0,0,.6}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{darkred}{rgb}{0.5,0,0}
+\lstset{%
+	language=Python, 
+	basicstyle=\LSTfont,
+	commentstyle=\color{darkgreen}, 
+	keywordstyle=\color{darkblue}\bfseries, 
+	breaklines=true,
+	tabsize=2,
+	xleftmargin=\fboxsep,
+	xrightmargin=-\fboxsep,
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	stepnumber=1,
+	numbersep=5pt,
+	frame=bt,
+	stringstyle=\color{darkred},
+	showstringspaces=false,
+	rulecolor= \color{gray},
+	emph=[1]%
+	{%  
+	    then, not, for, return%
+	},
+	emphstyle=[1]{\color{darkblue}\bfseries},
+	emph=[2]%
+	{%  Datatypes
+	    %
+	},
+	emphstyle=[2]{\color{darkblue}\bfseries},
+	emph=[3]%
+	{%  
+	    %
+	},
+	emphstyle=[3]{\color{darkred}\bfseries},
+	literate=%
+	{Ö}{{\"O}}1
+	{Ä}{{\"A}}1
+	{Ü}{{\"U}}1
+	{ß}{{\ss}}2
+	{ü}{{\"u}}1
+	{ä}{{\"a}}1
+	{ö}{{\"o}}1
+}
+\providecommand{\tabularnewline}{\\}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage{lastpage}
+\makeatletter
+
+\lhead{\textbf{\@title} \\ \@author}
+\chead{}
+\rhead{\@date \\ \thepage \ von \pageref{LastPage} }
+\cfoot{}
+
+\renewcommand{\maketitle}{}
+\newcommand{\utilde}[1]{\underaccent{\tilde}{#1}}
+\renewcommand{\familydefault}{\sfdefault}
+ 
+\author{Tobias Höppner}
+\title{HA - Gummi-Übung 06.}
+\date{Wintersemester 2014/2015}
+
+\begin{document} 
+\maketitle 
+
+\subsubsection*{35. Wechselgeld, 10 Punkte}
+\textbf{Pseudocode:} Naive Idee, einfach formuliert:
+Eingabe: Betrag, Geldwerte()
+\begin{enumerate}
+\item sortiere Geldwerte absteigend, mach aus Geldwerte gleichzeitig Tupel \lstinline!(Geldwert, Anzahl)!
+\item \lstinline!Restbetrag = Betrag!
+\item für jeden \lstinline!Geldwert!
+\begin{enumerate}
+\item wenn \lstinline!Betrag - Geldwert < 0!, dann nehme nächsten \lstinline!Geldwert!
+\item ziehe solange \lstinline!Geldwert! vom Restbetrag ab bis \lstinline!Restbetrag < Geldwert!
+\end{enumerate}
+\item ist der \lstinline!Restbetrag == 0!, dann gebe verwendete Geldwerte zurück
+\end{enumerate}
+Beste Lösung: nutze die mathematische Operation \lstinline!divmod(x,y)!. 
+\textbf{Code}
+\begin{lstlisting}
+def money(b, values):
+    r = b
+    l = []
+    for k in sorted(values, reverse=True):
+        c, r = divmod(r, k)
+        l.append((k, c))
+    if r == 0:
+        a = str(b)+'='
+        for b in l:
+            for i in range(0, b[1]):
+                a += str(b[0]) + '+'
+        print(a[0:len(a)-1])
+        return b, l
+    print('keine Lösung')
+    return b, []
+\end{lstlisting}
+\textbf{Laufzeit}: $n = $Geldwerte (Länge der Liste)
+\begin{enumerate}
+\item[-] sortieren: $\mathcal{O}(n * \log n)$
+\item[-] Werte berechnen: $\mathcal{O}(n)$
+\item[-] Ausgabe: $\mathcal{O}(n * $\lstinline!Anzahl berechneter Geldwerte!$)$
+\end{enumerate}
+Ohne die Ausgabe also $\mathcal{O}(n * \log n)$. Die Ausgabe, wie sie in der Aufgabenstellung vorhanden ist, kann die Laufzeit drastisch erhöhen.\\
+\subsubsection*{38. Beste unabhängige Knotenmenge in Bäumen, 10 Punkte}
+
+\end{document}
