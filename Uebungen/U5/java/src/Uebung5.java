@@ -4,7 +4,7 @@
 import java.math.BigInteger;
 import java.util.Random;
 
-public class u5 {
+public class Uebung5 {
 
     public static Random r = new Random();
     public static int high = 999999999;
