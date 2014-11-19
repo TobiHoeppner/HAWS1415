@@ -130,5 +130,6 @@ def money(b, values):
 \end{enumerate}
 Ohne die Ausgabe also $\mathcal{O}(n * \log n)$. Die Ausgabe, wie sie in der Aufgabenstellung vorhanden ist, kann die Laufzeit drastisch erhöhen.\\
 \subsubsection*{38. Beste unabhängige Knotenmenge in Bäumen, 10 Punkte}
+Durchlaufe Baum (G = (V,E)) mit Tiefensuche und markiere (ggfs. teile gleich in getrennte Listen auf) die Knoten abwechseln. Die resultierenden Knotenmengen erfüllen folgende Eigenschaft: $\forall v, v' \in V'. v \neq v' \Rightarrow \{v,v' \} \notin E$.
 
 \end{document}
