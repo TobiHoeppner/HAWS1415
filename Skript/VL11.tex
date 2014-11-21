@@ -1,0 +1,119 @@
+\section{Dynamische Programmierung (Fortsetzung)\tiny (Vorlesung 11 am 21.11.)}
+\subsection*{Nachtrag: Isotone Regression}
+\begin{align*}
+f_k(z) &= \min \{ \sum_{i=1}^k  w_i |x_i - a_i| : x_1 \leq x_2 \leq ... \leq x_{k-1} \leq x_k = z \}\\
+f_k(z) &=  \underbrace{\min \{\ f_{k-1}(\underbrace{ x}_{x_{k-1}}) | \underbrace{ x}_{x_{k-1}} \leq \underbrace{ z}_{x_{k}} \}}_{g_{k-1}(z)} + w_k |a_k-z|\\
+\end{align*}
+$g_{k-1}(z)$: 2 Fälle:
+\begin{enumerate}
+\item[$z\leq p_{k-1} \Rightarrow$] $g_{k-1}(z)=f_{k-1}(z)$; der optimale Wert von $x=x_{k-1}$ bei gegeben Wert von $z=x_k$ ist $z$ selbst.
+\item[$z\geq p_{k-1} \Rightarrow$] der optimale Wert von x ist $p_{k-1}$ 
+$g_{k-1}(z) = f_{k-1}(p_{k-1})$
+\end{enumerate}
+Wenn $x_k^*$ der optimale Wert von $x_k$ ist, dann ist der optimale Wert von $x_{k-1}$:\\
+\begin{align*}
+x_{k-1}^* = \min	\{ x_k^*, p_{k-1} \}
+\end{align*}
+
+%Bild
+Darstellung einer stückweise linearen stetigen Funktion durch Differenzen von Steigungen.\\
+%Bild mit y = s x + t und y = s' x +t 
+\underline{Knick} an der \underline{Stelle} $x_0$ mit \underline{Knickwert} $s' - s$\\
+Bei Addition einer linearen Funktion bleibt der \underline{Knickwert} unverändert! (und Knickstelle)\\
+
+Die Funktion wird durch eine Folge von Knickwerten dargestellt. Jeder Knick ist ein Paar (\underline{Knickstelle}, \underline{Knickwert})\\
+% Bild mit Folge von Knickwerten als Tupel angegeben.
+Darstellung ...
+\subsection{Algorithmus}
+Übergang von $f_{k-1}$ zu $g_{k-1}$:\\
+$(x,\Delta)$ sei der rechteste Knick:
+\begin{lstlisting}
+while s - \Delta \geq 0:
+	s:=s-\Delta
+	lösche den rechtesten Knick
+p_{k-1}:=x (min von f_{k-1} gefunden)
+neuen Knickwert des rechtesten Knicks = \Delta-s
+s:=0
+\end{lstlisting}
+Übergang von $g_{k-1}$ zu $f_k$:
+\begin{lstlisting}
+Füge einen zusätzlichen Knick (a_k, 2_w_k) ein.
+\end{lstlisting}
+
+Die Knicke können als Prioritätswarteschlange $Q$ gespeichert werden. nach Schlüsselwert $x$ geordnet.
+
+\begin{lstlisting}
+Q = empty, s=0
+for k = 1,...,n:
+	Q.insert((a_k,2w_k))
+	s = s + w_k
+	(x,\Delta) := Q.findmax()
+	while s - \Delta \geq 0:
+		s = s - \Delta
+		Q.deletemax()
+		(x,\Delta) := Q.findmax()
+	p_k = x
+	ersetze \Delta in Q.findmax() durch \Delta-s
+	s = 0
+(Berechnung der Optimallösung)
+x_n = p_n
+for k = n-1, n-2, ... , 1
+	x_k = min(x_{k-1}, p_k)
+\end{lstlisting}
+\section{Der optimale Suchbaum}
+Schlüssel:
+\begin{lstlisting}
+	AARON, p_1
+	KLAUS, p_3
+	DIETER, p_2
+\end{lstlisting}
+Mögliche Suchbäume:\\
+% Bild 
+% A(P1)
+%(Q0)			K(P3)
+%		D(P2)
+
+% oder Bild
+% 				D
+%	A					K
+
+Schlüssel $x_1 < x_2 < ... x_n$\\
+Anfragehäufigkeiten $p_1, p_2, ... ,p_n$ für die Schlüssel\\
+und $q_0,q_1, ... , q_n$ für die Intervalle zwischen den Schlüsseln\\
+% Bild
+%																												  q0	   q1  v   q2		q3
+% "Zeitstrahl" die Q-Werte stehen über dem Strahl mit Pfeil nach unten. -v--A--v---D--v---K--v-
+
+Mittlere gewichtete Weglänge:
+\begin{align*}
+&= \sum_{i=1}^n p_i \underbrace{(\text{Tiefe des Knotens mit Schlüssel}  i)}_{\# \text{ Vergleiche } -1} + \sum_{i=0}^n q_i \underbrace{(\text{ Tiefe des Blattes, dass dem entsprechenden Intervall entspricht})}_{\#\text{Vergleiche}}
+\end{align*}
+soll minimiert werden.
+
+Ansatz: $q_i$ entspricht dem Intervall ($x_i, x_{i+1}$) $x_0 = -\infty, x_{n+1} = +\infty$\\
+Ein Teilbaum in einem Suchbaum entspricht einem Interval ($x_i, x_j$ mit $0\leq i \leq j \leq n+1$)\\
+(Der Baum wird genau dann betreten, wenn der gesuchte Schlüssel in diesem Intervall liegt.)\\
+
+\subsection{Teilprobleme}
+ $f(i,j)$ $0\leq i \leq j \leq n+1$ optimaler Suchbaum für Schlüssel $x_{i+1}, ... , x_{j-1}$ und Häufigkeiten $p_{i+1},...,p{j-1}$\\
+ 
+ \subsection{Rekursion}
+ \begin{align*}
+ f(i,j) &= \min \{ f(i,k) + f(k,j)\} + q_i + q_{i+1} + ... + q_j + p_{i+1} + p{i+2} + ... + p_{j-1} - p_{k} &| i+1\leq k \leq j-1, 0 \leq i, j \leq n+1, j \geq i+1\\
+ \end{align*}
+ 
+ \subsection{Anfangswerte}
+ \begin{align*}
+ f(i, i+1) = 0, i = 0,...,n
+ \end{align*}
+ % Bild: Baum mit 3 Knoten
+ $f(2,4) = f(2,3) + f(3,4) + q_2 + q_3 + p_3 -p_3$
+ 
+\subsection{Gesamtlösung}
+$f(0,n+1)$ 
+ 
+ \subsection{Laufzeit}
+ $\mathcal{O}(n^2)$ Teilprobleme. \\
+ $\mathcal{O}(n)$ Ausdrücke, über die minimiert wird.\\
+ Die Summe $q_1 + ... + p_{i-1}$ ist fest, für jedes Teilproblem nur einmal ausrechnen $\rightarrow \mathcal{O}(n)$ Zeit.\\
+ $\Rightarrow \mathcal{O}(n^3)$ Zeit, $\mathcal{O}(n^2)$.
