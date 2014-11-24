@@ -1,0 +1,114 @@
+\section{Dynamische Programmierung (Einen hab ich noch!)\tiny (Vorlesung 12 am 24.11.)}
+\subsection{Dynamische Programmierung - eine Zusammenfassung}
+Bisher gelöste Probleme mit dynm. Prog.:
+\begin{enumerate}
+\item Rucksackproblem
+\item optimale Triangulierung $\mathcal{O}(n^3)$
+\item Suchbaum $\mathcal{O}(n^3)$
+\item CYK (zweites Semester GTI) - Coche, Younger, Kasamy\\
+Eine Grammatik ist in Chomsky Normalform (CNF), wenn jede jede Formel einer Grammatik in ein Terminalsymbol "mündet".\\
+Ziel ist es für ein gegebenes Wort zu prüfen, ob es von der gegeben CNF Grammatik erzeugt werden kann.\\
+$f(i,j) = \{ v | v \rightarrow^s{x} a_i,...,a_j\} | a_i, a_j \in \Sigma^*$
+\end{enumerate}
+\subsection{Editierabstand}
+Wir nehmen an, dass wir folgendes Wort auf der Tastatur getippt haben:\\
+$\quad \quad $ A g o r h y t m u s\\
+Aber eigentlich wollten wir Pfannku... ähm \textbf{Algorithmus} schreiben.\\ 
+Wie kommen wir jetzt von Agorhytmus zu Algorithmus?\\
+\subsubsection{Problem}
+\textbf{Gegeben}: zwei Wörter $A = a_1,...,a_m$ und $B = b_1,...,b_n$ aus $\Sigma^*$\\
+Wie können wir $A$ in $B$ durch folgende Operationen verwandeln?
+\begin{enumerate}
+\item löschen eines Buchstabens (Kosten $k_L$)
+\item einfügen eines Buchstabens ($k_E$)
+\item Buchstabe $u$ durch $x$ ersetzen ($\delta_{ux}$)
+\end{enumerate}
+\textbf{Gesucht} ist die billigste Folge von Operationen wie $A$ in $B$ umgewandelt wird.\\
+Die \textbf{Kosten} $k_L, k_E, \delta_{ux}$ sind der \textbf{Editierabstand}.\\
+Vor allem in der Bioinformatik ist das ein sehr wichtiges Problem auf sehr großen Datenmengen.\\
+\subsubsection{Teilprobleme}
+$f(i,j) =$ Editierabstand zwischen $a_1, ... , a_i$ und $b_1, ... , b_j$
+\subsubsection{Rekursion}
+\begin{align*}
+f(i,j) &= \min\{ f(i-1,j) + k_l, f(i,j-1)+k_E, f(i-1,j-1) + \delta_{a_i,b_j}\} &| 1\leq i \leq m, 1 \leq j \leq n
+\end{align*}
+\subsubsection{Startwerte}
+Konvention: $\delta_{xx} = 0 \forall x \in \Sigma$
+\begin{align*}
+f(i,0) &= f(i-1,0) + k_L = i*k_L\\
+f(0,0) &= 0\\
+f(0,j) &= j k_E\\
+\end{align*}
+
+\subsubsection{Graph}
+Graph mit $(m+1)(n+1)$ Knoten. Jeder Knoten hat 3 Vorgänger (außer am Rand).
+% Gittergraph
+Editierabstand ist der kürzeste Weg von $(0,0)$ zu $(m,n)$
+\subsubsection{Annahmen}
+Zwei aufeinanderfolgende Änderungen lohnen sich nicht:
+x$\rightarrow$y$\rightarrow$u (Dreiecksungleichung $x$: $\delta_{xy}+\delta_{yu}\geq \delta_{xu}$)\\
+Löschen und Einfügen statt Ändern ist in diesem Algorithmus vorgesehen. Falls $\delta_{xy} \leq k_L + k_E$\\
+\subsubsection{Speicherreduktion}
+auf $\mathcal{O}(m+n)$ durch devide \& conquer.
+\begin{enumerate}
+\item Zur Berechnung der \underline{Kosten} $f(m,n)$ ist nun $\mathcal{O}(m+n)$ Speicher notwendig: Es genügt, zwei aufeinanderfolgende Spalten im Speicher zu halten.
+\item Abstände zum Zielknoten:
+\begin{align*}
+g(i,j) = \min	\{ g(i+1,j) + k_L, g(i,j+1) + k_E, g(i+1, j+1) + \delta_{a_{i+1},b_{j+1}}\}
+\end{align*}
+\item Optimallösung =
+\begin{align*}
+\min\{ f(i,\lfloor \frac{n}{2} \rfloor) , g(i,\lfloor \frac{n}{2} \rfloor) | i = 0..m\}
+\end{align*}
+% Bild schema der Matrix
+\item Es sei $i_0$ das Optimum in 3.\\
+Bestimme rekursiv den kürzesten Weg von $(0,0)$ zu $(i_0, \lfloor \frac{n}{2} \rfloor)$ und von $(i_0, \lfloor \frac{n}{2} \rfloor)$ zu $(m,n)$
+\end{enumerate}
+$\Rightarrow $ Speicherbedarf $\mathcal{O}(m+n)$
+\subsection{Laufzeit (inkl. Speicherreduktion)}
+Rekursion: $T(m,n) = O(m,n) + T(i_0,  \lfloor \frac{n}{2} \rfloor) + T(m-i_0, n- \lfloor \frac{n}{2} \rfloor)$\\
+$n$ sei eine zweier Potenz:
+\begin{align*}
+T(n,m) &\leq cmn + T(i, \frac{n}{2}) + T(m-i,\frac{n}{2})\\
+&\leq cmn + \min\{ T(i,\frac{n}{2}) + T(m-i, \frac{n}{2}) | 0 \leq i \leq m\}
+\end{align*}
+Behauptung: $T(m,n) \leq c'mn$; Beweis durch Induktion\\
+Einsetzen: R.S.\\
+\begin{align*}
+&cmn + c' i * \frac{n}{2} + c'(m-i)\frac{n}{2}\\
+&= cmn + \frac{c'}{2}mn \leq c'mn\\
+\end{align*}
+wähle $c'=2c$, dann gehts.\\
+\section{Gierige Algorithmen}
+Optimierungsalgorithmen, die eine Folge von Entscheidungen kurzsichtig treffen und später nicht mehr rückgängig machen.\\
+\subsection{Beispiel Rucksack}
+Rucksackproblem $g_1,...,g_n G$ mit $w_1, ..., w_n$ \\
+\begin{enumerate}
+\item Wählt die wertvollsten Gegenstände zuerst, bis Rucksack voll ist.\\
+\textbf{NICHT OPTIMAL!}
+\begin{tabular}{|c|c|c|c|c|c|}
+$g_i$ & 10 & 1 & 1 & \dots & 10\\
+\hline
+$w_i$ & 100 & 99 & 99 & \dots & \\
+\end{tabular}
+\item Sortiere Gestenstände $\frac{w_1}{g_1}\geq ... \geq \frac{w_n}{g_n}$ und wähle gierig in dieser Reihenfolge.
+\textbf{NICHT OPTIMAL!}
+\begin{tabular}{|c|c|c|c|c|c|}
+$g_i$ & 8 &	5& 5 & \dots & G = 10\\
+\hline
+$w_i$ & 9 & 5 & 5 & \dots & \\
+\hline
+$\frac{w_i}{g_i}$ & $\frac{9}{8}$ & 1 & 1 & \\
+\end{tabular}
+\end{enumerate}
+Bemerkung: Algorithmus 2. ist optimal für das gebrochene Rucksackproblem!\\
+Wir sehen, dass Greedy-Algorithmen nicht immer die beste Lösung für gewisse Probleme sind.
+\subsection{Umgewichtete Intervallauswahl}
+$[a_1,b_1)...[a_n,b_n)$, keine Gewichte $w_i$\\
+Wähle eine möglichst große \textbf{Anzahl} von undisjunkten Intervallen aus.\\
+\begin{enumerate}
+\item Wähle kürzeste Intervalle zuerst. (NICHT OPTIMAL)
+\item Intervalle von links nach rechts. (NICHT OPTIMAL)
+\item Intervall, das am wenigsten andere überlappt.
+\item sortiert nach Endzeitpunkt $b_i$
+\end{enumerate}
