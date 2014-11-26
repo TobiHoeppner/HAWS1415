@@ -125,12 +125,38 @@ def money(b, values):
 \textbf{Laufzeit}: $n = $Geldwerte (Länge der Liste)
 \begin{enumerate}
 \item[-] sortieren: $\mathcal{O}(n * \log n)$
-\item[-] Werte berechnen: $\mathcal{O}(n)$
+\item[-] Werte berechnen: $\mathcal{O}(n)$ unter Annahme, dass \lstinline!divmod! in $\mathcal{O}(1)$ ausgeführt wird.
 \item[-] Ausgabe: $\mathcal{O}(n * $\lstinline!Anzahl berechneter Geldwerte!$)$
 \end{enumerate}
 Ohne die Ausgabe also $\mathcal{O}(n * \log n)$. Die Ausgabe, wie sie in der Aufgabenstellung vorhanden ist, kann die Laufzeit drastisch erhöhen.\\
 \subsubsection*{38. Beste unabhängige Knotenmenge in Bäumen, 10 Punkte}
-Durchlaufe Baum (G = (V,E)) mit Tiefensuche und markiere (ggfs. teile gleich in getrennte Listen auf) die Knoten abwechseln. Die resultierenden Knotenmengen erfüllen folgende Eigenschaft: $\forall v, v' \in V'. v \neq v' \Rightarrow \{v,v' \} \notin E$.
-Anschließend berechne die Summe beider Teilmengen und gebe die größte Menge zurück.
+
+\begin{lstlisting}
+def foo(p):
+	if P == leaf:
+		return
+	if p == root:
+		mark(p)
+	else:
+		if isMarked(parent(p)):
+			
+	if val(p) > (val(lc) + val(rc):
+		if isMarked(p):
+			
+		
+\end{lstlisting}
+
+\begin{enumerate}
+\item Bestimme Startknoten
+\item 
+\item 
+\end{enumerate}
+    Bestimme den Knoten, an dem die Suche beginnen soll
+    Expandiere den Knoten und speichere den kleinsten/größten (optional) noch nicht erschlossenen Nachfolger in einem Stack
+    Rufe rekursiv für jeden der Knoten in dem Stack DFS (depth first search oder Tiefensuche) auf
+        Falls der Stack leer sein sollte, tue nichts
+        Falls es keine nicht erschlossenen Nachfolger mehr gibt, lösche den obersten Knoten aus dem Stack und Rufe für den jetzt oberen Knoten im Stack DFS (depth first search oder Tiefensuche) auf
+        Falls das gesuchte Element gefunden worden sein sollte, brich die Suche ab und liefere ein Ergebnis
+
 
 \end{document}
