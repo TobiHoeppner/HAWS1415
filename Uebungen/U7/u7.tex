@@ -1,0 +1,132 @@
+\documentclass[ngerman,a4paper]{report}
+\usepackage[ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{MyriadPro}
+\usepackage[scaled]{beramono}
+\newcommand\Small{\fontsize{10.5}{10.5}\selectfont}
+\newcommand*\LSTfont{\Small\ttfamily\SetTracking{encoding=*}{-20}\lsstyle}
+\usepackage{microtype}
+\usepackage{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{listings}
+\usepackage{stmaryrd}
+\usepackage{paralist}
+\usepackage{array}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{accents}
+\usepackage{tikz}
+\usetikzlibrary{plotmarks}
+
+% Code Listing Style
+\definecolor{darkblue}{rgb}{0,0,.6}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{darkred}{rgb}{0.5,0,0}
+\lstset{%
+	language=Python, 
+	basicstyle=\LSTfont,
+	commentstyle=\color{darkgreen}, 
+	keywordstyle=\color{darkblue}\bfseries, 
+	breaklines=true,
+	tabsize=2,
+	xleftmargin=\fboxsep,
+	xrightmargin=-\fboxsep,
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	stepnumber=1,
+	numbersep=5pt,
+	frame=bt,
+	stringstyle=\color{darkred},
+	showstringspaces=false,
+	rulecolor= \color{gray},
+	emph=[1]%
+	{%  
+	    then, not, for, return%
+	},
+	emphstyle=[1]{\color{darkblue}\bfseries},
+	emph=[2]%
+	{%  Datatypes
+	    %
+	},
+	emphstyle=[2]{\color{darkblue}\bfseries},
+	emph=[3]%
+	{%  
+	    %
+	},
+	emphstyle=[3]{\color{darkred}\bfseries},
+	literate=%
+	{Ö}{{\"O}}1
+	{Ä}{{\"A}}1
+	{Ü}{{\"U}}1
+	{ß}{{\ss}}2
+	{ü}{{\"u}}1
+	{ä}{{\"a}}1
+	{ö}{{\"o}}1
+}
+\providecommand{\tabularnewline}{\\}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage{lastpage}
+\makeatletter
+
+\lhead{\textbf{\@title} \\ \@author}
+\chead{}
+\rhead{\@date \\ \thepage \ von \pageref{LastPage} }
+\cfoot{}
+
+\renewcommand{\maketitle}{}
+\newcommand{\utilde}[1]{\underaccent{\tilde}{#1}}
+\renewcommand{\familydefault}{\sfdefault}
+ 
+\author{Tobias Höppner}
+\title{HA - Beton-Übung 07.}
+\date{Wintersemester 2014/2015}
+
+\begin{document} 
+\maketitle 
+
+\subsection*{41. Matrizenmultiplikation, 10 Punkte}
+Bei der Matrizenmultiplikation kommt es stark auf die Reihenfolge der ausgeführten Teilmultiplikationen an.
+\subsubsection*{Teilprobleme}
+Das Problem lässt sich in zwei Teilfragen näher betrachten:\\
+\textbf{Ziel 1:} finden der minimalen Anzahl von Operationen, um Matrizen zu multiplizieren.\\
+\textbf{Ziel 2:} finden der optimalen Reihenfolge von Matrixmultiplikationen, um die Anzahl an Operationen zu minimieren.\\
+Findet man eine Antwort zum ersten Ziel hat man bereits eine Lösung für das zweite Ziel gefunden. Es ist nur wichtig die Rechenschritte die man bei der Lösung von 1 gemacht hat entsprechend zu notieren. Dafür hilft man sich mit einer Matrix $Z (k \times k)$.
+\subsubsection*{Rekursion}
+Die Felder der Matrix $Z$ werden mit der Anzahl an Operationen gefüllt, die man benötigt, um die Matrix $A_i$ mit der Matrix $A_k$ zu multiplizieren. Folgende Rekursionsgleichung wird verwendet:\\
+\begin{align*}
+Z[i,j] = \begin{cases} 0, \quad\text{wenn } i = j \\ \min_{l = i \rightarrow k-1}\{Z(i,l) + Z(l+1,k) + m_i * n_l * p_k \}\end{cases}
+\end{align*}
+Die Rekursionsgleichung soll auf bereits berechnete Ergebnisse zurückgreifen können. Daher sollte die Berechnung an der Diagonalen beginnen (weil $Z[i,j] = 0\;|\;i = j$) und sich anschließend zur Optimallösung an Position $Z[1,k]$ oder $Z[k,1]$ "vorarbeiten".\\
+Zur Veranschaulichung die Matrix mit $k = 4: Z=$
+\begin{tabular}{|c||c|c|c|c|}
+\hline
+i,j &1 & 2 & 3 & 4  \\
+\hline
+\hline
+1&  0& $Z[1,2]$ & $Z[1,3]$ & $Z[1,4]$ \\
+\hline
+2&  & 0 & $Z[2,3]$ & $Z[2,4]$  \\
+\hline
+3&  &  & 0 &$Z[3,4]$\\
+\hline
+4&  &  &  & 0  \\
+\hline
+\end{tabular}
+
+\subsubsection*{Algorithmus}
+\begin{enumerate}
+\item erzeuge Matrix $Z (k \times k)$ mit Nullen gefüllt
+\item berechne die Werte der Matrix diagonal, um zur Ecke rechts oben oder links unten zu gelangen 
+\item für jedes Feld berechne $Z[i,j] = \begin{cases} 0, \quad\text{wenn } i = j \\ \min_{l = i \rightarrow k-1}\{Z(i,l) + Z(l+1,k) + m_i * n_l * p_k \}\end{cases}$ rekursiv. Notiere den Wert von $l$, für den das Minimum berechnet wurde.
+\end{enumerate}
+\subsubsection*{Laufzeit}
+Um die Matrix $Z$ zu berechnen sind $\Theta(\frac{1}{2}n^2)$ Schritte notwendig. In jedem Schritt wird die Rekursionsgleichung $Z[i,j]$ berechnet und diese braucht $\Theta(n)$ Zeit. Die Gesamtlaufzeit ist also vereinfacht (ohne $c=\frac{1}{2}$) $\Theta(n*n^2) = \Theta(n^3)$ Zeit.
+\subsection*{43. Optimaler binärer Suchbaum, 10 Punkte}
+
+\end{document}
