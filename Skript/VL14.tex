@@ -1,0 +1,120 @@
+\section{Kürzeste Wege\tiny (Vorlesung 14 am 01.12.)}
+
+\subsection{Wiederholung: Djikstras Methode}
+Eingabe: gerichteter Graph $G=(V,E)$ mit $m$ Kanten und $n$ Knoten und Kantengewichten $c_{uv}$ für $u,v \in E$.
+\subsubsection{Algorithmus nach Dijkstra (1960-1961)}
+$c_{uv} \geq 0$\\
+kürzester Weg von einem Startknoten zu allen anderen Knoten.\\
+\subsubsection*{Laufzeiten}
+Laufzeiten optimieren sich hauptsächlich mit der verwendeten Speicherstruktur.\\
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Methode} & \textbf{Laufzeit}\\
+\hline
+\hline
+primitiv & $\mathcal{O}(n^2)$\\
+\hline
+Halde (heap) als Prioritätswarteschlange & $\mathcal{O}((m+n)\log	 n)$\\
+\hline
+Fibonacci-Halde & $\mathcal{O}(m + n \log n)$\\
+\hline
+\end{tabular}
+\subsection{Algorithmus von Bellman / Ford}
+$c_{uv} \in \mathbb{R}$ beliebig.\\
+ein Startknoten.\\
+Laufzeit $\mathcal{O}(nm)$\\
+\subsubsection*{Algorithmus}
+$d_i^* = $ kürzeste Weglänge von Startknoten $s$ zu Knoten $i$ mit \underline{höchstens $k$ Knoten}.\\
+$k=0,1,2,...$\\
+\subsubsection{Rekursion}
+$d_j^k= \min	\{ d_i^{k-1} + c_{ij} \; | \; i \in V, ij \in E\} \cup \{d_j^{k-1}\}$\\
+\subsubsection{Anfangswerte}
+$d_j^{(0)} = \begin{cases} 0,\quad j=s \\ \infty, \quad \text{sonst}\end{cases}$\\
+\subsubsection{Beispiel}
+% siehe Bild (julian)
+\begin{tabular}{c|ccccc}
+j,k & 0 & 1 & 2 & 3 & 4\\
+\hline
+1 & $0$ &$0$&$0$&$0$&$0$\\
+2 & $+\infty$&$-1$&$-1$&$-1$&$-1$\\
+3 & $+\infty$&$6$&$1$&$1$&$1$\\
+4 & $+\infty$&$5$&$3$&$-2$&$-2$\\
+\end{tabular}
+\subsubsection{Bemerkungen}
+Wenn der Graph keine negativen Kreise enthält, dann besucht ein kürzester Weg keinen Knoten mehrfach und hat somit $n-1$ Kanten.\\
+$\Rightarrow d_j^{n-1}$ sind die kürzesten Weglängen.\\
+Vektor $d^{(k)} = \begin{pmatrix} d_1^{(k)} \\ \vdots \\d_n^{(k)} \end{pmatrix}$, Rekursion hat die Gestalt $d^{(k)} = F(d^{(k-1)}), d^{(k)} \leq d^{(k-1)}$\\
+Sobald $d^{(k-1)} = d^{(k)}$ ist, kann man abbrechen:\\
+ $F(d^{(k-1)}) = F(d^{(k)}) \Rightarrow d^{(k)} = d^{(k+1)} \Rightarrow d^{(k+2)} = d^{(k+3)} = ...$\\
+ Wenn es einen negativen Kreis gibt, dann kann die Weglänge beliebig klein werden, indem man diesen Kreis beliebig oft durchläuft.\\
+ (Sofern der Kreis vom Startknoten erreichbar ist.)\\
+ Falls $d^{(n-1)} \neq d^{(n)}$, dann muss es einen negativen Kreis geben. $\rightarrow$ \lstinline!ABBRUCH!.\\
+ \textbf{Satz:} Der Algorithmus von Bellmann-Ford bestimmt in $\mathcal{O}(nm)$ Zeit die kürzesten Wege von einem Startknoten zu allen anderen Knoten oder er stellt fest, dass der Graph einen negativen Kreis enthält.\\
+\subsubsection{Implementierung der Rekursion}
+\begin{enumerate}
+\item[a)] wie geschrieben \lstinline!for j = 1,...,n (for! alle eingehenden Kanten \lstinline!)!
+\item[b)] "Vorwärtsrechnung" \lstinline!for j = 1,...,n:!$d_j^{(k)} := d_j^{(k-1)}$\\
+$\quad$ \lstinline!for i = 1,...,n: (for! \\$\quad\quad$alle ausgehenden Kanten$(i,j)$:\\$\quad\quad\quad$\lstinline!( if! $d_i^{(k-1)}+c_{ij} \leq d_j^{(k)}$ \lstinline!then! $d_j^{(k)} := d_i^{k-1}+c_{ij}$\lstinline!))!
+\end{enumerate}
+\subsubsection{Verbesserungsmöglichkeit}
+$d_i^{(k-1)}$ und $d_i^{(k)}$ nicht unterscheiden, sondern nur 1 Variable verwenden $d_i$\\
+\subsubsection{Rekursion neu}
+\begin{lstlisting}
+for i = 1,...,n:
+	# erforschen
+	for alle Knoten (i,j):
+		if d_i +c_{ij} < d_j then
+			d_j = d_i + c_{ij}
+\end{lstlisting}
+$d_i^{(k-1)} \leq d_i^{(k)} \leq d_i^{(k+1)}$\\
+Per Induktion ergibt sich:\\
+Nach $k$ Iterationen ist $d_i^{(\text{NEU})} \leq d_i^{(k)}$\\
+Wenn es keine neg. Kreise gibt, dann ist $d_i^{(\text{NEU})}$ immer $\leq d_i^{(n-1)}$ (tatsächlich kürzester Weg)!\\
+Jedes $d_i$, dass im Algorithmus ausgerechnet wird, ist die Länge eines Weges von $s$ nach $i$.\\
+Nach $k$ Schritten gilt:\\
+$d_i^{(k)} \leq d^{(\text{NEU})} \leq d_i^{(n-1)}$\\
+$k=n-1: \rightarrow d_i^{(\text{NEU})} = d_i^{(n-1)}$\\
+Die Knoten $i$, deren Wert sich seit der letzten (Erforschung, Behandlung) geändert haben, speichert man in einer Warteschlange $Q$. (Falls sich der Wert nicht geändert hat, wäre es sinnlos ihn noch einmal zu erforschen).\\
+\begin{lstlisting}[mathescape]
+erforsche(i):
+	for all Kante(i,j):
+		if d_i + c_{ij} < d_j then
+			d_j = d_i + c_{ij}:
+			if j \notin Q then:
+				O.insert(j)
+\end{lstlisting}
+\subsubsection{Verbesserter Algorithmus}
+\begin{lstlisting}[mathescape]
+d_s = 0, d_i = \infty für i \neq s
+Q=(s)
+while Q \neq \emptyset:
+	Lösche das erste Element i aus Q
+	erforsche(i)
+\end{lstlisting}
+\subsection{Algorithmus von Bellman, Ford, Moore}
+Wir unterteilen den Algorithmus in Phasen.
+Phase $0$ endet nach der Initialisierung $Q:=(s)$.
+Phase $k$ beginnt wenn Phase $k-1$ endet und dauert, bis die Knoten in $Q$, die zu Beginn der Phase in $Q$ sind, erforscht sind.\\
+Am Ende von Phase $k$ gilt $d_i \leq d_i^{(k)}$\\
+\subsubsection*{nach Induktion}
+Am Beginn der Phase gilt $d_i \leq d_i^{(k-1)}$\\
+Wir stellen uns vor, dass wir jetzt alle Knoten erforschen.\\
+1 Rekursion "neu" $\begin{cases} \text{zuerst die Knoten, die} \\\text{nicht in $Q$ sind}\\\text{dann die Knoten in }Q\end{cases}$\\
+Effekt: $d_i\leq d_j^{(k)}$ danach.\\
+Um im Falle eines neg. Kreises abbrechen zu können, muss man 
+\begin{enumerate}
+\item[a)] nach $n^2$ Erforschungen abbrechen
+\item[b)] oder die Phasen mitzählen und die Phasengrenzen in $Q$ markieren:\\
+\begin{lstlisting}
+
+$Q = \{s, _M\}$\\
+Phase := 0\\
+while $Q \neq \emptyset$:
+	if erstes Elemente = _M:
+		entferne _M und füge es am Ende ein.
+		Phase = Phase +1
+		if Phase > n then Abbruch.
+	else:
+		lösche erstes Element i und erforsche(i)
+\end{lstlisting}
+\end{enumerate}
