@@ -99,7 +99,7 @@ Ein Teilbaum in einem Suchbaum entspricht einem Interval ($x_i, x_j$ mit $0\leq 
  
  \subsection{Rekursion}
  \begin{align*}
- f(i,j) &= \min \{ f(i,k) + f(k+1,j)\} + q_i + q_{i+1} + ... + q_{j-1} + p_{i+1} + p{i+2} + \\ &... + p_{j-1} - p_{k} &| i+1\leq k \leq j-1, 0 \leq i, j \leq n+1, j \geq i+1\\
+ f(i,j) &= \min \{ f(i,k) + f(k+1,j)\} + q_i + q_{i+1} + ... + q_{j-1} + p_{i+1} + p_{i+2} + \\ &... + p_{j-1} - p_{k} &| i+1\leq k \leq j-1, 0 \leq i, j \leq n+1, j \geq i+1\\
  \end{align*}
  
  \subsection{Anfangswerte}
