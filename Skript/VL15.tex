@@ -1,0 +1,137 @@
+\section{Das algebraische Wegproblem \tiny (Vorlesung 15 am 05.12.)}
+Nicht immer interessieren uns die kürzesten Wege in einem Algorithmus. Dafür kann man den Bellman Ford Alogrithmus derart verallgemeinern, dass er auch andere Wegeprobleme lösen kann.\\
+\subsection{Beispiel: Der sichereste Weg.}
+Gerichteter Graph mit Wahrscheinlichkeiten $p_{ij}$ auf den Kanten. Die Kante fällt mit Wahrscheinlichkeit $1-p_{ij}$ aus.\\
+Ausfallwahrscheinlichkeiten sind unabhängig. Die Wahrscheinlichkeit, dass ein ganzer Weg funktioniert $=$ Produkt der Wahrscheinlichkeiten.\\
+Gesucht ist der sicherste Weg. Dafür brauchen wir zwei Operationen, um das Wegeproblem zu definieren:
+\begin{enumerate}
+\item[$\otimes$] berechnet den "Wert" eines Weges aus den Kantengewichten
+$c(i_1i_2...i_k) = c_{i_1i_2} \otimes c_{i_2i_3} \otimes ... \otimes c_{i_{k-1}i_{k}}$
+\item[$\oplus$] Wir wollen die $\oplus$-Summe der Werte aller Wege von $s$ nach $t$ ausrechnen.
+\end{enumerate}
+Wertebereich $H$:\\
+sicherste Weg $H=[0,1]$\\
+\begin{enumerate}
+\item $\otimes = *$
+\item $\oplus = \max$
+\end{enumerate}
+Exkurs: kürzeste Wege\\
+\begin{enumerate}
+\item $\otimes = +$
+\item $\oplus = \min$
+\end{enumerate}
+
+
+\subsection{Algebraisches Wegeproblem}
+Berechne $\bigoplus c(P)$ über alle Wege $P$ von $s$ nach $t$.\\
+$H[0,1]$\\
+\begin{enumerate}
+\item $\otimes = *$
+\item $\oplus = +$
+\end{enumerate}
+Wenn ich im Knoten $i$ bin, dann wähle ich einen Nachfolgeknoten $j$ mit Wahrscheinlichkeit $c_{ij}$ aus.\\
+$\sum_j c_{ij} \leq 1$ für alle $i$\\
+Wenn $<1$ ist, dann kann der Prozess in diesem Knoten abbrechen.\\
+\section{Halbring}
+Ein Halbring ist eine algebraische Struktur ($H,\otimes , \oplus$) mit folgenden Eigenschaften:
+\begin{enumerate}
+\item $\oplus, \otimes$ ist assoziativ:\\
+\begin{align*}
+a \oplus (b \oplus c) &= (a \oplus b) \oplus c\\
+a \otimes (b \otimes c) &= (a \otimes b) \otimes c\\
+\end{align*}
+\item $\oplus$ ist kommutativ:\\
+\begin{align*}
+a \oplus b &= b \oplus a\\
+\end{align*}
+\item Distributivgesetz:
+\begin{align*}
+a \otimes (b \oplus c) &= (a \otimes b) \oplus (a \otimes c)\\
+(a \oplus b) \otimes c  &= (a \otimes c) \oplus (b \otimes c)\\
+\end{align*}
+\end{enumerate}
+
+Oft ist es nützlich, ein neutrales Element $e_0$ für $\oplus$ und $e_1$ für $\otimes$ zu haben.\\
+\begin{align*}
+a \oplus e_0 &= a\\
+a \otimes e_1 &= e_1 \otimes a = a\\
+a \otimes e_0 &= e_0 \otimes a = e_0\\
+\end{align*}
+$e_0$ wird auch absorbierendes Element für $\otimes$ genannt.\\
+
+Für das Problem des sichersten Weges sind die neutralen Elemente $e$ wie folgt:
+\begin{enumerate}
+\item[$e_1$] $=1\quad e_0 \times a = e_0$
+\item[$e_0$] $=0 \quad e_0 \oplus a = \min(0,a) = a$
+\end{enumerate}
+Wir interpretieren $e_0$ als Summe der leeren Menge. $e_0$ ist die Lösung, wenn es keinen Weg gibt.\\
+$e_1$ wird als Wert eines leeren Weges ($s$) ohne Kanten interpretiert.\\
+Das klassische kürzeste Wege Problem definiert $e_0 = \infty, e_0 \otimes a = \infty + a = \infty = e_0$(muss definiert werden!) und $e_1 = 0$\\
+
+\section{Bellman-Ford-Algorithmus}
+\begin{align*}
+d_i^{(k)} &= \bigoplus_{\text{Weg von $s$ nach $i$ mit höchstens $k$ Knoten}} c(p)\\
+\\
+d_i^{(k)} &= \bigoplus_{\text{Weg von $s$ nach $i$ mit genau $k$ Knoten}} \\
+\\
+d_j^{(k)} &= \bigoplus_{i=1}^n (d_i^{(k-1)} \otimes c_{ij}) \oplus \delta_{js}\\
+\\
+\delta_{js} &= \begin{cases}e_1,\quad j=s \\ e_0, \quad j \neq s \end{cases}\\
+\end{align*}
+Jeder Weg zu $j$ hat einen Vorgänger $i$ (außer, wenn es der leere Weg von $s$ nach $s$ ist). Wir können die Wege nach $j$ mit $\leq k$ Kanten bezüglich $i$ gruppieren und getrennt aufsummieren.\\
+Alle Wege die über $i$ hereinkommen, haben als letzten Faktor $c_{ij}$ ausklammern.
+\begin{align*}
+d_j^k = \bigoplus_{i=1}^n d_i^{k-1} \otimes c_{ij}, d_i^0 = \delta_{is}\\
+\end{align*}
+
+Das ganze erinnert irgendwie an die Matrizenmultiplikation... und tatsächlich, man kann folgende Vektoren definieren:\\
+\begin{align*}
+d^{(k)} &= (d_1^{(k)},d_2^{(k)},...,d_n^{(k)})\\
+d^{k} &= (d_1^{k},d_2^{k},...,d_n^{k})\\
+c &= (c_{ij})_{1\leq i,j \leq n}
+\end{align*}
+Rekursion:
+\begin{align*}
+d^k &= d^{k-1} \otimes C\\
+d^{(k)} &= (d^{(k-1)} \otimes C) \oplus (e_1,e_0,...,e_0)
+\end{align*}
+Annahme $s=1$!\\
+Matrizenmultiplikation über einem Halbring ist assoziativ (aber niemals kommutativ).\\
+Matrizenaddition ist kommutativ und assoziativ. Es gilt das Distributivgesetz.\\
+Die $n \times n$ Matrix über einem Halbring bilden wieder einen Halbring, ggf. mit:\\
+\begin{align*}
+e_0 =
+\begin{pmatrix}
+e_0 & &\\
+e_0 &\ddots &\\
+ & &e_0\\
+\end{pmatrix}
+, e_1= \begin{pmatrix}
+e_1 & & e_0\\
+e_0 &\ddots &\\
+e_0 & &e_1\\
+\end{pmatrix}
+\end{align*}
+
+\begin{align*}
+d^{(k)} &= \bigoplus d^k\\
+d^{(0)} &= d^0 = \{e_1,e_0,...,e_0\} = \text{erster Einheitsvektor}\\
+\\
+d^{(k-1)} = d^0 \oplus d^1 \oplus ... \oplus d^{k-1}\\
+d^{k-1} \otimes C &= (\bigoplus_{k=0}^{k-1} d^k) \otimes C\\
+(d^{(k-1)} \otimes C) \oplus d^0 = d^0 \oplus d^1 \oplus ... \oplus d^k = d^{(k)}\\
+\end{align*}
+
+\subsection{Die k-kürzesten Wege (k=2)}
+$H = \{ (x,y) | x,y \in \mathbb{R} \cup \{\infty\}, x \leq y\}$\\
+$x$ ist der kürzeste Weg und $y$ ist der zwei kürzeste Weg.\\
+
+\begin{align*}
+(x,y) \otimes (z,u) &= (x+z, \min\{x+u, y+z\}) \\
+(x,y) \oplus (z,u) &= \text{die zwei kleinsten Elemente von } (x,y,z,u) \text{ in sortierter Reihenfolge}\\
+\text{Kantengewichte } &= (\text{Kantenlänge, }\infty)\\
+e_0 = (\infty, \infty)&, e_1 = (0, \infty)\\  
+\end{align*}
+Der zweit kürzeste Weg kann auch Kreise oder Schleifen enthalten. Es gibt höchsten eine Wiederholung eines Knotens $\rightarrow d^(n)$ reicht aus, wenn keine neg. Kreise.\\
+
+ 
