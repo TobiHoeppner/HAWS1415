@@ -1,0 +1,102 @@
+\section{ Fixed Parameter Tractability \tiny (Vorlesung 16 am 08.12.)}
+
+Sei $A$ ein NP-vollständiges (wahrscheinlich kein Polynomialzeitalgorithmus), algorithmisches Problem.\\
+\subsection{Strategien}
+\begin{enumerate}
+\item Heuristiken (Pro: gute Ergebnisse, oft schnell; Con: keine Garantie)
+\item Approximationalgorithmen (Pro: schnell, Fehler wird abgeschätzt; Con: keine Optimallösung)
+\item FPT (Pro: garantiert richtiges Ergebnis; exponentielles Verhalten ist "kontrolliert"; Con: nicht immer anwendbar, immer noch exponentiell)
+\end{enumerate}
+\subsection{Defintion FPT}
+Problem mit Parameter $k$ ist in FPT $\leftrightarrow \exists$ Algorithmus mit Laufzeit $\mathcal{O}(f(k).n^c))$. Wobei $c$ eine Konstante, $n=$ Eingabegröße und $f$ eine beliebige Funktion ist.\\
+\subsection{Beispiel: Unabhängige Knotenmenge auf planaren Graphen}
+Eingabe: $G$ ein planarer Graph \\
+Parameter: $k \in \mathbb{N}$\\
+Frage: $\exists S \subseteq V \quad |S| \geq k$, $S$ ist unabhängige Knotenmenge.\\
+$\exists$ Algorithmus mit Laufzeit $6^k*n$\\
+Der naive Algorithmus hat die Laufzeit $\mathcal{O}(n^{k+1})$ (Teste $\binom{n}{k} = n^k$ Teilmengen in jeweils $\mathcal{O}(n)$)\\
+\subsubsection{Suchbaum}
+Fakt: Jeder planare Graph hat einen Knoten mit Grad $\leq 5$
+%Bild mit Sterngraph 6 knoten, v in der mitte w_1..5 als kinder
+\begin{enumerate}
+\item[Fall 1]:  mindestens einer der Knoten $w_1, ... , w_5$ ist in $S$
+\item[Fall 2]: keiner der Knoten $w_1, ... , w_5$ ist $S$
+\end{enumerate}
+$\Rightarrow$ Es ist mindestens einer der Knoten $v, w_1, ... , w_5$ in $S$.
+\subsubsection{Algorithmus}
+$v:=$ Sei Knoten mit Grad $\leq 5$\\
+$w_1,...,w_5$ die Nachbarn\\
+$G_0 = G$ ohne $v$ und ohne $N(v)$\\
+$G_1 = G$ ohne $w_1$ und ohne $N(w_1)$\\
+$\dots$\\
+$G_i = G$ ohne $w_i$ und ohne $N(w_i)$\\
+% Bild siehe Foto
+\subsubsection{Laufzeit}
+\begin{align*}
+&n\\
+&6n\\
+&6^2n\\
+&6^kn\\
+&\Rightarrow (1+6+6^2+...+6^k)n = (\frac{k6^{k+1}-1}{6-1})n\\
+&=6*6^k*n\\
+\end{align*}
+\subsubsection{Datenreduktion / Problemkern (Kernelization)}
+Definition: Sei $(I,k)$ Eingabe + Parameter $g(k)$ eine beliebige Funktion.\\
+Ein Algortihmus ist eine Reduktion zu einem Problemkern gdw. $(I,k) \rightarrow (I',k')$\\
+\begin{enumerate}
+\item Polynomialzeit
+\item $k' \leq k$
+\item $|I'| \leq g(k)$
+\end{enumerate}
+\begin{enumerate}
+\item Beispiel: UK auf planaren Graphen\\
+Wir zeigen $\exists$ Prolemkern $\leq \mathcal{O}(k)$\\
+Konstruktion $G=(V,E)$ Eingabe\\
+$\exists$ 4-Färbung (geht in polynomieller Zeit)!
+\begin{enumerate}
+\item[Fall 1] $k\leq \frac{n}{4} \Rightarrow$ Problem kann in Polynomialzeit gelöst werden. Problemkern$= (\emptyset,0)$\\
+\item[Fall 2] $k \leq \frac{n}{4} \Rightarrow 4k \leq n$, Problemkern $(G,k)$ unverändert $|G| = \mathcal{O}(k)$\\
+\end{enumerate}
+\item Beispiel MAX SAT (maximum satisfiability)\\
+Eingabe: Bool'sche Formel $F$ in KNF, $m$ Klauseln, $k \in \mathbb{N}$\\
+Parameter: $k$\\
+Ausgabe: $\exists$ Belegeung der Variablen mit mindestens $k$ Klauseln erfüllt?\\
+$F = (x \land y \land \not{z}) \lor (x \land \not{y}) \lor (x \land \not{u} \land v \land z)$\\
+\begin{enumerate}
+\item $k \leq \frac{m}{2} \Rightarrow$ Antwort ist Ja\\
+$\Rightarrow$ Problemkern $(\emptyset, 0)$\\
+Sei $B$ irgendeine Belegung und $\not{B}$ die Belegung, die jeder Variablen den jeweils anderen Wahrheitswert zuweist.\\
+Sei $C$ eine Klausel $\Rightarrow B$ oder $\not{B}$ erfüllt $C \Rightarrow$ mindestens die Hälfte der Klauseln werden von $B$ oder $\not{B}$ erfüllt.\\ 
+$F = \underbrace{(x \land y \land \not{z})}_{\text{Länge}=3} \lor  \underbrace{(x \land \not{y})}_{\text{Länge}=2} \lor \underbrace{(x \land \not{u} \land v \land z)}_{\text{Länge}=4}$\\
+Klausel $C$ ist lang $\leftrightarrow$ mindestens $k$ Literale kurz, sonst\\
+$L:=\#$ lange Klauseln.
+\end{enumerate}
+\subsubsection*{Beobachtung}
+wenn $i$ Klauseln zu erfüllen braucht man nie mehr als $i$ Variablen zu Belegen (Die restlichen kann man sich später überlegen).\\
+$F = F_l \land F_s$\\
+$F_l = $ Formel der langen Klauseln\\
+$F_s = $ Formel der kurzen Klauseln\\ 
+Problemkern $= (F_s, k-l)$\\
+Problemkern $\mathcal{O}(k^2)$\\
+$\#$ Klauseln $m \leq 2k$\\
+Größe der Klausel $\leq k$\\
+$\Rightarrow$ Gesamtgröße $\leq \mathcal{O}(k^2)$(Größe des Problemkerns)\\
+ACHTUNG: Das Problem wurde vielleicht garnicht verkleinert.\\
+\end{enumerate}
+\subsubsection{Lemma}
+$\exists FPT \Rightarrow \exists$ Problemkernreduktion\\
+\begin{enumerate}
+\item[$\Rightarrow$]: Algorithmus $f(k)*n^c$\\
+Lasse ihn $n^{c+1}$ viele Schritte laufen.\\
+\begin{enumerate}
+\item[Fall 1] Problem gelöst. $\Rightarrow$ Problemkern = triviale Antwort.
+\item[Fall 2] Problem nicht gelöst. $\Rightarrow f(k*n^c) > n^{c+1} \Rightarrow f(k) > n$ Problemkern Identität. Größe ist $f(k)$.
+\end{enumerate}
+\item[$\Leftarrow$]: $\exists$ Problemkern der Größe $g(k)$ mit einem trivialen Algorithmus der in $h(n)$ das Problem löst.\\
+Gesamtlaufzeit: $h(g(k))+\underbrace{n^c}_{\text{Laufzeit Problemkernreduktion}}$
+\begin{align*}
+f &:= h \circ g\\
+& \leq f(k) + n^c \leq f(k)*n^c\\
+&\Rightarrow \text{Problem ist in FPT}
+\end{align*}
+\end{enumerate}
