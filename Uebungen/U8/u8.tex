@@ -2,7 +2,7 @@
 \usepackage[ngerman]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-%\usepackage{MyriadPro}
+\usepackage{MyriadPro}
 \usepackage[scaled]{beramono}
 \newcommand\Small{\fontsize{10.5}{10.5}\selectfont}
 \newcommand*\LSTfont{\Small\ttfamily\SetTracking{encoding=*}{-20}\lsstyle}
@@ -105,19 +105,26 @@
 \subsubsection*{45. Wege mit Transportkapazität, 10 Punkte}
 Lösung: Der Algorithmus orientiert sich an dem Prim Algorithmus zum erstellen eines minimalen Spannbaums.
 Jedoch brechen wir früher ab, wenn wir am Knoten $B$ angekommen sind. Da wir dann den optimalen Weg von $A$ nach $B$ gefunden haben.\\
-\begin{enumerate}
-\item 
-\end{enumerate}
+\begin{compactitem}
+\item[-] Wähle Knoten $A$ als Graph $S$
+\item[-] Solange $S$ noch nicht $B$ enthält:
+\begin{compactitem}
+\item[-] Wähle Kante $(x,y)$ mit dem minimalen Gewicht $w_{xy}$ aus, die einen neuen Knoten $T$ mit $S$ verbindet
+\item[-] Füge $T$ und Kante $(x,y)$ zu $S$ hinzu\\
+\end{compactitem}
+\end{compactitem}
+Die Kanten werden bei Entdeckung eines neuen Knotens in eine Prioritätswarteschlange einsortiert. Die Prioritätswarteschlange liefert immer die Kante mit optimalen Gewicht.\\
+Der Algorithmus bricht ab, wenn der Knoten $B$ im Graphen $S$ enthalten ist. Anschließend muss noch ein Weg von $A$ nach $B$ in $S$ gefunden werden.\\
 
-\begin{proof}
-some proof
-\end{proof}
+\subsubsection{Korrektheit}
+Der Algorithmus nimmt immer nur die kleinste Kante, um von den bereits entdeckten Knoten zu einem neuen Knoten zu kommen. Der entstehende Graph ist mindestens ein Teilgraph des minimalen Spannbaums, der gegebenen Knotenmenge. Im schlimmsten Fall entsteht ein minimaler Spannbaum, dessen Korrektheit bereits bekannt ist.
+
 \subsubsection*{Laufzeit}
-Die Laufzeit ist stark von der verwendeten Prioritätswarteschlange abhängig. Die optimale Struktur bietet der Fibonacci Heap. Die Gesamtlaufzeit beträgt $\mathcal{O}(|E| + |V| \log |V|)$. 
+Die Laufzeit ist stark von der verwendeten Prioritätswarteschlange abhängig. Die optimale Struktur für die Warteschlange bietet der Fibonacci Heap, mit der die Laufzeit optimal wird. Die Gesamtlaufzeit des Algorithmus beträgt $\mathcal{O}(|E| + |V| \log |V| + |S|)$ für das finden eines Weges von $A$ nach $B$.
 
 \subsubsection*{48. Wechselgeld, 10 Punkte}
-\begin{enumerate}
-\item[b)] 
-\item[c)]
-\end{enumerate}
+\begin{compactitem}
+\item[b)] Beweisidee: Die Münzwerte sind so konstruiert, dass bestimme Paare vielfache voneinander sind. Der Greedy-Algorithmus teilt immer den Betrag durch den gegeben Geldwert und wiederholt diesen Schritt mit dem Restbetrag und den verbleibenden Geldwerten, bis der Betrag vollständig abgebildet ist.\\ Der Greedyalgorithmus wird immer die optimale Lösung finden, solange die gegebenen Geldwerte Teiler untereinander sind.\\
+\item[c)] siehe B. 
+\end{compactitem}
 \end{document}
