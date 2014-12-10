@@ -2,7 +2,7 @@
 \usepackage[ngerman]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-%\usepackage{MyriadPro}
+\usepackage{MyriadPro}
 \usepackage[scaled]{beramono}
 \newcommand\Small{\fontsize{10.5}{10.5}\selectfont}
 \newcommand*\LSTfont{\Small\ttfamily\SetTracking{encoding=*}{-20}\lsstyle}
@@ -18,6 +18,7 @@
 \usepackage{caption}
 \usepackage{url}
 \usepackage{amsmath}
+\usepackage{amsfonts}
 \usepackage{accents}
 \usepackage{tikz}
 \usetikzlibrary{arrows}
@@ -103,6 +104,38 @@
 \maketitle 
 
 \subsubsection*{51. Inflation, 10 Punkte}
+\subsubsection*{Optimallösung}
+Unser Budget $B$ steigt linear mit 1000 Euro pro Monat an. Die Kosten $L_{i}(k) = 1000*r_i^k$ für eine Lizenz steigen jedoch, um einen Faktor $r_i^k$ mit $r_i\leq 1$ und $k=\#$Monate und damit schneller an. Um die Gesamtkosten $K_{ges}$ (alle gekauften Lizenzen) gering zu halten muss man eine Lizenz immer dann kaufen, wenn man genug Geld hat. Wartet man länger und kauft später mehrere Lizenzen auf einmal, kann man es unter Umständen (kleiner Wert für $r$) schaffen wenigstens die gleiche Anzahl der Lizenzen zu erwerben. Allerdings ist es offensichtlich, dass man einen insgesamt höheren Preis bezahlt hat.
+\subsubsection*{Algorithmus}
+\begin{compactitem}
+\item $k=0$
+\item $B=0$
+\item $K_{ges}=0$
+\item $c=0$
+\item für $i = 1,...,n$
+\begin{compactitem}
+\item $B=B+1000$
+\item Wenn $B > L_{i,k}$, dann kaufe ($B = B - L_i(k)$) Lizenz (Berechne Gesamtkosten $K_{ges}=K_{ges}+L_i(k)$ und inkrementiere Zähler $c++$).
+\end{compactitem}
+\end{compactitem}
+\subsubsection*{Beweis für Optimallösung}
 
-\subsubsection*{54. (10 Punkte) Für welche der unten angegebenen Operationen $\oplus$ und $\otimes$ auf einer Grundmenge $S$ gelten die folgenden beiden Distributivgesetze?}
+
+\subsubsection*{54. (10 Punkte) Für welche der unten angegebenen Operationen $\oplus$ und $\otimes$ auf einer Grundmenge $S$ gelten die folgenden beiden Distributivgesetze?} 
+
+\begin{align*}
+a \otimes (b \oplus c) &= (a \otimes b) \oplus (a \otimes c)\\
+(a \oplus b) \otimes c &= (a \otimes c) \oplus (b \otimes c)
+\end{align*}
+
+\begin{enumerate}
+\item $S=\mathbb{R} \cup \{-\infty,\infty \}, \oplus = \max$ und $\otimes = \min$
+\item $S=\mathbb{R}, \oplus = \max$ und $\otimes = *$
+\item $S=\mathbb{R} \cup \{-\infty\}, \oplus = +$ und $\otimes = \max$
+\item $S=\mathbb{R}^2, \otimes=$ elemetweises $+: (a_1,a_2)\otimes(b_1,b_2) = (a_1+b_2,a_2+b_2)$ und $\oplus=$das lexikographische Minimum:
+\begin{align*}
+(a_1,a_2)\oplus (b_1,b_2) &= (\min\{a_1,b_2\},c), \text{ mit } c = \begin{cases} a_2, &\text{für }a_1 < b_1 \\ b_2, &\text{für }b_1 < a_1 \\ \min\{a_2,b_2\},&\text{für } a_1=b_1\end{cases}
+\end{align*}
+\end{enumerate}
+
 \end{document}
