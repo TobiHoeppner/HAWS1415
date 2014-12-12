@@ -1,0 +1,70 @@
+\section{ Fixed Parameter Tractability (Fortsetzung)\tiny (Vorlesung 17 am 08.12.)}
+
+\subsection*{Baumweite}
+= Maß für die Ähnlichkeit eines Graphen mit einem Baum\\
+
+% Bild
+% 					SPEKTRUM
+% Baum ----------------------- allgemeiner Graph
+% Baumweite 1 \omega		unbeschränkte Baumweite
+
+Unabhängige Knotenmenge für Bäumen kann man in linearer Zeit berechnen.\\
+Das Spektrum $\mathcal{O}(2^\omega \omega * n)$\\
+Es gibt keinen Polynomialzeitalgorithmus für die unabhängige Knotenmenge in einem Allgemeinen Graphen\\
+
+\subsubsection*{Baumzerlegung der Weite $k$}
+Definition: $G=(V,E)$ Graph $( G, \{ X_i | i \in T \}, T )$\\
+Baumzerlegung\\
+$X_i$-Taschen\\
+$T = (I,E')$ Baum auf den Taschen. (Taschenbaum)\\
+
+\begin{enumerate}
+\item $X_i \subseteq V \quad |X_i| \leq k +1 $
+\item $VX_i = V$
+\item $T $ Baum
+\item $\forall e = (u,v) \in E \quad	 \exists i: u,v \in X_i$
+\item Konsistenz-Bedingung: $\forall v \in V : \{ i \in I | v \in X_i\}$ (Diese Menge ist zusammenhängend in $T$). 
+\end{enumerate}
+
+% Bilder siehe Foto
+
+Fakt: Bäume haben Baumweite 1\\
+
+Was macht man jetzt damit?\\
+Eingabe: $G = (V,E) + $ Baumzerlegung der Weite $\omega$ wird eine Zahl $k \in \mathbb{N}$\\
+Parameter: $\omega$ die Baumweite\\
+Ausgabe: Existiert $S$, UK mit $|S| \geq k$?\\
+Ja, in $\mathcal{O}(2^\omega * w * n)$ Zeit\\
+\begin{enumerate}
+\item $A \cap	B = X_i$
+\item $v \in A, w \in Bm vw \e E $\\
+$\Rightarrow$ $v$ oder $w$ ist in $X_i$\\
+$U \subseteq A, W \subseteq B$ UK in $G$\\
+$U \cap X_i = W \cap W_i$\\
+Behauptung: $U \cup W$ ist UK in $G$\\
+Beweis per Widerspruch: Sei $x \in U, y \in W$ und $(x,y) \in E \Rightarrow $ o.B.d.A. $x \in X_i$\\
+$\Rightarrow x \in B \Rightarrow X_i $ ist $U \cao X_i = W \cap X_i \Rightarrow x \in B$ (Widerspruch!)\|
+\end{enumerate}
+
+\subsection{Algorithmus mit DP}
+Annahme der Taschenbaum $T$ ist gewurzelt.
+\subsubsection{Teilprobleme}
+$\forall i $ Index einer Tasche\\
+$\forall S \subseteq X_i$\\
+$f(i,S) := $ Größe der größten UK W mit $X_i \cap W =S$ in den Teiltaschenbaum unter $i$.\\
+\subsubsection{Anker}
+$i$ sei ein Blatt: $S \subseteq X_i \forall S$\\
+$f(i,S) = \begin{cases}
+|S|, \text{wenn } S UK\\
+-\infty, \text{sonst}.
+\end{cases} $
+\subsubsection{Rekursion}
+$i$ hat Kinder $j$ und weitere $k, S \subseteq X_i$\\
+$f(i,S) = |S| + \max \{f(j,U) - |U \cap X_i \cap X_j| \text{für } U\cap X_i \cap X_j = S \cap X_i \cap X_j \text{ und } U \subseteq X_j \}$
+\subsubsection{Lösungen}
+$f(i,S) = -\infty$, wenn $S$ nicht in UK
+\begin{enumerate}
+\item[-] müssen alle Konfigurationen von $U \subseteq X_j$ anschauen
+\item[-] $U$ muss kompatibel sein mit $S$
+\item[-] bestimmte Knoten nicht doppelt zählen!
+\end{enumerate}
