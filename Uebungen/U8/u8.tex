@@ -2,7 +2,7 @@
 \usepackage[ngerman]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{MyriadPro}
+%s\usepackage{MyriadPro}
 \usepackage[scaled]{beramono}
 \newcommand\Small{\fontsize{10.5}{10.5}\selectfont}
 \newcommand*\LSTfont{\Small\ttfamily\SetTracking{encoding=*}{-20}\lsstyle}
@@ -125,6 +125,29 @@ Die Laufzeit ist stark von der verwendeten Prioritätswarteschlange abhängig. D
 \subsubsection*{48. Wechselgeld, 10 Punkte}
 \begin{compactitem}
 \item[b)] Beweisidee: Die Münzwerte sind so konstruiert, dass bestimme Paare vielfache voneinander sind. Der Greedy-Algorithmus teilt immer den Betrag durch den gegeben Geldwert und wiederholt diesen Schritt mit dem Restbetrag und den verbleibenden Geldwerten, bis der Betrag vollständig abgebildet ist.\\ Der Greedyalgorithmus wird immer die optimale Lösung finden, solange die gegebenen Geldwerte Teiler untereinander sind.\\
+
+Musterlösung im Tutorium.\\
+Grundidee hier ist es die Fälle zu zeigen, bei der die Münzen nicht optimal zusammen gefügt sind:\\
+1,5,10,50,100 - doppelt\\
+(1,2,2), (2,2,2), (10,20,20), (20,20,20)\\
+
+Daraus ergibt sich folgendes Lemma:\\
+In der Optimallösung sind folgende Eigenschaften gegeben:
+$\sum 1,2 \leq 4$\\
+$\sum 1,2,5 \leq 9$\\
+$\sum 1,2,5,10 \leq 19$\\
+$\sum 1,2,5,10,20 \leq 49$\\
+\dots $\leq 99$\\
+\dots $\leq 199$\\
+
+Behauptung: greedy = optimale Lösung.\\
+Beweis per Widerspruch:\\
+I.A.: $G=1,...,9$ per Hand ausrechnen\\
+I.S.: $G \in \{ 10,...,19 \}$\\
+Fall 1: OPT verwendet 10 $\Rightarrow$ I.V: auf $(G-10)$\\
+Fall 2: OPT verwendet 10 nicht $\Rightarrow$ Widerspruch laut Lemma!\\
+Das Schema nun für alle Teilmengen durchführen und damit stellt sich immer ein Widerspruch ein.\\
+
 \item[c)] siehe B. 
 \end{compactitem}
 \end{document}
