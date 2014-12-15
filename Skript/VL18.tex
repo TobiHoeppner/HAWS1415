@@ -1,0 +1,90 @@
+\section{Kürzeste Wege (Fortsetzung)\tiny (Vorlesung 18 am 15.12.)}
+\subsection{Berechnen aller Paare von kürzesten Wegen}
+\begin{enumerate}
+\item kürzeste Wege von einem Startpunkt $k$, $n$ mal wiederholen - bspw. Bellman-Ford $n\times \mathcal{O}(mn^2) \leq \mathcal{O}(n^4)$
+\item Floyd-Warshall, dynamische Programmierung über Matrizen
+\end{enumerate}
+Es geht aber auch besser:\\
+\subsubsection{Verbesserung}
+Definiere beliebige Knotengewichte $u_i, i \in V$\\
+Betrachte modifizierte Kosten: $\bar{c_{ij}} = c_{ij} + u_i - u_j$\\ 
+% Bild mit Graphen und modifizierten Gewichten
+Die kürzesten Wege bezüglich $\bar{c_{ij}}$ sind die gleichen wie die kürzesten Wege bezüglich $c_{ij}$. Der Weg $i_1,i_2, ... , i_k$ berechnet sich wie folgt: $\bar{c_{i_1i_2}} + \bar{c_{i_2i_3}} +  ... + \bar{c_{i_{k-1}i_k}} = (c_{i_1 i_2} + u_i_1 - u_i_2) + (c_{i_2 i_3} + u_i_2 - u_i_3) + ... = (c_{i_1 i_2} + c_{i_2 i_3} + c_{i_{k-1} i_k}) + u_i_1 - u_i_k$ für alle Wege von $i_1$ nach $i_k$ konstant.\\
+Idee: finde $u_i$, sodass $\bar{c_{ij}} \geq 0 \quad \forall ij \rightarrow$ Algorithmus von Djikstra $\Rightarrow \mathcal{O}(n \log n +m)$ anwendbar und damit verbessert sich die Laufzeit anstelle von $\mathcal{O}(nm)$\\
+Beobachtung: $d_i^*$ sei die Länge des kürzesten Weges von einem festen Startknotens (z.B. $s=1$) zu $i$. Dann wir mit $u_i := d_i^*$ die modifizierten Kosten $\bar{c_{ij}} \geq 0$\\
+Beweis: $\bar{c_{ij}} = c_{ij} + u_i + u_j = c_{ij} + d_i^* - d_j^* \geq 0 \Leftrightarrow d_j^* \leq d_i^* + c_{ij}$\\
+Jeder Knoten muss von $s$ erreichbar sein. Man kann einen künstlichen Knoten $s$ mit Kanten $s,i \forall i \in V$ und Kosten $c_{si} = 0$\\
+\subsubsection{Algorithmus}
+\begin{enumerate}
+\item Füge künstlichen Startknoten $s$ mit Kanten $c_{si} = 0$ dazu.
+\item Bellman-Ford-Moore-Algorithmus mit $s$ als Startpunkt.
+\begin{enumerate}
+\item Wenn negativer Kreis auftritt, Abbruch.
+\item kürzeste Distanzen $d_i^*$
+\end{enumerate}
+\item Für jeden Startknoten $i$: Alogrithmus von Dijkstra mit Kosten $\bar{c_{ij}}$.
+\item Ergebnisdistanzen müssen noch umgerechnet werden.
+\item kürzester Weg von $i$ nach $j$... $-u_i + u_j$ addieren.
+\end{enumerate}
+\subsubsection{Laufzeit}
+\begin{enumerate}
+\item[2.] $\mathcal{O}(mn)$
+\item[3.] $n * \mathcal{O}(m+n*\log n)$
+\item[Summe] $\mathcal{O}(mn+n^2\log n)$
+\end{enumerate}
+\subsection{Floyd-Warshall Algorithmus zur Berechnung aller kürzesten Wege}
+\subsubsection{Teilprobleme}
+$c_{ij}^k = $ alle Wege von $i$ nach $j$, die als Zwischenknoten nur die Knoten $1,2,...,k$ verwenden dürfen.
+\subsubsection{Lösungen}
+$c_{ij}^0 = c_{ij} \quad (i\neq j)$
+$c_{ii}^0 = c_{ii} $ (Wir legen fest: der leere Weg von $i$ nach $i$ verwendet als Zwischenknoten den Knoten $i$ - das ist im Grunde kein Unterschied mehr zu $c_{ij}^0$)
+\subsubsection{Rekrusion}
+$(c_{ij}^{k-1})_{i,j \in V} \rightarrow (c_{ij}^k)_{i,j}$ 
+Ein Weg in $c_{ij}^k \quad (i,j \neq k)$ hat zwei Möglichkeiten:
+\begin{enumerate}
+\item Er verwendet den Knoten $k$ überhaupt nicht. $\rightarrow c_{ij}^{k-1}$
+\item man kann den Weg aufspalten in 
+\begin{enumerate}
+\item Anfangsstück von $i$ nach $k$ $\rightarrow c_{ik}^{k-1}$
+\item Beliebig viele $\leq 0$ Zwischenstpck von $k$ nach $k$ $\rightarrow c_{kk}^{k-1}$
+\item Ein Endstück von $k$ nach $j$ $\rightarrow c_{kj}^{k-1}$
+\end{enumerate}
+Jedes dieser Stücke verwendet $k$ nicht als Zwischenknoten
+\end{enumerate}
+$(i,j \neq k) \quad c_{ij}^k = c_{ij}^{k-1} \oplus c_{ik}^{k-1} \otimes [e_1 \oplus c_{kk}^{k-1} \oplus (c_{kk}^{k-1})^2 \oplus (c_{kk}^{k-1})^3 \oplus ...] \otimes c_{kj}^{k-1}$\\
+Der Term in den eckigen Klammern ist eine unendliche Summe der folgenden Gestalt:
+$e_1 \oplus a \oplus a^2 \oplus a^3 \oplus ... := a^*$, wobei bspw. $a^3$ als $a \oplus a \oplus a$ zu verstehen ist.\\
+Wir haben angenommen, dass die Rechengesetze (Distrib. etc.) auch für unendliche Summen gelten, sofern diese Existieren.\\
+$i,j \neq k \quad c_{ij}^k = c_{ij}^{k-1} \oplus c_{ik}^{k-1} \oplus (c_{kk}^{k-1})^* \otimes c_{kj}^{k-1}$\\
+$j\neq k \quad c_{kj}^k = (c_{kk}^{k-1})^* \otimes c_{kj}^{k-1}$\\
+$i\neq k \quad c_{ik}^k = (c_{kk}^{k-1})^* \otimes c_{ik}^{k-1}$\\
+$i\neq k \quad c_{kk}^k = (c_{kk}^{k-1})^*$ \\
+\subsubsection{Beispiele für $a^*$}
+$\oplus = \min$\\
+$\otimes = +$\\
+$a^* = \min \{0, a, 2a, 3a,... \} = \begin{cases}0, &a\leq 0 \\ \text{undefiniert, sonst} \end{cases}$\\
+$\oplus = +$\\
+$\otimes = *$\\
+$a^* = 1 + a + a^2 + a^3 + ... = \begin{cases} \frac{1}{1-a}, &|a|< 1 \\ \text{undefiniert, sonst} \end{cases}$\\
+zweit kürzeste Wege:
+$a = (u_1,u_2) \in \mathbb{R}^2, u_1 \leq u_2$\\
+$a^* = e_1 \oplus a \oplus a^2 \oplus ... (0,\infty) \oplus (u_1,u_2) \oplus (2u_1, u_1 + u_2) \oplus ...  = \begin{cases} (0,u_1), & u_1 \leq 0 \\ \text{undefiniert, sonst} \end{cases}$\\
+
+\subsubsection{Algorithmus}
+Initialisiere $c_{ij}^0 = c_{ij}$
+for $k=1,..,n$
+\begin{enumerate}
+\item Berechne $c_{kk}^k$
+\item Zeile $k$: $c_{k_j}^k$ für $j\neq k$
+\item Spalte $k$: $c_{ik}^k$ für $i\neq k$
+\item Berechne die übrigen Elemente $c_{ij}^k$ für $i,j \neq k$
+\end{enumerate}
+Ergebnis: $c_{ij}$ in Laufzeit: $\mathcal{O}(n^3)$ mit $\oplus, \otimes, *$-Operation
+
+\subsection{Halbring der formalen Sprachen}
+$H = \sigma^* = $Mengen von Wörtern über einem Alphabet $\sigma$\\
+$\oplus = \bigcup$\\
+$\otimes = \bigodot$ (Konkatenation)\\
+Frage: Welche Sprache wird von einem endlichen Automaten akzeptiert.\\
+Einen Automaten kann man als Zustandsgraph interpretieren. In diesem Graphen kann man das algebraische Wegeproblem anwenden.\\
+Algorithmus von Kleene (ca. 1950er), zum Beweis, dass jede Sprache, die von einem NEA akzeptiert wird, durch einen regulären Ausdruck beschrieben werden kann.\\
