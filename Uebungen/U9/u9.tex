@@ -140,29 +140,68 @@ a \otimes (b \oplus c) &= (a \otimes b) \oplus (a \otimes c) \tag{a}\\
 \begin{enumerate}
 \item $S=\mathbb{R} \cup \{-\infty,\infty \}, \oplus = \max$ und $\otimes = \min$\\
 \begin{enumerate}
-\item Gegenbeispiel: wähle $a = \infty, b = 1, c = -\infty$\begin{align*}
+\item[(a) Fall 1:] wähle o.B.d.A. $a > b,c$\begin{align*}
 \min\{ a, \max\{b, c \} \} &= \max\{ \min\{ a, b\}, \min\{ a, c\} \}\\
-\min\{ a, \max\{b, c \} \} &= \max\{ \min\{ a, b, c\} \}\\
-\min\{ \infty, \max\{1, -\infty \} \} &= \max\{ \min\{ \infty, 1, -\infty\} \}\\
-\min\{ \infty, 1 \} &= \max\{ -\infty \}\\
-1 &= -\infty\\
+\max\{b, c \} &= \max\{ b, c \} &\square\\
 \end{align*}
-Widerspruch!
-\item Gegenbeispiel: wähle $a = -\infty, b = 1, c = \infty$\begin{align*}
-(a \oplus b) \otimes c &= (a \otimes c) \oplus (b \otimes c)\\
-\min\{ \max\{a, b \}, c \} &= \max\{ \min\{ a, c\}, \min\{ b, c\} \}\\
-\min\{ \max\{-\infty, 1 \}, \infty \} &= \max\{ \min\{ -\infty, \infty\}, \min\{ 1, \infty\} \}\\
-\min\{ 1 , \infty \} &= \max\{ \min\{ -\infty, 1, \infty\} \}\\
-1 &= -\infty\\
+\item[(a) Fall 2:] wähle o.B.d.A. $a < b,c $\begin{align*}
+\min\{ a, \max\{b, c \} \} &= \max\{ \min\{ a, b\}, \min\{ a, c\} \}\\
+a &= \max\{ a,a \} &\square\\
 \end{align*}
-Widerspruch!
+\item[(b) Fall 1:] ähnlich wie 54.1.a. Fall 1 und wähle $a=c, b = b, c = a \Rightarrow c > a,b$
+\begin{align*}
+\min\{\max\{a, b\}, c\} &= \max\{ \min\{a,  c\}, \min\{b, c\} \}\\
+\max\{a, b\} &= \max\{ a,b \} &\square\\
+\end{align*}
+\item[(b) Fall 2:] ähnlich wie 54.1.a. Fall 2 und wähle $a=c, b = b, c = a \Rightarrow c < a,b$
+\begin{align*}
+\min\{\max\{a, b\}, c\} &= \max\{ \min\{a,  c\}, \min\{b, c\} \}\\
+c &= \max\{ c,c \} &\square\\
+\end{align*}
 \end{enumerate}
 \item $S=\mathbb{R}, \oplus = \max$ und $\otimes = *$
-\item $S=\mathbb{R} \cup \{-\infty\}, \oplus = +$ und $\otimes = \max$
-\item $S=\mathbb{R}^2, \otimes=$ elemetweises $+: (a_1,a_2)\otimes(b_1,b_2) = (a_1+b_2,a_2+b_2)$ und $\oplus=$das lexikographische Minimum:
-\begin{align*}
-(a_1,a_2)\oplus (b_1,b_2) &= (\min\{a_1,b_2\},c), \text{ mit } c = \begin{cases} a_2, &\text{für }a_1 < b_1 \\ b_2, &\text{für }b_1 < a_1 \\ \min\{a_2,b_2\},&\text{für } a_1=b_1\end{cases}
+\begin{enumerate}
+\item Wissen für $\mathbb{R}$: $\max\{x,y\} = \frac{x+y + |x-y|}{2}$\begin{align*}
+a * \max\{b, c\}&= \max\{(a * b), (a * c) \}\\
+a * (\frac{b + c + |b-c|}{2}) &= \frac{(a*b) + (a*c) + |(a*b) - (a*c)|}{2}\\
+\frac{a * (b + c + |b-c|)}{2} &= \frac{(a*b) + (a*c) + |(a*b) - (a*c)|}{2}\\
+\frac{a * (b + c + |b-c|)}{2} &= \frac{a * (b + c + |b-c|)}{2}\\
+1 &= 1 &\square\\
+\end{align*}
+\item  Wissen für $\mathbb{R}$: $\max\{x,y\} = \frac{x+y + |x-y|}{2}$\begin{align*}
+\max\{a, b\} * c &= \max\{(a*c),(b*c)\}\\
+c* \frac{a+b + |a-b|}{2} &= \frac{(a*c)+(b*c) + |(a*c)-(b*c)|}{2}\\
+&\dots \\
+1 &= 1 &\square\\
 \end{align*}
 \end{enumerate}
-
+\item $S=\mathbb{R} \cup \{-\infty\}, \oplus = +$ und $\otimes = \max$
+\begin{enumerate}
+\item Gegenbeispiel: wähle $a = b + c + 1$\begin{align*}
+\max\{a, (b + c)\} &= \max\{a, b\} + \max\{a, c\}\\
+a &= a + a \\
+a &= 2a &\lightning\\
+\end{align*}
+\item Gegenbeispiel: wähle $c = a + b + 1$\begin{align*}
+\max\{(a + b), c\} &= \max\{a, c\} + \max\{b, c\}\\
+c &= c + c \\
+c &= 2c &\lightning\\
+\end{align*}
+\end{enumerate}
+\item $S=\mathbb{R}^2, \otimes=$ elementweises $+: (a_1,a_2)\otimes(b_1,b_2) = (a_1+b_1,a_2+b_2)$ und $\oplus=$das lexikographische Minimum:
+\begin{align*}
+(a_1,a_2)\oplus (b_1,b_2) &= (\min\{a_1,b_1\},c), \text{ mit } c = \begin{cases} a_2, &\text{für }a_1 < b_1 \\ b_2, &\text{für }b_1 < a_1 \\ \min\{a_2,b_2\},&\text{für } a_1=b_1\end{cases}
+\end{align*}
+folgend seien $a,b,c$ Vektoren aus $\mathbb{R}^2$
+\begin{enumerate}
+\item[(a)] Fall 1: $b \oplus c = c$
+\begin{align*}
+a \otimes (b \oplus c) &= \\
+a \otimes c &= (a \otimes b) \oplus (a \otimes c)\\
+&=a \otimes c &\square \\
+\end{align*}
+\item[(a)] Fall 2:  $b \oplus c = b$ analog.
+\end{enumerate}
+\item[(b)] $(a \oplus b) \otimes c = (a \otimes c) \oplus (b \otimes c)$, analog wie (a) Fall 1.
+\end{enumerate}
 \end{document}
