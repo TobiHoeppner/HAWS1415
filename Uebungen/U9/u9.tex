@@ -2,7 +2,7 @@
 \usepackage[ngerman]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{MyriadPro}
+%\usepackage{MyriadPro}
 \usepackage[scaled]{beramono}
 \newcommand\Small{\fontsize{10.5}{10.5}\selectfont}
 \newcommand*\LSTfont{\Small\ttfamily\SetTracking{encoding=*}{-20}\lsstyle}
@@ -104,6 +104,8 @@
 \maketitle 
 
 \subsubsection*{51. Inflation, 10 Punkte}
+\subsubsection*{Annahmen}
+Das Budget steigt linear um 1000 EUR pro Monat an.
 \subsubsection*{Optimallösung}
 Unser Budget $B$ steigt linear mit 1000 Euro pro Monat an. Die Kosten $L_{i}(k) = 1000*r_i^k$ für eine Lizenz steigen jedoch, um einen Faktor $r_i^k$ mit $r_i\leq 1$ und $k=\#$Monate und damit schneller an. Um die Gesamtkosten $K_{ges}$ (alle gekauften Lizenzen) gering zu halten muss man eine Lizenz immer dann kaufen, wenn man genug Geld hat. Wartet man länger und kauft später mehrere Lizenzen auf einmal, kann man es unter Umständen (kleiner Wert für $r$) schaffen wenigstens die gleiche Anzahl der Lizenzen zu erwerben. Allerdings ist es offensichtlich, dass man einen insgesamt höheren Preis bezahlt hat.
 \subsubsection*{Algorithmus}
@@ -119,17 +121,42 @@ Unser Budget $B$ steigt linear mit 1000 Euro pro Monat an. Die Kosten $L_{i}(k) 
 \end{compactitem}
 \end{compactitem}
 \subsubsection*{Beweis für Optimallösung}
-
+Um zu zeigen, dass der präsentierte Algorithmus die Optimallösung darstellt, brauche ich nur zu zeigen, dass man mehr Geld bezahlt, wenn man einen Lizenzkauf um einen Monat nach hinten verschiebt, obwohl genug Budget für einen Lizenzkauf vorhanden wäre.\\
+Da sich der Preis einer Lizenz aus einer Konstante ($1000$) und einem variablen Faktor $r^k_i$ zusammensetzt betrachte ich nur den Faktor:
+\begin{align*}
+r^k &= r^{k+1}\\
+r^k &= r^k * r &|\quad : r^k \\
+1 &\neq r\\
+\end{align*}
+Im Vergleich zur Optimallösung gibt man $r$-mal mehr Geld aus, wenn man wartet. \\
 
 \subsubsection*{54. (10 Punkte) Für welche der unten angegebenen Operationen $\oplus$ und $\otimes$ auf einer Grundmenge $S$ gelten die folgenden beiden Distributivgesetze?} 
 
 \begin{align*}
-a \otimes (b \oplus c) &= (a \otimes b) \oplus (a \otimes c)\\
-(a \oplus b) \otimes c &= (a \otimes c) \oplus (b \otimes c)
+a \otimes (b \oplus c) &= (a \otimes b) \oplus (a \otimes c) \tag{a}\\
+(a \oplus b) \otimes c &= (a \otimes c) \oplus (b \otimes c) \tag{b}
 \end{align*}
 
 \begin{enumerate}
-\item $S=\mathbb{R} \cup \{-\infty,\infty \}, \oplus = \max$ und $\otimes = \min$
+\item $S=\mathbb{R} \cup \{-\infty,\infty \}, \oplus = \max$ und $\otimes = \min$\\
+\begin{enumerate}
+\item Gegenbeispiel: wähle $a = \infty, b = 1, c = -\infty$\begin{align*}
+\min\{ a, \max\{b, c \} \} &= \max\{ \min\{ a, b\}, \min\{ a, c\} \}\\
+\min\{ a, \max\{b, c \} \} &= \max\{ \min\{ a, b, c\} \}\\
+\min\{ \infty, \max\{1, -\infty \} \} &= \max\{ \min\{ \infty, 1, -\infty\} \}\\
+\min\{ \infty, 1 \} &= \max\{ -\infty \}\\
+1 &= -\infty\\
+\end{align*}
+Widerspruch!
+\item Gegenbeispiel: wähle $a = -\infty, b = 1, c = \infty$\begin{align*}
+(a \oplus b) \otimes c &= (a \otimes c) \oplus (b \otimes c)\\
+\min\{ \max\{a, b \}, c \} &= \max\{ \min\{ a, c\}, \min\{ b, c\} \}\\
+\min\{ \max\{-\infty, 1 \}, \infty \} &= \max\{ \min\{ -\infty, \infty\}, \min\{ 1, \infty\} \}\\
+\min\{ 1 , \infty \} &= \max\{ \min\{ -\infty, 1, \infty\} \}\\
+1 &= -\infty\\
+\end{align*}
+Widerspruch!
+\end{enumerate}
 \item $S=\mathbb{R}, \oplus = \max$ und $\otimes = *$
 \item $S=\mathbb{R} \cup \{-\infty\}, \oplus = +$ und $\otimes = \max$
 \item $S=\mathbb{R}^2, \otimes=$ elemetweises $+: (a_1,a_2)\otimes(b_1,b_2) = (a_1+b_2,a_2+b_2)$ und $\oplus=$das lexikographische Minimum:
