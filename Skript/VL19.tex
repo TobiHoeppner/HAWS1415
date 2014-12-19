@@ -1,0 +1,54 @@
+\section{Matrizenmultiplikation und kürzeste Wege\tiny (Vorlesung 19 am 19.12.)}
+Wir definieren uns eine Matrix mit der entsprechenden Matrixmultiplikation:
+\begin{align*}
+C = \mathbb{R}^{n \times n}
+C = (C_{ij})
+C^2 = C*C
+(C^2)_{ik} = \sum_{j=1}^n  c_{ij}*c_{jk}
+\end{align*}
+Also alle Wege mit zwei Kanten von $i$ nach $k$.\\
+Satz: In einem Halbring ist das Element $(i,j)$ der Matrix $C^k$ die Summe aller Gewichte, aller Wege von $i$ nach $j$ mit $k$ Kanten.\\
+Beweis durch Induktion mit $k=1 : C^1 = C$
+$k=0 C^0 = I$\\
+$k \rightarrow k +1$\\
+\begin{align*}
+C^{k+1} = C^k \otimes C\\
+(C^{k+1})_{ij} = \bigoplus_{l=1}^n \underbrace{ \underbrace{ (C^k)_{il} }_{\text{ Summe aller Wege von $i$ nach $l$ mit $k$ Knoten}}\otimes c_{lj}}_{\text{alle Wege von $i$ nach $j$ mit $k+1$ Kanten deren vorletzter Knoten $l$ ist}}\\
+\end{align*}
+Beim Bellman-Ford-Algortihmus:$ d_j^k=$Weg von Startknoten zu $j$ mit genau $k$ Kanten $=$ eine Zeile von $C^k = (C^k)_{sj}$\\
+$d_j^k=(e_0,e_0,\dots \underbrace{e_1}_{s}, \dots e_0, e_0) \otimes C^k$\\
+$d_j^k=(d_1^k,...,d_n^k)$ folgt $d^{k+1} = d^k \otimes C$\\
+Die Lösung des algebraischen Wegproblems lässt sich auch beschreiben als:\\
+$I \oplus C \oplus C^2 \oplus C^3 \oplus ... := C^*$\\
+Viele Halbringe sind idempotent: $a\oplus a = a$\\
+z.B.: kürzeste Wege: $\oplus = \min$\\
+Es reicht bei kürzesten Wegen aus, die Summe $C^*$ bis $C^{n-1}$ oder $C^n$ auszurechnen:
+\begin{align*}
+(I\oplus C)^k &= I^k \oplus \binom{k}{1}C \oplus \binom{k}{2}C^2\oplus ... \oplus C^k\\
+&= I^k \oplus \binom{k}{1}C \oplus \binom{k}{2}C^2 \oplus ... 
+&= I \oplus C \oplus ... \oplus C^k
+& \underbrace{C\oplus C \oplus ... \oplus C}_{k} = C\\
+\end{align*}
+\subsubsection{Algorithmus}
+(nur für idempotente Halbringe!)
+$D  = I \oplus C$\\
+wiederhole $\lceil \log_2 n \rceil$ mal\\
+$D = D \otimes D \leftarrow D = (I\oplus C)^k = C^{(k)}$ für ein $k\leq n$\\
+falls $D\oplus D \neq D$ ist, dann hat der Graph negative Kreise, andernfalls ist $D=C^*$\\
+Halbring: $(\mathbb{R}, + , *)$\\
+\begin{align*}
+C^* &= I + C + C^2 + C^3 + ... &| \times C\\
+C^**C &= C + C^2 + C^3 + ...\\
+I + C^* C = I + C + C^2 + C^3 + ... = C^*\\
+I = C^* (I-C)\\
+C^* = (I-C)^{-1}\\
+\end{align*}
+\begin{align*}
+a^* &= 1 + a +a^2 + a^3 ... = \frac{1}{1-a} \text{ falls } |a| < 1\\
+a^* * (1-a) &= 1\\
+a^* - a^*a &=1\\
+a^* &= 1 + a^**a\\
+a^* &= e_1 \oplus a^* \otimes a
+\end{align*}
+Wenn man in Floyd-Warschall Algorithmus die Formel $a^* = \frac{1}{1-a}$ für alle $a \neq 1$ blind anwendet und niemals der Wert $1^*$ berechnet werden musste, dann berechnet der Algorithmus die Matrix $(I-C)^{-1}$, die Matrizeninversion.\\
+Dieser Algorithmus heißt (bis auf kosmetische Änderungen) Gauß-Jordan-Elimination.
