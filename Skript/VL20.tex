@@ -1,0 +1,69 @@
+\section{Komplexitätsklassen P und NP\tiny (Vorlesung 20 am 05.01.)}
+Es gibt verschiedene Klassen von Problemlösungen:
+\begin{enumerate}
+\item polynomiell lösbare Probleme (kürzeste Wege bspw. $\mathcal{O}(n^3)$)\\
+\textbf{P} ist die Klasse der Probleme, die sich in polynomieller Zeit lösen* lassen.\\
+Genauer: auf einer Turingmaschine oder Registermaschine (mit log. Kostenmaß) lösen lassen.\\
+\item nicht polynomiell lösbare Probleme (Rundreiseproblem mit $\mathcal{O}(n^2 2^n)$)
+\end{enumerate}
+Die Problembeschreibung muss im wesentlichen spezifizieren, wie die Eingabe zu kodieren ist. Das ist wichtig, weil polynomiell = polynomiell in Länge der Eingabe bedeutet. Dazu die Standardannahme: irgendein vernünftiges Eingabeformat; Zahlen werden binär kodiert. (Alternativ unäre Kodierung)\\
+Polynomielle Zeit: $\exists$ Konstante $a,b,c$, sodass die Turingmaschine bei Eingabe der Länge $n$ in $an^b+c$ Schritten anhält und die Ausgabe auf das Band schreibt.\\
+Der Speicher (PSPACE) ist automatisch beschränkt, wenn die Zeit polynomiell beschränkt ist.\\
+Ein Problem $A$ (mit Spezifikation der Eingabe) gehört zur Klasse $\mathcal{P}$, wenn es sich auf einer Turingmaschine mit polynomieller Laufzeit lösen lässt.\\
+Berechnungsprobleme: (klar)
+Eintscheidungsprobleme: Ausgabe hat nur ein Bit: Ja / Nein.
+Für die Theorie ist es praktischer ein Entscheidungsproblem zu betrachten.
+\subsection{P}
+\subsubsection{Problem: Hamiltonscer Kreis}
+Eingabe: ein ungerichteter Graph\\
+Frage: Hat der Graph einen Kreis, der jeden Knoten genau einmal besucht?\\
+Idee/Fakt: Jedes Entscheidungsproblem ist eine formale Sprache $L \subseteq \sigma^*$\\
+$L = \{ x \in \sigma^* | x\text{ ist eine gültige Eingabe un die Antwort auf die Frage ist JA}\} = $ Menge der JA-Eingaben.\\
+\subsubsection{Problem: Rundreise}
+Das Beispiel für ein Berechnungsproblem ist das Rundreiseproblem. Berechnungsprobleme lassen sich in der Regel als (ein oder mehere) Entscheidungsproblem formulieren.\\
+Eingabe: Ein Graph mit Kantengewichten, eine Zahl $K$.\\
+Frage: Gibt es eine Tour mit Länge $K$?\\
+Zwischenfrage: ist nicht jedes Berechnungsproblem automatisch ein Entscheidungsproblem? Antwort: nicht immer, aber allgemein gibt es eine Methode:
+FRAGE: Ist das $k$-te Bit des Ergebnisses 1?
+\subsubsection{Reduzierbarkeit}
+Zwei Entschediungsprobleme $A,B \subseteq \sigma^*$. A heißt polynomiell reduzierbar auf B ($A\leq_p B$), wenn es eine in polynomieller Zeit berechenbare Funktion $f: \sigma^* \rightarrow \sigma^*$ gibt, sodass $\forall x \in \sigma^*: x \in A \Leftrightarrow f(x) \in B$\\
+Umgangssprachlich als: \emph{A wird auf B zurückgeführt} oder \emph{A kann mit Hilfe von B gelöst werden} oder \emph{A ist mindestens so leicht wie B}\\
+Satz: Wenn $A \leq_p B$ und $B \in P$, dann $A \in P$.
+Beweis: Annahme:\\
+$f$ lässt sich in $\leq an^b+c$ Zeit berechnen. $B$ lässt sich in $a'n^{b'}+c'$ Zeit entscheiden.\\
+Entscheidungsalgorithmus für $A$:\\
+Eingabe $x$ mit $|x|=n$:
+\begin{enumerate}
+\item Berechne $f(x)$ Laufzeit $\leq an^b+c$, sodass wir annehmen können: $|f(x)| \leq an^b+c$
+\item Entscheide $B$ für Eingabe $f(x)$. Korrekt: $x\in A \Leftrightarrow f(x) \in B$\\
+\end{enumerate}
+Laufzeit:\\
+Lemma: $(u+v)^{b'} \leq 2^{b'}(u^{b'}+v^{b'})$\\
+Beweis: o.B.d.A. $u \leq v$\\
+$(u+v)^{b'} \leq (v+)^{b'} = (2v)^{b'} = 2^{b'} v^{b'} \leq 2^{b'} (u^{b'}+v^{b'}) \square$\\
+$a'|f(x)|^{b'}+c' \leq a'(an^b+c)^{b'}+c' = \underbrace{a'a^{b'}}_{a''}n^{\underbrace{bb'}_{b^n}} + \underbrace{ac^{b'}+c'}_{c''}$\\
+$=a''n^{b''}+c''$\\
+\subsubsection{Beispiel}
+Hamilton-Kreis $\leq_p$ Rundreise\\
+Eingabe: Graph.\\
+Gib allen Kanten Gewicht 1 und allen nicht vorhandenen Kanten Gewicht 2. Schranke $K=n$.\\
+$\exists$ Rundreise mit Gewicht $\leq n \Leftrightarrow$ urspr. Graph hat einen Hamiltonkreis.\\
+Sehr einfach, ABER man muss immer 3 Dinge beweisen:
+\begin{enumerate}
+\item $\Leftarrow$
+\item $\Rightarrow$
+\item polynomielle Laufzeit von $f$
+\end{enumerate} 
+\subsection{NP}
+Die Klasse $NP$ ist die Klasse der Sprachen $A \subseteq \sigma^*$, die von nichtdeterminitischen Turingmaschinen in polynomieller Zeit akzeptiert werden.\\
+Nichtdeterminitischtische Turingmaschinen (NTM) ist wie eine deterministische TM, aber es gibt abhängig vom aktuellen Zustand und vom gelesenen Bandsymbol mehrere (beliebig viele) mögliche Aktionen. Berechnung bei konkreter Eingabe ist nicht eindeutig vorgegeben, sondern es gibt mehrere mögliche Berechnungen.\\
+Die von einer NTM in Laufzeit $f$ akzeptierte Sprache ist $\{x \in \sigma^* | \text{Es gibt eine Berechnung mit Eingabe} x,\text{ die in Zeit }\leq f(|x|) \text{in einem akzeptierenden Zustand führt }\}$\\
+\subsubsection{Beispiel: Rundreiseproblem $\in NP$}
+nicht deterministischer Algorithmus: Eingabe: $n$, Graph auf $n$ Knoten mit Kantengewichten, Schranke $k$.
+\begin{enumerate}
+\item Schreibe nicht deterministisch eine Permutation der Zahlen $1,2,...,n$ aufs Band.
+\item Berechne die Kosten der entstehenden Tour.
+\item Akzeptiere, falls die Kosten $\leq K$ sind.
+\end{enumerate}
+NP Probleme, die sich durch erraten lösen lassen.
+NP ist nicht von vorherein abgeschlossen gegenüber Kompelemtierung. $\leftarrow$ ungelöstes Problem $\rightarrow$ Klasse co*NP
