@@ -1,0 +1,93 @@
+\section{Alternative NP-Definition \tiny (Vorlesung 21 am 09.01.)}
+Klausurtermin 13.2. oder 16.2.\\
+\subsection{Polynomiell verifizierbares Zertifikatskriterium}
+Die bisher gezeigte Definition ist zwar korrekt, aber nicht gut umsetzbar in der Praxis.
+Wir definieren daher eine alternative die den Nichtdeterminismus etwas anders interpretiert. \\
+Eine Sprache $A \subseteq \sigma^*$ hat ein p.v.ZK, wenn es zwei Polynome
+\begin{align*}
+p_1(n) =& a_1n^{b_1}+c_1\\
+p_2(n) =& a_2n^{b_2}+c_2\\
+\end{align*}
+und eine Funktion 
+\begin{align*}
+f:(\sigma \cup \{\$\})^* \rightarrow \{\text{JA, NEIN}\}
+\end{align*}
+gibt, mit folgenden Eigenschaften:
+\begin{enumerate}
+\item 
+\begin{align*}
+x \in A \Leftrightarrow & \exists y \in \sigma^*\quad |y| \leq p_1(|x|) \text{ und } f(x \$ y) = \text{JA}
+\end{align*}
+\item $f$ ist in Laufzeit $\leq p_2(n)$, bei Eingabe der Länge $n$  berechenbar.
+\end{enumerate}
+\textbf{Anmerkungen}: $y$ heißt das \emph{Zertifikat} (witness); $f$ ist das \emph{Zertifikationskriterium}\\
+\textbf{Satz (alternative Definition): }$A \in NP \Leftrightarrow A$ hat ein p.v.ZK.\\
+\subsubsection{Beispiel: Rundreiseproblem}
+Zertifikat = Tour
+\subsubsection{Beweis}
+$NP \leftrightarrow_{\text{DEF}} nTM$ (nicht deterministische Turingmaschine)\\
+Wir wollen zeigen: $nTM \Rightarrow pvZK.$: $nTM \mathcal{M}$ akzeptiert $A$ in Laufzeit $t \leq an^b+c$ bei Eingabe der Länge $n$. Das Zertifikat ist eine akzeptierende Berechnung für Eingabe $x$. Wobei eine Berechnung eine Folge von Konfigurationen der Turingmaschine $\mathcal{M}$ ist. Die Konfiguration besteht aus Zustand, Bandinhalt und Position des Lesekopfs. Dabei ist die Länge des Zertifikats $\leq t $ Konfigurationen bzw. $\leq n+t \leq 0(t(n+t)) = $ $\underbrace{\text{polynomiell in }n\text{, wenn }t\text{ polynomiell in }n\text{ ist.}}_{A(n)}$ $f(x,y)$ überprüft ob $y$ eine akzeptierende Berechnung für die Eingabe $x$ ist.\\
+Rückrichtung: $pvZK \Rightarrow nTM \mathcal{M}$\\
+$\mathcal{M}$ liest die Eingabe $x$, schreibt anschließend $\$$ und nichtdeterministisch bis zu $p_1(|x|)$ beliebige Symbole $y$ auf das Band. Anschließend fährt sie an den Anfang zurück und startet das (deterministische) Programm für $f$.\\
+% BILD 1
+\subsection{Komplexitätsklassen}
+$P \subseteq NP$
+% BILD 2
+Vermutung $P \neq NP$, aber nicht bewiesen.
+\subsubsection{NP-vollständig}
+Definition: Ein Problem $A$ ist NP-vollständig, wenn 
+\begin{enumerate}
+\item $A \in NP$
+\item $\forall B \in NP: B \leq_p A$
+\end{enumerate}
+Anmerkung zu (b): $A$ ist mindestens so schwer wie alle anderen Probleme in $NP$\\
+Wenn nur (b) gilt, dann ist $A$ NP-schwer (engl. NP-hard). Der Begriff NP-schwer wird für Probleme verwendet, die keine Entscheidungsprobleme sind.\\
+Beobachtungen:
+\begin{enumerate}
+\item $A$ ist NP-Schwer und $A \in P \Rightarrow P = NP$
+\item $C$ ist NP-Schwer und $C \leq_p D \Rightarrow D$ ist NP-schwer.
+\end{enumerate}
+\subsection{SAT - satisfiability = Erfüllbarkeit}
+Eingabe: eine boole'sche Formel in KNF (konjuktiver Normalform).\\
+Frage: Gibt es eine Belegung der Variablen die die Formel wahr mach?\\
+\subsubsection{Beispiel KNF}
+\begin{align*}
+( \underbrace{x_1}_{\text{Literal}} \lor \not{x_5} \lor x_7 \lor \not{x_8}) \land \underbrace{ (x_1 \lor x_2 \lor \not{x_3})}_{\text{Klauseln}} \land (x_3 \lor x_4) \land ...)
+\end{align*}
+\subsubsection{SATZ: Cook-Levin, 1971}
+SAT ist NP-vollständig.\\
+\begin{enumerate}
+\item SAT $\in NP$ (Zertifikat = Belegung) $\checkmark$
+\item $B \in $ NP beliebig: zu zeigen $B \leq_p SAT$
+\end{enumerate}
+Es gibt eine nTM $\mathcal{M}$, die $B$ in Laufzeit $p(n)$ akzeptiert. Wir wollen die Aussage: \\
+\fbox{
+$\mathcal{M}$ akzeptiert die Eingabe $x = x_1, x_2, .., x_n$ in $T$ Schritten.}\\
+als Boolesche Formel formulieren. Gegeben Eingabe $x$ für $B$. Ziel: $x$ in Eingabe $f(x)$ für SAT transfomieren: $x \in B \Leftrightarrow f(x)$ erfüllbar.\\
+Variablen: 
+\begin{enumerate}
+\item[$b_{i,t,x} = 1,$ ] wenn an Stelle $i$ des Bandes zum Zeitpunkt $t$ das Symbol $x$ steht.\\ ($\underbrace{ -T \leq i \leq T, 0\leq t \leq T, x \in P \text{ (Bandalphabet)}}_{\mathcal{O}(T^2) \text{Boolesche Variablen}}$)
+\item[$p_{i,t} = 1,$] wenn Maschine zum Zeitpunkt $t$ an Position $i$ ist\\
+($-T \leq i \leq T, 0 \leq t \leq T$)
+\item[$z_{t,q} = 1,$] wenn $\mathcal{M}$ zum Zeitpunkt $t$ im Zustand $q$ ist.\\
+($0 \leq t \leq T, q \in Q$(Zustandsmenge))
+\end{enumerate}
+Klauseln, die gültige Berechnungen charakterisieren:
+\begin{align*}
+[p_{it} \Rightarrow (b_{j,t,x} \Leftrightarrow b_{j,t+1,x}])\\
+(0 \leq t \leq T-1, -T \leq i, j \leq +T, i \neq j, x \in T')
+\end{align*}
+\begin{enumerate}
+\item Bandinhalt bleibt unverändert, wenn Kopf nicht an Postion $j$ ist.
+\item Kopfposition ändert sich höchstens um 1
+\item Ausgangsinhalt des Bandes:\\ $b_{i,0,x_{i+1}}=1$ für $0\leq i \leq n-1$, $b_{b_i,0,B} = 1$ für $-T \leq i \leq 0$ und $n \leq i \leq T$
+\item Auf jeder Postion steht höchstens 1 Symbol:\\
+\begin{align*}
+\lnot (b_{i,t,x} \land b_{i,t,y}) \quad i,t,x\neq y \in T'
+\end{align*}
+\item Zu jedem Zeitpunkt gibt es nur einen Zustand
+\item Übergangsrelation: $(z_{t,\underline{q}} \land p_{\underline{i}, t} \land b_{i,t, \underline{x}} \Rightarrow (....) \lor (...) \lor (...)$\\
+z.B. ($z_{t+1,q'} \land p_{i-1, t+1} \land b_{i, t+1,y}$)
+\item irgendwann erreicht $\mathcal{M}$ einen akzeptierenden Zustand.
+\end{enumerate}
+Jeder dieser Ausdrücke enthält $\leq K$ Variablen ($k$ hängt von $\mathcal{M}$ ab). kann die KNF mit $\leq 2^K$ Klauseln transformiert werden\\

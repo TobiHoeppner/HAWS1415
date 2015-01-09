@@ -9,7 +9,7 @@ Es geht aber auch besser:\\
 Definiere beliebige Knotengewichte $u_i, i \in V$\\
 Betrachte modifizierte Kosten: $\bar{c_{ij}} = c_{ij} + u_i - u_j$\\ 
 % Bild mit Graphen und modifizierten Gewichten
-Die kürzesten Wege bezüglich $\bar{c_{ij}}$ sind die gleichen wie die kürzesten Wege bezüglich $c_{ij}$. Der Weg $i_1,i_2, ... , i_k$ berechnet sich wie folgt: $\bar{c_{i_1i_2}} + \bar{c_{i_2i_3}} +  ... + \bar{c_{i_{k-1}i_k}} = (c_{i_1 i_2} + u_i_1 - u_i_2) + (c_{i_2 i_3} + u_i_2 - u_i_3) + ... = (c_{i_1 i_2} + c_{i_2 i_3} + c_{i_{k-1} i_k}) + u_i_1 - u_i_k$ für alle Wege von $i_1$ nach $i_k$ konstant.\\
+Die kürzesten Wege bezüglich $\bar{c}_{ij}$ sind die gleichen wie die kürzesten Wege bezüglich $c_{ij}$. Der Weg $i_1,i_2, ... , i_k$ berechnet sich wie folgt: $\bar{c}_{i_{1}i_{2}} + \bar{c}_{i_2i_3} +  ... + \bar{c}_{i_{k-1} i_{k}} = (c_{i_1 i_2} + u_{i_1} - u_{i_2}) + (c_{i_2 i_3} + u_{i_2} - u_{i_3}) + ... = (c_{i_1 i_2} + c_{i_2 i_3} + c_{i_{k-1} i_k}) + u_{i_1} - u_{i_k}$ für alle Wege von $i_1$ nach $i_k$ konstant.\\
 Idee: finde $u_i$, sodass $\bar{c_{ij}} \geq 0 \quad \forall ij \rightarrow$ Algorithmus von Djikstra $\Rightarrow \mathcal{O}(n \log n +m)$ anwendbar und damit verbessert sich die Laufzeit anstelle von $\mathcal{O}(nm)$\\
 Beobachtung: $d_i^*$ sei die Länge des kürzesten Weges von einem festen Startknotens (z.B. $s=1$) zu $i$. Dann wir mit $u_i := d_i^*$ die modifizierten Kosten $\bar{c_{ij}} \geq 0$\\
 Beweis: $\bar{c_{ij}} = c_{ij} + u_i + u_j = c_{ij} + d_i^* - d_j^* \geq 0 \Leftrightarrow d_j^* \leq d_i^* + c_{ij}$\\
