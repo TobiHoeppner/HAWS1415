@@ -1,0 +1,68 @@
+\section{Reduktionen \tiny (Vorlesung 22 am 12.01.)}
+$A$ NP-schwer., $A \leq_p B \Rightarrow B$ NP-schwer\\
+Wir wissen aus der letzten Vorlesung, dass SAT NP-schwer ist.
+\subsection{Unabhängige Menge (von Knoten)}
+U.M. ist NP-vollständig. \\
+Eingabe: Ein Graph ($G = (V,E)$), Schranke $k$\\
+Frage: Gibt es eine unabhängige Menge $S \subseteq V$ mit $|S| \geq k: \forall uv \in E: u \notin S \lor v \notin S$\\
+% Bildbeispiel Graphen
+\subsubsection{Beweis}
+\begin{enumerate}
+\item U.M. $\in$ NP
+\item SAT $\leq_p$ U.M.\\
+Gegeben: boolesche Formel $\phi$ in KNF. Wir wollen $\phi$ in einem Graphen $f(\phi)$ mit einer Schranke $k$ überführen, sodass $\phi$ erfüllbar $\Leftrightarrow f(\phi)$ hat eine U.M. mit $k$ Knoten. Anmerkung: $\phi$ habe $n$ Variablen $x_1,...,x_n$ und $m$ Knoten.
+\end{enumerate}
+Beispiel Klausel: $x_1 \lor \lnot{x}_2 \lor x_3$ Allgemein: Für eine Klausel $u_1 \lor u_2 \lor ... \lor u_l$ mit $l$ Literalen. Füge $l$ neue Knoten hinzu und verbinde sie mit den Knoten $\lnot{u}_1, \lnot{u}_2, ... , \lnot{u}_l$. Verbinde die Knoten untereinander zu einem vollst. Graphen. $K = m+n$.
+zu zeigen:
+\begin{enumerate}
+\item $\phi$ erfüllbar $\Leftrightarrow f(\phi)$ hat U.M. mit $\leq m+n$ Knoten.
+\begin{enumerate}
+\item[$\Rightarrow$] (leicht): Gegeben sei eine erfüllende Belegung:\\
+$S_1 = \{ x_i | x_i$ ist wahr$\} \cup \{\lnot{x}_i | x_i$ ist falsch$\}$ Weil es in jeder Klausel ein wahres Literal gibtm finden wir in der entsprechenden Knotenmenge einen Knoten der nicht zu einem Knoten aus $S_1$ benachbart ist. $T:=$Menge dieser $m$ Knoten. $S = S_1 \cup T$.
+\item[$\Leftarrow$] (schwerer): $S$ sei eine U.M. mit $m+n$ Knoten:\\
+Jede \emph{Variablenkante} und jede \emph{Klausel Knotenmenge} enthält $\leq 1$ Knoten aus $S$. $|S|=m+n \Rightarrow$ $\underbrace{$Jede Variablenkante$}_{$als Belegung interpretieren$}$ jede Klauselknotenmenge enthält genau 1 Knoten aus $S$. Die Belegung erfüllt alle Klauseln, dann in jeder Klauselknotenmenge ist ein Knoten in $S$. Der entsprechende Nachbau der Variablenkanten $\notin S \Rightarrow$ Das entsprechende Literal erfüllt die Klausel.\\
+\end{enumerate}
+\item $f$ polynomiell berechenbar $\leftarrow$ KLAR: $|V|= 2n +$ Gesamtlänge aller Klauseln. $|E| = |V|^2$ \checkmark 
+\end{enumerate}
+\subsubsection{Anmerkungen: Wie kommt man drauf?}
+Manche Probleme sind so klein, dass man die Lösung sofort erkennt und eine Reduktion durchführen kann. Andere Probleme lassen sich nur durch sogenannte Vorrichtungen (engl. Gadgets) so umformen, dass die Reduktion nachvollziehbar und richtig bleibt.
+\subsection{Hamiltonkreis in gerichtetem Graph}
+ist NP-vollständig. (Spezialfall des Rundreiseproblems)
+\begin{enumerate}
+\item $\in $ NP \checkmark
+\item SAT $\leq_p$ HAMg
+\end{enumerate}
+\subsubsection{Variablen Gadgets (Vorrichtungen)}
+Für jede Variable eine lange Kette, die in zwei Richtungen durchlaufen werden kann.
+\begin{enumerate}
+\item von links nach rechts = wahr
+\item von rechts nach links = falsch
+\end{enumerate}
+\subsubsection{Klausel Gadgets}
+Beispiel $x_1 \lor \lnot{x_2} \lor x_3$\\
+Jede Klausel ist ein einzelner Knoten: Dieses und mit 2 benachbarten Knoten auf alle enthaltenen Variablenketten verbunden, sodass der Knoten zwischendurch eingefügt werden kann, wenn die Kette in der Reihenfolge durchlaufen wird, die die Klausel war macht. Anfangs und Endknoten der Ketten, werden zu einem vollst. Graphen verbunden. Rechts und links von den Nachbarn eines Klauselknoten muss jeweils 1 Nachbar ohne zusätzliche Kanten verbleiben und die Nachbarn von verschiedenen Klauselknoten sind disjunkt.\\
+\subsubsection{Beweis}
+\begin{enumerate}
+\item[$\Rightarrow$] Belegung $\Rightarrow$ Hamiltonkreis \checkmark
+\item[$\Leftarrow$] Hamiltonkreis\\
+Lemma: Wenn ein Hamiltonkreis zu einem Klauselknoten kommt, muss er direkt zur gleichen Kette wieder zurückspringen.\\
+Wir nehmen an: wir haben eine Kette und der Klauselknoten $w$ ist an irgendeiner Stelle mit der Kette verbunden. $(u,w), (w,v),(u',u), (v,v') \in E$\\
+Annahme: $(u,w) \in H$ (Hamiltonkreis), $(w,v) \notin H$
+\begin{enumerate}
+\item[Fall 1)] $(v,u) \in H \Rightarrow H$ kann $u'$ nicht besuchen.
+\item[Fall 2)] $(u',u) \in H \Rightarrow H$ kann $v$ nicht besuchen.
+\end{enumerate}
+Wenn die Annahme gilt, dann muss der Hamiltonkreis aus einer Folgen von Ketten bestehen, in beliebiger Reihenfolge und Orientierung, in die die Klauselknoten eingefügt sind.\\
+Orientierung $\rightarrow$ Belegung ablesen $\rightarrow$ Weil die Klauselknoten besucht werden müssen.... erfüllt.\\
+\end{enumerate}
+HAM-Kreise ist auch NP-vollständig mit ungerichteten planaren Graphen vom Maximalgrad 3.\\
+\subsection{3-SAT}
+Spezialfall von SAT, wo jede Klausel genau 3 Literalte enthält. Ist auch NP-vollständig.\\
+\begin{enumerate}
+\item NP \checkmark
+\item Reduktion: Eingabe beliebige Formel $\phi$ in KNF
+\end{enumerate}
+zu lange Klausel durch eine Variable aufspalten:\\
+$(x_1 \lor \not{x}_2 \lor x_5 \not{x}_7 \lor x_3) \rightarrow (x_1 \lor \not{x}_2 \lor x_5 \lor y) \land (\not{y} \lor \not{x}_7 \lor x_8)$\\
+Was ist mit zu kurzen Klauseln? $x_1 \lor \not{x}_2$\\
+$(x_1 \lor x_2 \lor y) \underbrace{ \land (...) \land (...)}_{\text{nur erfüllbar wenn $y$ falsch ist}}$
