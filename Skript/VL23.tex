@@ -1,0 +1,121 @@
+\section{Weitere Reduktionen \tiny (Vorlesung 23 am 16.01.)}
+\subsection{Graphenfärbung}
+Eingabe: Graph $G = (V,E)$\\
+Frage: Lässt sich $G$ mit $k$ Farben färben?\\
+$\exists g: V \rightarrow\{1,...,k\}: \forall uv \in E : g(u) \neq g(v)$?\\
+\subsection{3-Färbbarkeit}
+wie oben, nur mit $k=3$ fest.\\
+Satz: Die 3 Färbbarkeit ist NP-vollständig.\\
+\begin{enumerate}
+\item $\in$ NP
+\item 3-SAT $\leq_p$ 3-Färbbarkeit
+\end{enumerate}
+\subsubsection{Vorrichtungen (Gadgets)}
+Wir definieren uns ein (logisches) Gatter:\\
+% E------o
+%				\
+%				 o - Ausgang
+%				/
+% E------o
+Lemma: 
+\begin{enumerate}
+\item Wenn die beiden Eingänge die gleiche Farbe haben, dann hat der Ausgang ebenfalls diese Farbe.
+% A------B
+%				\
+%				 A - Ausgang
+%				/
+% A------C
+
+% A------C
+%				\
+%				 A - Ausgang
+%				/
+% A------B
+\item Wenn die Eingänge verschiedene Farben haben, dann kann der Ausgang jede beliebige Farbe haben:
+% A------B
+%				\
+%				 A - Ausgang
+%				/
+% B------C
+
+% A------C
+%				\
+%				 B - Ausgang
+%				/
+% B------A
+
+% A------B
+%				\
+%				 C - Ausgang
+%				/
+% B------A
+\end{enumerate}
+
+Als nächstes bauen wir uns ein ODER-Gatter mit 3 Eingängen:
+
+% E------o
+%				\
+%				 o----o
+%				/		|
+% E------o			|
+%						|
+% E--------------o - Ausgang
+
+\subsubsection{Reduktion}
+Gegeben Boolesche Formel $\psi$ in 3-SAT Form.\\
+% Komplexer Graph mit Basisdreieck und Oder-Gatter
+
+Für jede Klausel, erstelle ein ODER-Gatter mit den entsprechenden Literalten als Eingabeknoten. Der Ausgang des Gatters wird mit dem F-Knoten des Basisdreiecks verbunden. (Beispiel: $x_1 \lor \lnot{x}_2 \lor x_3$)\\
+\subsubsection{Beweis}
+Behauptung: $\psi$ erfüllbar $\Leftrightarrow G$ ist 3-färbbar. 
+\begin{enumerate}
+\item[$\Rightarrow$] erfüllende Bedingung\\
+$x_i, \lnot x_i$ entsprechend Färben. Weil die Belegung alle Klauseln erfüllt, sind die Eingaben jedes Klauselgatters nicht (F,F,F), Man kann dann als Klauselgatter immer so färben, dass der Ausgang mit W gefärbt ist, das ist eine gültige Färbung von G.\\
+\item[$\Leftarrow$] Färbung sei gegeben.\\
+o.B.d.A. Basisdreiecke gefärbt mit W,F,O wie in Abbildung.
+\begin{enumerate}
+\item[$\Rightarrow$] $x_i, \lnot x_i$ sind mit W,F gefärbt, entgegengesetzt.
+\item[$\rightarrow$] Belegung ablesen. Wenn eine Klausel nicht erfüllt ist, sind alle 3 Eingänge des entsprechenden ODER-Gatters F,F,F,...,F ist die einzige mögliche Farbe für den Ausgang. Widerspruch, weil Ausgang mit F verbunden ist.
+\end{enumerate}
+\end{enumerate}
+$G = f(\psi)$ in polynomieller Zeit berechenbar. \checkmark \\
+3-Färbbarkeit ist NP-vollständig sogar, wenn man es auf planare Graphen einschränkt.\\
+\subsection{Reduktion von gewöhnlichen 3-FARB auf 3-FARB in planaren Graphen}
+Skizze der Reduktion: Beliebige Zeichnung von $G$; Elimination der Kreuzungen.\\
+% Siehe Bild mit 8 Ecken und Knotennamen rstu (als Eingänge)
+In jeder gültigen Färbung des Achtecks bekommen $r$ und $t$, sowie $s$ und $u$ die gleichen Farben.\\
+
+\subsection{Teilmengensumme (TMS)}
+(Spezialfall des Rucksackproblems)\\
+Eingabe: $n$ Zahlen $a_1,a_2,...,a_n \in \mathbb{N}$, Zielsumme $b$\\
+Frage: gibt es eine $I \subseteq \{1,...,n\}$ mit $\sum_{i \in I}^{} a_i = b$\\
+Satz: TMS ist NP-vollständig\\
+\subsubsection{Beweis}
+\begin{enumerate}
+\item TMS $\in$ NP \checkmark
+\item 3-SAT $\leq_p$ TMS\\
+Gegeben Boolesche Formel $\psi$ mit $n$ Variablen und $m$ Klauseln:\\
+$2n$ Literalzahlen $a_i,a_j$ (entsprechend $x_i,x_j$)\\
+$a_1 = \underbrace{1}_{x_1}\underbrace{0}_{x_2}0...\underbrace{0}_{x_n}\underbrace{0000}_{c_1}\underbrace{0001}_{c_2}....\underbrace{0001}_{c_m}$, falls $x_1$ in Klauseln $2$ und $m$ vorkommt.\\
+$b_1 = \underbrace{1}_{x_1}\underbrace{0}_{x_2}0...\underbrace{0}_{x_n}\underbrace{0001}_{c_1}\underbrace{0000}_{c_2}....\underbrace{0}_{c_m}$, falls $\lnot x_1$ in Klausel 1 vorkommt.\\
+$b = \underbrace{1}_{x_1}\underbrace{0}_{x_2}0...\underbrace{0}_{x_n}\underbrace{0003}_{c_1}\underbrace{0003}_{c_2}....\underbrace{0003}_{c_m}$
+\end{enumerate}
+Für jede Klausel $j$ 2 Füllerzahlen:\\
+$d_j=e_j=00000000\underbrace{0001}_{c_j}000$\\
+Eingabe für TMS: $a_1,...,a_n,b_1,...,b_n,d_1,...,d_m,e_1,...,e_m$\\
+$b$\\
+Behauptung: $\psi$ erfüllbar $\Leftrightarrow$ TMS lösbar
+\begin{enumerate}
+\item[$\Rightarrow$] Belegung gegeben\\
+wähle $d_i$ oder $b_i$ aus, je nachdem, ob $x_i = W$ oder $x_i = F$\\
+In jeder Klauselspalte $j$ ist die Summe $1,2,3 = $(Anzahl der wartenden Literale)\\
+Nimm $d_j + e_j$ bzw. $d_j$ bzw. gar nichts zur Lösung dann.\\
+Summe = $111111...133333...3$
+\item[$\Leftarrow$] Lösung in TMS gegeben. Bei Bildung der Summe gab es keinen Übertrag.\\
+Gesamtsumme in den linken Spalten $=2$, in den rechten Spalten $=5 \Rightarrow$ Summenbedingung muss für jede Dezimalstelle gelten. $a_i$ oder $b_i$ ausgewählt, aber nicht beide. $\rightarrow$ Belegung.\\
+Summe aller $a_i / b_i$ Variablen ist mindestens $1$ in jeder Klauselspalte. $\rightarrow$ jede Klausel ist erfüllt.\\ 
+\end{enumerate}
+\subsection{Rucksackproblem}
+Das Ruckproblem ist NP-vollständig. Laufzeit $\mathcal{O}(nb)$ (dynm. Prog.)\\
+
+Einen Algorithmus, der polynomiell in der Größe der Zahlen und nicht unbedingt in der Kodierungslänge der Zahlen (binär)ist, nennt man pseudopolynomiell.\\
