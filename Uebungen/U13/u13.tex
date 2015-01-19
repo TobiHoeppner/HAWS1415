@@ -1,0 +1,109 @@
+\documentclass[ngerman,a4paper]{report}
+\usepackage[ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+%\usepackage{MyriadPro}
+\usepackage[scaled]{beramono}
+\newcommand\Small{\fontsize{10.5}{10.5}\selectfont}
+\newcommand*\LSTfont{\Small\ttfamily\SetTracking{encoding=*}{-20}\lsstyle}
+\usepackage{microtype}
+\usepackage{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{listings}
+\usepackage{stmaryrd}
+\usepackage{paralist}
+\usepackage{array}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{accents}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+
+%tikz
+\tikzset{
+  treenode/.style = {align=center, inner sep=0pt, text centered,
+    font=\sffamily},
+  arn_n/.style = {treenode, circle, white, font=\sffamily\bfseries, draw=black,
+    fill=black, text width=3.5em},% arbre rouge noir, noeud noir
+  arn_r/.style = {treenode, red, 
+    text width=1.5em, very thick},% arbre rouge noir, noeud rouge
+  arn_x/.style = {treenode, rectangle, draw=black,
+    minimum width=0.5em, minimum height=0.5em}% arbre rouge noir, nil
+}
+
+% Code Listing Style
+\definecolor{darkblue}{rgb}{0,0,.6}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{darkred}{rgb}{0.5,0,0}
+\lstset{%
+	language=Python, 
+	basicstyle=\LSTfont,
+	commentstyle=\color{darkgreen}, 
+	keywordstyle=\color{darkblue}\bfseries, 
+	breaklines=true,
+	tabsize=2,
+	xleftmargin=\fboxsep,
+	xrightmargin=-\fboxsep,
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	stepnumber=1,
+	numbersep=5pt,
+	frame=bt,
+	stringstyle=\color{darkred},
+	showstringspaces=false,
+	rulecolor= \color{gray},
+	emph=[1]%
+	{%  
+	    then, not, for, return%
+	},
+	emphstyle=[1]{\color{darkblue}\bfseries},
+	emph=[2]%
+	{%  Datatypes
+	    %
+	},
+	emphstyle=[2]{\color{darkblue}\bfseries},
+	emph=[3]%
+	{%  
+	    %
+	},
+	emphstyle=[3]{\color{darkred}\bfseries},
+	literate=%
+	{Ö}{{\"O}}1
+	{Ä}{{\"A}}1
+	{Ü}{{\"U}}1
+	{ß}{{\ss}}2
+	{ü}{{\"u}}1
+	{ä}{{\"a}}1
+	{ö}{{\"o}}1
+}
+\providecommand{\tabularnewline}{\\}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage{lastpage}
+\makeatletter
+
+\lhead{\textbf{\@title} \\ \@author}
+\chead{}
+\rhead{\@date \\ \thepage \ von \pageref{LastPage} }
+\cfoot{}
+
+\renewcommand{\maketitle}{}
+\newcommand{\utilde}[1]{\underaccent{\tilde}{#1}}
+\renewcommand{\familydefault}{\sfdefault}
+ 
+\author{Tobias Höppner}
+\title{HA - Beton-Übung 10.}
+\date{Wintersemester 2014/2015}
+
+\begin{document} 
+\maketitle 
+
+\subsubsection*{57. Problemkern und Suchbaum (Kernelization und Searchtree), 10 Punkte}
+
+\subsubsection*{59. Baumweite, 10 Punkte}
+
+\end{document}
