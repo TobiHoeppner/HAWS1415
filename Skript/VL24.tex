@@ -1,0 +1,84 @@
+\section{ Komplexitätstheorie \tiny (Vorlesung 24 am 19.01.)}
+\subsection{Stark-NP-vollständig}
+Ein Problem heißt stark-NP-vollständig (stark-NP-schwer), wenn es auch dann noch NP-vollst. (-schwer) ist, wenn die Eingabe vollkommenden Zahlen unär kodiert werden: Kodelänge für eine Zahl $x \in \mathbb{N}$ ist $x+1$. (Bspw. $9 = 1111111110$)\\
+Algorithmen mit dieser Eingabekodierung heißen pseudopolynomielle Algorithmen.\\
+\subsection{Rundreiseproblem ist stark-NP-vollständig}
+Beweis:
+\begin{enumerate}
+\item $\in$ NP
+\item HAMMILTONKREIS $\leq$ RUNDREISEPROBLEM (unär)\\
+Diese Reduktion ist auch bei unärer Eingabe ein polynomielle Reduktion: die auftretenden Zahlen sind 1,2,n.
+\end{enumerate}
+3-SAT $<_p$ Teilmenge
+\subsection{coNP}
+$= \{ A \subseteq \Sigma^* | \Sigma^* - A \in NP\}$\\
+Probleme in NP, mit vertauschter Antwort JA $\leftrightarrow$ NEIN\\
+Beispiel: Primzahltest:
+Eingabe: $n \in \mathbb{N}$
+Frage: Ist $n$ eine Primzahl?
+Dieses Problem ist in coNP. Zertifikat: zwei Faktoren $p,q > 1$mit Produkt $p*q = n$\\
+Das Problem ist sogar in P!.\\
+coNP-vollständig , coNP-schwer, analog zu NP.\\
+\subsection{PSPACE}
+Probleme die in polynomieller Speicherplatz lösbar.\\
+PSPACE-vollst. - PSPACE-schwer\\
+Landkarte der Komplexitätsklassen:\\
+% BILD1
+\subsection{Turing-Reduzierbarkeit}
+Ein Berechnungsporblem $A$ ist NP-schwer, wenn man mit seiner Hilfe (man darf das Problem A beliebig oft als Unterprogramm aufrufen) jedes Problem in NP in polynomieller Zeit löse könnte.\\
+(bisher) $\leq_p$ - komplette Reduzierbarkeit: die Eingabe von B in eine Eingabe von A umrechnen und darf dann den Algorithmus von A einmal verwenden und muss die Antwort (JA / NEIN) unverändert übernehmen.\\
+$x \in B \Leftrightarrow f(x) \leftarrow A$
+\section{Approximationsalgorithmen}
+\subsection{amortisierte Analyse}
+Beispiel isotone Regression:
+$Q = \emptyset$\\
+wiederhole n-mal:\\
+Q.insert(...)\\
+while bla\\
+...\\
+Q.deletemax()\\
+Ein Schleifendurchlauf kann bis zu $\mathcal{O}(n)$ Zeit dauern. In Summe als locker in $\mathcal{O}(n^2)$. Aber trotzdem ist die Gesamtlaufzeit nur in $\mathcal{O}(n)$, weil aus $Q$ nicht öfters gelöscht, als eingefügt werden. Die amortisierte Laufzeit eines Schleifendurchlaufes ist $\mathcal{O}(1)$.\\
+Definition: Datenstrukturen mit Operationen $A,B,C,...$\\
+Wir sagen, die Operationen haben amrotisierte Laufzeit $T_A(n),T_B(n),T_C(n),...$ bei Eingabe der Größe $n$, wenn jede Folge von $n_A$ Operationen $A$, $n_B$ Operationen B,... auf einer leeren Datenstruktur beginnend mit: $\mathcal{O}(n_A*T_A(n)+n_B*T_B(n)+n_C*T_C(n)+..)$ Zeit ausgeführt werden kann.\\
+\subsubsection{Bsp: Fibonacci-Heap}
+Fib-Halden sind Priotritätswarteschlange, die die Operationen:
+\begin{enumerate}
+\item insert
+\item findmin
+\item merge
+\item decreasekey
+\end{enumerate}
+in $\mathcal{O}(1)$ amortisierter Zeit und 
+\begin{enumerate}
+\item deletemin
+\end{enumerate}
+in $\mathcal{O}(\log n)$ amortisierter Zeit ausführen können.\\
+Anwendung: Algorithmus von Dijkstra mit $n$ Knoten und $m$ Kanten.\\
+\begin{enumerate}
+\item $n$ insert $\mathcal{O}(1)$
+\item $m$ decreasekey $\mathcal{O}(1)$
+\item $n$ deletemin $\mathcal{O}(\log	n)$
+\end{enumerate}
+$\rightarrow \mathcal{O}(n \log n + m)$\\
+\subsection{Binomialbäume}
+$B_0$ = Wurzel\\
+Induktive Defintion eines Binomialbaumes $B_i$ vom Rang $i$ (=Höhe $i$):\\
+$B_i$ erhält man, indem man an die Wurzel von $B_{i-1}$ eine weitere Kopievon $B_{i-1}$ als zusätzliches letztes Kind der Wurzel anhängt.\\
+$B_i$ hat $2^i$ Kinder, und zwar $\binom{i}{k}$ Kinder auf Tiefe $k$.\\
+Eine Binomialhalde ist eine Liste von Binomialbäumen mit verschiedenen Rang, wobei die Kuchen in jedem Baum die Haldeneingeschaft haben. Schlüssel eines Knotens $\geq$ Schlüssel des Elternknotens.\\
+Beispiel: Binomialhalde mit 11 Knoten von $n=11=8+2+1=1011_2$\\
+Struktur ist durch die Knotenanzahl $n$ eindeutig vorgegeben. Es gibt eine Binomialhalde $\leq \log_2 n$ Binomialbäume.\\
+... findmin $\mathcal{O}(\log n)$ Zeit (Durchsuchen der Wurzeln).\\
+\subsubsection{merge}
+Vereinigung von zwei Binomialhalden.\\
+Zwei $B_i$s können in Konstaner Zeit zu einem $B_{i+1}$ kombiniert werden:\\
+Vergleich der Wurzeln: größere Wurzel wird als Kind an die kleinere gehängt.\\
+Algorithmus: verschmelze die beiden Listen von Binomialbäumen zu einer Liste, nach Rang sortiert.\\
+for $i = 0,1,2,... \lfloor \log n \rfloor$\\
+while $\exists$ zwei Bäume $B_i$: vereinige sie zu einem Baum $B_{i+1}$
+$B_i$ = Knoten mit Unterbaum $B_{i-1}$\\
+Laufzeit: $\mathcal{O}(\log n)$\\
+\subsubsection{insert}
+merge mit einer neuen Binomialhalde mit +1 Knoten: $\mathcal{O}(\log n)$
+\subsubsection{deletemin}
+finde die Wurzel mit dem kleinsten Schlüssel. lösche sie, vereinige die Knoten (die selbst eine Binomialhalde bilden) mit den übrigen Wuzeln (merge) ... $\mathcal{O}(\log n)$ Zeit.
