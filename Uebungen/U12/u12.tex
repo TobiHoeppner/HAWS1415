@@ -2,7 +2,7 @@
 \usepackage[ngerman]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{MyriadPro}
+%\usepackage{MyriadPro}
 \usepackage[scaled]{beramono}
 \newcommand\Small{\fontsize{10.5}{10.5}\selectfont}
 \newcommand*\LSTfont{\Small\ttfamily\SetTracking{encoding=*}{-20}\lsstyle}
@@ -123,11 +123,43 @@ maximiert wird und dabei die Nebenbedingung
 erhalten bleibt.
 \end{enumerate} 
 
-\subsubsection*{67. Zertifikatskriterium, 10 Punkte}
+\subsubsection*{Musterlösung aus dem Tutorium}
+\begin{align*}
+\sum_{i=1}^n g_ix_i \leq G\\
+\sum_{i=1}^n -w_ix_i \leq -W\\
+\end{align*}
+zu zeigen:
+\begin{enumerate}
+\item $f$ ist in polynomieller Zeit berechenbar bzw. $\in$ NP\\
+Wie geht das? Wie macht man das? Hier ist es offensichtlich. Aber genauer kann man das nicht beschreiben. Entscheidend dafür ist die Kodierung und weil diese nicht vorgegeben ist kann man das nicht genauer beschreiben. An dieser Stelle können wir nur sagen, dass $f$ im Prinzip noch eine Umkodierung ist.\\
+\begin{align*}
+x \in RP \Rightarrow f(x) \in 01-ILP\\
+x \in RP \Rightarrow \exists I \subseteq \{1,....,n\}:\\
+\quad \sum_{i \in I} g_i \leq G, \sum_{i \in I} w_i \geq W
+\end{align*}
+Wir definieren $x_i := \begin{cases}1, &i \in I \\ 0, & i \notin I \end{cases}$
+\begin{align*}
+\Rightarrow \sum_{i=1}^n g_i x_i = \sum_{i \in I} g_i \leq G\\
+\Rightarrow \sum_{i=1}^n -w_i x_i = \sum_{i \in I} -w \leq -W\\
+\end{align*}
+$x \in RP \Leftarrow f(x) \leftarrow 01-ILP$
+\begin{align*}
+f(1) \in 01ILP\\
+\Rightarrow \exists x_1,...,x_n \in \{0,1\}
+\end{align*}
+Definiere $I = \{i\in \{1,..,n\}|x_i = 1\}$\\
+$\Rightarrow$ I erfüllt Gleichungen.
+\item 
+\end{enumerate}
 
 0-1-ILP $\in $ NP $\Leftrightarrow$ 0-1-LIP hat p.v.ZK\\
 
 Das Zertifikat $y$ für 0-1-ILP sind die Werte $x_1,...,x_n \in \{0,1\}$ die alle Ungleichungen erfüllen.\\
 Das Zertifikatskriterium $f$ überprüft das Zertifikat $y$ zur einer beliebigen Eingabe $x \in $ 0-1-ILP, ob $x$ eine Lösung ist. Weil die Eingabe auf die Länge $n$ beschränkt ist, ist die Laufzeit von $f$ in polynomieller Laufzeit berechenbar. Somit ist 0-1-ILP $\in$ NP.
+
+\subsubsection*{67. Zertifikatskriterium, 10 Punkte}
+\subsubsection*{Musterlösung aus Tutorium}
+Zeuge: Werte für $x_1,...,x_0 \in \{0,1\}$ Länge ist polynomiell.\\
+Algorithmus: Überprüfe die Gleichungen mit obigen Werten in polynomieller Zeit.\\
 
 \end{document}
