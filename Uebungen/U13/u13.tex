@@ -2,7 +2,7 @@
 \usepackage[ngerman]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{MyriadPro}
+%\usepackage{MyriadPro}
 \usepackage[scaled]{beramono}
 \newcommand\Small{\fontsize{10.5}{10.5}\selectfont}
 \newcommand*\LSTfont{\Small\ttfamily\SetTracking{encoding=*}{-20}\lsstyle}
@@ -18,6 +18,7 @@
 \usepackage{caption}
 \usepackage{url}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{accents}
 \usepackage{tikz}
 \usetikzlibrary{arrows}
@@ -103,9 +104,57 @@
 \maketitle 
 
 \subsubsection*{72. Kürzester einfacher Weg, 10 Punkte}
+Funktion $f$: 
+\begin{enumerate}
+\item wähle $s,t \in V$, sodass $s$ mit $t$ mit einer gerichteten Kante von $t$ nach $s$ verbunden ist.
+\item wähle $k = - |V|$
+\item für alle Kantengewichte setze $c_{ij} = -1$
+\end{enumerate}
+Berechne KEW mit diesen Parameter. \\
 
-\subsubsection*{73. Klausuraufgaben, 5 Betonpunkte}
+\begin{enumerate}
+\item KEW $\in$ NP? Ja, das Zertifikat, Weg $s,t$ mit  $\sum c_{ij} \leq k$, ist in polynomieller Zeit überprüfbar.
+\item Eingabe $x \in$ HAM $\rightarrow f(x) \in $ KEW \\
+Dadurch, dass ich der Eingabe nur Kantengewichte hinzufüge, die den Graphen aber nicht verändern. Wird das Problem nicht verändert.
+\item Eingabe $x \in$ HAM $\leftarrow f(x) \in $ KEW\\
+Wenn $f(x)$ eine Lösung hat, dann erhalte ich ein neues Zertifikat für HAM.
+\end{enumerate}
+
+%\subsubsection*{73. Klausuraufgaben, 5 Betonpunkte}
+%Wofür steht NP?
+%\begin{enumerate}
+%\item[$\square$] Null Problemo!
+%\item[$\square$] Niedrig Preise!
+%\item[$\square$] not persistent.
+%\item[$\square$] null pointer.
+%\item[$\square$] Nicht prima.
+%\item[$\square$] Nicht primzahlzerlegbar.
+%\item[$\square$] Nicht-deterministisch berechenbar.
+%\item[$\square$] Nicht-deterministisch praxisnahberechenbar.
+%\item[$\square$] Nicht-deterministisch polynomiell berechenbar.
+%\item[$\square$] Nur bei Pfollmond berechenbar.
+%\item[$\square$] Nur partiell berechenbar.
+%\item[$\square$] Nichtmal deine Mutti kann das ausrechnen.
+%\item[$\square$] Niemals! Peter!
+%\item[$\square$] Nur Prollos wissen, wie das geht.
+%\item[$\square$] Neue Probleme.
+%\item[$\square$] Natriumpolyamid.
+%\item[$\square$] Nicht Pfändbar.
+%\item[$\square$] No Pattern.
+%\item[$\square$] No Patternmatching.
+%\item[$\square$] Nicht (im stehen) Pinkeln.
+%\item[$\square$] Nitratpegel.
+%\end{enumerate}
 
 \subsubsection*{74. Das Mengenüberdeckungsproblem, Selbstreduktion, 10 Punkte}
+Dadurch, dass $F$ zur Eingabe von $X$ gehört. Muss $F$ polynomiell Groß sein. Demnach ist es möglich $U$ in polynomieller Zeit zu finden. Die Überdeckung $U$ finde ich wie folgt:
+\begin{enumerate}
+\item sortiere Teilmengen der Größe nach, absteigend.
+\item für alle Teilmengen $A_i$, prüfe mit $X$, ob es eine Überdeckung mit den anderen Teilmengen gibt
+\item wenn es eine Überdeckung gibt, dann entferne Teilmenge aus der Auswahl ($A_i$ beinhaltet diese Menge bereits).
+\item wenn nicht, nehme nächste Teilmenge und prüfe wieder.
+\item breche ab, wenn alle Teilmengen überpüft wurden.
+\item Prüfe mit $X$, ob alle Teilmengen zusammen ($U$) eine Überdeckung von $S$ liefern.
+\end{enumerate}
 
 \end{document}
