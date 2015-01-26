@@ -1,0 +1,83 @@
+\section{ Fibonacci-Halden \tiny (Vorlesung 25 am 23.01.)}
+Ist eine Spezialanwendung von Binomialhalden.
+
+Bei F-Halden kann ein Knoten ein Kind verlieren, ohne dass der Baum dadurch umgebaut werden muss.\\
+
+Eine F-Halde ist eine Liste von Bäumen, die die Haldeneigenschaft haben. Die Wurzeln sind in einer ungeordneten Liste organisiert.\\
+
+\subsection{decreasekey(x)} $x$ bekommt einen kleinen Wert. Die Kante von $x$ zum Elternknoten ist möglicherweise nicht mehr gültig. Lösche diese Elternkante und mache $x$ zur Wurzel.\\
+Der Elternknoten von $x$ wird markiert, zum Zeichen, dass er ein Kind verloren hat. Wenn $x'$ schon markiert war, löse $x'$ ebenfalls aus dem Bau und mache $x'$ zu einer Wurzel. $\Rightarrow$ Elementknoten $x''$ von $x'$ (sofern vorhanden) markieren, bzw. selbst aus dem Baum herausschneiden.\\ 
+Eine einzelne decreasekey-Operation führt möglicherweise zu einer ganzen Kaskade von \emph{Schnittoperationen}.\\
+Bemerkung: Wurzelknoten sind nie markiert.
+\subsection{merge}
+Vereinigung von 2 F-Halden. Die beiden Wurzellisten aneinander hängen.\\
+\subsection{deletemin}
+\begin{enumerate}
+\item min unter den Wurzeln finden. Diesen Knoten entfernen und seine Kinder zu Wurzeln machen. 
+\item Wurzelliste aufräumen, sodass von jedem Grad höchstens ein Baum übrig ist: \\
+Solange es 2 Wurzeln mit dem gleichen Grad $i$ gibt, vereinige diese zu einem Baum mit Grad $i+1$\\
+\end{enumerate}
+
+\subsubsection{mögliche Implementierung}
+\begin{lstlisting}[mathescape]
+Feld B[0],...,B[d_{max}] mit BOTTOM initialisiert
+Eingabeliste L
+while notempty(L)
+	v = L.pop()
+	i = Grad(v)
+	if B[i] = BOTTOM then B[i] := v
+	else: vereinige v und B[i] zu v'
+		L.insert(v')
+for i = 0 to d_{max}
+	if B[i] != BOTTOM then L.insert(B[i])
+\end{lstlisting}
+Laufzeit: $\mathcal{O}(|L|+d_{max})$\\
+$L_0$ ist die Ausgangsliste, die Whileschleife wird höchstens $|L_0|+|L_0|$-mal durchlaufen, denn in jedem Durchlauf wird aus $L$ ein Element entfern.\\
+
+\subsection{Invariante}
+Die Kinder eines Knotens $v$ seien $v_1,v_2,...,v_k$ in der Reihenfolge, in der sie Kinder geworden sind. Dann ist der Grad($v_i$)$\begin{cases} \geq i-1 \text{falls $v_i$ unmarkiert ist} \\ \geq i-2 \text{falls $v_i$ markiert ist} \end{cases}$
+
+\subsubsection{Beweis}
+$v$ verliert ein Kind \checkmark\\
+Ein Kind von $v$ wird markiert \checkmark\\
+$v$ bekommt ein zusätzliches Kind $v'$. $v'$ war vorher eine Wurzel und ist daher unmarkiert. \checkmark\\
+
+\subsection{Kleinstmögliche F-Bäume mit Grad k}
+siehe Bäume im Originalskript.
+
+Der Grad der Bäume lässt sich wie folgt berechnen: $k = k-1 + k-2$ und ist $\mathcal{O}(\log n)$, ebenfalls gilt: $|F_k| = |F_{k-1}| + |F_{k-2}| \approx (\frac{\sqrt{5}+1}{2})^k$
+
+\subsection{Amortisierte Analyse}
+Wir geben der Datenstruktur ein gewisses Budget vor, dass die Datenstruktur für Operationen ausgeben kann oder für einen späteren Zeitpunkt sparen kann.\\ 1 Taler reicht für eine Operation mit Laufzeit $\mathcal{O}(1)$.\\
+Jeder markierte Knoten hat 2 Taler. Jeder Wurzelknoten hat 1 Taler.\\
+Der Taler im Wurzelknoten bezahlt für das Aufräumen. $L^{vor} L^{nach}$ Liste vor bzw. nach dem Aufräumen. $|L^{nach}| \leq d_{max‚}$\\
+\subsubsection{Laufzeit}
+\begin{align*}
+& \mathcal{O}(d_{max} + |L^{vor}|)\\
+=& \mathcal{O}(d_{max} + (|L^{vor}|-|L^{nach}|) + \underbrace{|L^{nach}|}_{\leq d_{max}})\\
+=& \mathcal{O}( \underbrace{ d_{max} }_{\text{kostet } d_\max = \mathcal{O}{\log n} \text{ Taler}} + \underbrace{ |L^{vor}| - |L^{nach}| }_{\text{wird aus gespeicherten Talern bezahlt}})\\
+\end{align*}
+
+\subsubsection{Analyse für decreasekey}
+Wir stellen 4 Taler zur Verfügung.
+Elternknoten von $x'$ unmarkiert:
+\begin{enumerate}
+\item[-] 1 Taler für $x$ als neue Wurzel
+\item[-] 2 Taler zur Markierung von $x'$
+\item[-] 1 Taler bleibt zum Bezahlen der Operationen.
+\end{enumerate}
+Elternknoten von $x'$ markiert:
+\begin{enumerate}
+\item[-] 1 Taler für $x$ als neue Wurzel
+\item[-] 1 Taler zum Bezahlen der Laufzeit.
+\end{enumerate}
+Bleiben 2 Taler, zusammen mit den 2 die in $x'$ gespeichert sind $\rightarrow$ 4 Taler.\\
+\subsubsection{Satz: Amortisierte Laufzeit}
+Betrachte eine Folge von $A$ Operationen insert, decreasekey, merge und $B$ Operationen deletemin auf eine anfangs leere F-Halde, die zu jedem Zeitpunkt höchstens $n$ Elemente enthält. Dann ist die Laufzeit $\mathcal{O}(A + B \log n)$\\
+Wir sagen: insert, decreasekey, merge hat eine amortisierte Laufzeit von $\mathcal{O}(1)$, deletemin hat amortisierte Laufzeit von $\mathcal{O}(\log n)$.\\
+\subsubsection{Potentialfunktion}
+Amortisierte Analyse mit einer Potentialfunktion $\Psi$. $\Psi$ ist eine Funktion, die von Zustand der Datenstruktur abhängt. Beispiel F-Halden: $\Psi = 2 \#$(markierte Knoten) $+ \#$(Wurzeln)\\
+Bei einer Operation mit tatsächlicher Laufzeit $T$, definieren wir die amortisierte Laufzeit $T^a = T - \Psi^{vor} + \Psi^{nach}$\\
+Wenn $\Psi$ zu Beginn $=0$ ist und nie negativ werden kann, dann gilt:\\
+Summe der Tatsächlichen Laufzeiten $\leq $ Summe der amortisieren Laufzeiten.\\
+(Beweis in anderer Mitschrift)

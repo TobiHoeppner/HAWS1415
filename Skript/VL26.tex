@@ -1,0 +1,76 @@
+\section{ Kürzeste Spannbäume, UNION-FIND-Problem \tiny (Vorlesung 26 am 26.01.)}
+
+\subsection{Algorithmus von Kruskal für einen kürzesten Spannbaum}
+
+\begin{enumerate}
+\item Sortiere die Katen nach Gewicht $w(e_1) \leq w(e_2) \leq ... \leq w(e_n)$
+\item $T = \emptyset$\\
+for i = 1,...,n\\
+	Kante $e_i = (u,v)$\\
+	Falls $u$ und $v$ in verschiedenen Komponenten$^*$ von $T$ liegen, setze $T = T \cup \{e_i\}$
+\end{enumerate}
+
+$^*$ ist der Kern des UNION-FIND-Problems.
+
+\subsection{UNION-FIND-Problem}
+Grundmenge von $n$ Elementen (z.B. $\{1,2,..,\}$).\\
+Zu Beginn: jedes Element bildet eine eigene Klasse. Partition $\{\{1\},\{2\},\{3\},...,\{n\}\}$\\
+\subsubsection{Operationen}
+\begin{enumerate}
+\item Gehören 2 Elemente, $u,v$ zur selben Klasse? (FIND)
+\item Vereinige 2 Klassen zu einer größere Klasse. (UNION)
+\end{enumerate}
+\subsubsection{FIND(u)}
+Gibt einen Repräsentanten der Klasse zurück, zu der $U$ gehört.\\
+FIND(u) $=$ FIND(v) $\Leftrightarrow$ $u$ und $v$ gehören zur selben Klasse.\\
+Der Repräsentant kann ein ausgewähltes Element der Klasse, oder z.B. eine Klassennummer sein.
+\subsubsection{UNION(a,b)}
+Modifiziert die Klassenzerlegung so, dass die Klassen mit Repräsentanten $a$ und $b$ vereinigt werden. ($a,b$ sind Ergebnisse der FIND-Operation)\\
+\subsubsection{Implementierungsmöglichkeiten}
+\begin{enumerate}
+\item[\textbf{•}A:] Klassen als verkettete Listen speichern. Jedes Element hat einen Zeiger zu seinen Repräsentanten. Die Repräsentanten gehören nicht zur Grundmenge. Jeder Repräsentant hat einen Zeiger auf die Liste der Elemente.\\
+% siehe Bild aus Hauptskript
+FIND: $\mathcal{O}(1)$\\
+UNION: Eine der Listen durchlaufen und alle Repräsentantenzeiger umspeichern. $\mathcal{O}(n)$\\
+\item[\textbf{A'}:] Jeder Repräsentant speichert die Größe seiner Klasse.\\
+UNION: Umspeichern der kleineren Klasse. Laufzeit $\mathcal{O}(n)$\\
+ABER: Gesamtlaufzeit aller UNION-Operationen ist $\mathcal{O}(n \log n)$\\
+Begründung: Die Größe der Klasse, zu der ein Knoten $u$ gehört, wird mindestens verdoppelt, wenn die Repräsentantenzeiger von $u$ geändert wird. Das passiert $\leq \mathcal{O}(\log n)$-mal.
+\item[\textbf{B}:] Speichern der Menge als Baum. Repräsentant ist die Wurzel eines Baumes.\\
+UNION: Einen Baum in den anderen Baum einfügen, indem die Wurzeln verbunden werden. Laufzeit $\mathcal{O}(1)$.\\
+FIND: Verfolge einen Pfad zur Wurzel. Laufzeit $\mathcal{O}(n)$\\
+% siehe Bild aus Hauptskript
+\item[\textbf{B'}:] UNION nach Größe (Anzahl der Knoten). Der kleinere Baum wird als Kind an den größeren gehängt. (Jedesmal, wenn man zu seinem Elternknoten geht und die Größe des Teilbaums mindestens verdoppelt.) Laufzeit für FIND: $\mathcal{O}(\log n)$
+\item[\textbf{B''}:] UNION nach Rang (Rang=Tiefe). Die Wurzel mit dem kleineren Rang wird als Kind an die andere Wurzel gehängt. Bei Gleichstand wird der Rand der Wurzel um 1 erhöht.\\
+Invariante: \begin{enumerate}
+\item Ein Knoten vom Rang $r$ enthält mindestens $2^r$ Knoten in seinem Teilbaum
+\item Erweiterungen geht zu einem Knoten mit größerem Rang.
+\end{enumerate}
+\item[\textbf{C}:] Speichern als Baum, FIND mit Pfadkompression.\\
+Wenn FIND(u) eine Folge von Knoten $u = v_1,v_2,...,v_k$ durchläuft, dann setze anschließend Elternzeiger von $v_1,v_2,...,v_{k-2}$ auf $v_k$.\\
+Laufzeit von FIND wird verdoppelt, ABER Ersparnis bei zukünftigen FIND-Operationen.
+\item[\textbf{C'}:] UNION nach Rang, FIND mit Pfadkompression\\
+Grundmenge mit $n$ Elementen. $\leq n-1$ UNION Operationen. $m$ FIND-Operationen.\\
+Laufzeit: $\mathcal{O}(m+n \log n)$ wegen \textbf{B''}.\\
+Empirisch $\mathcal{O}(m+n)$ \\
+zunächst $\mathcal{O}(n+m \log \log n)$\\
+später $\mathcal{O}(n+m \log^*n)$\\
+$\log^* n = \min \{i | \underbrace{\log_2,\log_2,\log_2,...,\log_2}_{i-\text{mal}} n \leq 1 \}$
+endgültig $\mathcal{O}(n+m \alpha(m,n))$ (R.E. Tarjan)\\
+$\alpha$ ist die inverse Ackermannfunktion, also eine  unglaublich langsam wachsende Funktion die in der Praxis nicht mehr von $(m+n)$
+\end{enumerate}
+\subsection{Analyse von C'}
+\begin{enumerate}
+\item[Werdegang eines Knoten:] Rang steigt in Schritten von 1, solange er eine Wurzel ist. Danach ist er konstant $=r$. Der Rang des Elternknotens ist immer $>r$ und kann steigen.
+\item[Seidel und Staur:] Wir haben einen Wald F gegeben: Eine verallgemeinerte Kompressionsfolge für F ist eine Folge von Pfaden $P_1,P_2,...,P_m$. Jeder Pfad P ist:
+\begin{enumerate}
+\item ein interner Pfad: $v_1,v_2,...,v_k (k\geq 1)}, v_{i+1}$ ist Elternknoten von $v_i$
+\item ein Geisterpfad: wie oben, nur $v_{k-1}$ ist Wurzel $v_k = BOTTOM$ ($k\geq 2$)
+\end{enumerate}
+Kompression ersetzt die Elternzeiger von $v_1,v_2,...,v_{k-2}$ durch $v_k$ (bei einem Geisterpfad werden alle Knoten zu Wurzeln).\\
+Setze $F_0 = F$\\
+$F_1 = P_i$ angewendet auf $F_{i-1}$. Wir müssen annehmen, dass $P_i$ ein gültigen Pfad für $F_{i-1}$ ist.\\
+Kosten eines internen Pfades $= \max{0,k-2} = Anzahl der Zeigeränderungen$\\
+Kosten eines Geisterpfades $=0$\\
+Kosten der Folge $C=(P_1,...,P_m)=cost(C)=$ Summe der Kosten der Pfade. Länge von $C = l(\mathcal{C})$ = $\#$ der internen Pfade.  
+\end{enumerate}
