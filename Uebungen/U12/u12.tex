@@ -2,7 +2,7 @@
 \usepackage[ngerman]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-%\usepackage{MyriadPro}
+\usepackage{MyriadPro}
 \usepackage[scaled]{beramono}
 \newcommand\Small{\fontsize{10.5}{10.5}\selectfont}
 \newcommand*\LSTfont{\Small\ttfamily\SetTracking{encoding=*}{-20}\lsstyle}
@@ -103,7 +103,31 @@
 \maketitle 
 
 \subsubsection*{66. Polynomielle Reduktion, 10 Punkte}
+Zu zeigen: RP $ \leq_p $ 0-1-ILP.
+\begin{enumerate}
+\item 0-1-ILP $\in$ NP
+\item RP $ \leq_p $ 0-1-ILP\\
+Eingabe von RP so umformen, dass es mit 0-1-ILP berechnet werden kann:\\
+Man fügt den Bedingungen vom RP:
+\begin{align*}
+\sum_{i \in I} g_i \leq G \text{ und } \sum_{i \in I} w_i \geq W
+\end{align*}
+jeweils noch einen Faktor $x_i \in \{0,1\}$ hinzu, um zu entscheiden, ob ein Gegenstand $i$ ausgewählt (1) oder nicht ausgewählt(0) wird und iteriert über die Anzahl der gegeben Gegenstände $n$, sodass :
+\begin{align*}
+\sum_{i \in I}^n x_iw_i
+\end{align*}
+maximiert wird und dabei die Nebenbedingung
+\begin{align*}
+\sum_{i \in I}^n x_ig_i \leq G
+\end{align*}
+erhalten bleibt.
+\end{enumerate} 
 
 \subsubsection*{67. Zertifikatskriterium, 10 Punkte}
+
+0-1-ILP $\in $ NP $\Leftrightarrow$ 0-1-LIP hat p.v.ZK\\
+
+Das Zertifikat $y$ für 0-1-ILP sind die Werte $x_1,...,x_n \in \{0,1\}$ die alle Ungleichungen erfüllen.\\
+Das Zertifikatskriterium $f$ überprüft das Zertifikat $y$ zur einer beliebigen Eingabe $x \in $ 0-1-ILP, ob $x$ eine Lösung ist. Weil die Eingabe auf die Länge $n$ beschränkt ist, ist die Laufzeit von $f$ in polynomieller Laufzeit berechenbar. Somit ist 0-1-ILP $\in$ NP.
 
 \end{document}
