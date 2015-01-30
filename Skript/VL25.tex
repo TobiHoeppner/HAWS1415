@@ -50,12 +50,12 @@ Der Grad der Bäume lässt sich wie folgt berechnen: $k = k-1 + k-2$ und ist $\m
 \subsection{Amortisierte Analyse}
 Wir geben der Datenstruktur ein gewisses Budget vor, dass die Datenstruktur für Operationen ausgeben kann oder für einen späteren Zeitpunkt sparen kann.\\ 1 Taler reicht für eine Operation mit Laufzeit $\mathcal{O}(1)$.\\
 Jeder markierte Knoten hat 2 Taler. Jeder Wurzelknoten hat 1 Taler.\\
-Der Taler im Wurzelknoten bezahlt für das Aufräumen. $L^{vor} L^{nach}$ Liste vor bzw. nach dem Aufräumen. $|L^{nach}| \leq d_{max‚}$\\
+Der Taler im Wurzelknoten bezahlt für das Aufräumen. $L^{vor} L^{nach}$ Liste vor bzw. nach dem Aufräumen. $|L^{nach}| \leq d_{\max}$\\
 \subsubsection{Laufzeit}
 \begin{align*}
 & \mathcal{O}(d_{max} + |L^{vor}|)\\
 =& \mathcal{O}(d_{max} + (|L^{vor}|-|L^{nach}|) + \underbrace{|L^{nach}|}_{\leq d_{max}})\\
-=& \mathcal{O}( \underbrace{ d_{max} }_{\text{kostet } d_\max = \mathcal{O}{\log n} \text{ Taler}} + \underbrace{ |L^{vor}| - |L^{nach}| }_{\text{wird aus gespeicherten Talern bezahlt}})\\
+=& \mathcal{O}( \underbrace{ d_{\max} }_{\text{kostet } d_{\max} = \mathcal{O}{\log n} \text{ Taler}} + \underbrace{ |L^{vor}| - |L^{nach}| }_{\text{wird aus gespeicherten Talern bezahlt}})
 \end{align*}
 
 \subsubsection{Analyse für decreasekey}
