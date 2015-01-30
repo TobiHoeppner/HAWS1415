@@ -1,0 +1,94 @@
+\section{ UNION-FIND-Fortsetzung \tiny (Vorlesung 27 am 30.01.)}
+Wiederholung:\\
+Vereinigung nach Rang.\\
+%2 Bilder
+\\
+Finde mit Pfadkompression\\
+Hohe Ränge tauchen im Verlauf des Algorihtmus weniger häufig auf. Daher formulieren wir folgendes Lemma:\\
+Knoten, die im Laufe des Algorithmus Rang $r$ haben ist $\frac{n}{2^r}$
+\begin{proof} Wie entsteht ein Knoten vom Rang $r$?\\
+Eine Wurzel wird Kind und ändert durch den Rang nicht mehr.\\
+Induktion: r = 0 \checkmark\\
+r -1 $\rightarrow$ r \checkmark\\
+\end{proof}
+Wir haben eine Folge von UNION-FIND Operationen, die wir so anordnen, dass erst alle UNION-Operationen ausgeführt werden und dann die FIND-Operationen ausgeführt werden. Außerdem verallgemeinern wir die Pfadkompression.\\
+Lemma: Gegeben sei eine Folge $X$ von UNION-FIND-Operationen, ausgehend von der Partition $\{\{ 1\},\{2 \},...,\{n \} \}$, mit $m$ FIND-Operationen und $\leq n-1$ UNION-Operationen. Dann exisitiert ein Wald $F$ und eine Folge $\mathcal{C}$ von verallgemeinerten Kompressionen:
+\begin{enumerate}
+\item[(i)] $l(\mathcal{C}) = m$
+\item[(ii)] Laufzeit von $X = \mathcal{O}(m+n+cost(\mathcal{C}))$ 
+\end{enumerate}
+\begin{proof}
+Zuerst alle UNION-Operationen.\\
+Sei $F$ der entstehende Wald. Anschließend betrachte alle FIND-Operationen:\\
+Es sei FIND($u$) = $v$. Füge zu $\mathcal{C}$ den internen Pfad von $u$ nach $v$ dazu.
+\end{proof}
+Kosten für FIND = $\mathcal{O}(1) + \mathcal{O}(\underbrace{\text{Länge des Weges}}_{\leq cost(P)+2})$\\
+$P=$ Pfad $v_1,v_2,...,v_k$ von $u$ nach $v$. $cost(P) = \max \{ k-2,o\}$\\
+Wir ordnen jedem Knoten einen festen Rang zu\\
+$=$ Höhe im Wald $F$ (erster Wald)\\
+$=$ endgültiger Rang in der Folge $X$\\
+%in Box
+Dann gibt es $\leq \frac{n}{2^r}$ Knoten mit Rang $\geq r$\\
+Wir zerlegen einen Wald $F$ in einen oberen Wald $F_+$ bestehend aus dem Knoten mit Rang $>S$ und einen Wald $F_-$, bestehend aus Knoten mit Rang $\leq S$. Knoten in $F_-$, die einen Elternknoten in $F_+$ haben, werden zu Wurzeln.\\
+% Bild V
+\subsection{Zerlegungslemma}
+Gegeben Wald $F$ mit verallgemeinerte Kompressionsfolge $\mathcal{C}$, Zerlegung $F = F_+ \cup F_-$. Dann gibt es verallgemeinerte Kompressionsfolgen $\mathcal{C}_+$ für $F_+$ und  $\mathcal{C}_-$ für $F_-$ mit 
+\begin{enumerate}
+\item[(i)] $l(\mathcal{C}) = l(\mathcal{C}_+) +l(\mathcal{C}_-)$
+\item[(ii)] $cost(\mathcal{C}) = \underbrace{cost(\mathcal{C}_+)}_{1.} + \underbrace{ cost(\mathcal{C}_-)}_{2.} + \underbrace{ |F_-|} + \underbrace{ l(\mathcal{C}_+)}_{4.}$
+\end{enumerate} 
+\begin{proof}
+Wege, die nur in $F_+$ oder nur in $F_-$ verlaufen, werden zu $\mathcal{C}_+$ bzw. $\mathcal{C}_-$ zugeteilt.\\
+Wege $P$, die in $F_-$ beginnen und in $F_+$ enden: werden aufgespalten in $P_- = P \cap F_-$ und $P_+ = P \cap F_+$. $P_+$ wird zu $\mathcal{C}_+$ hinzugefügt. $P_-$ wird zu einem Geisterpfad $P_- \cup \{\bot \}$ gemacht und zu $\mathcal{C}_-$ hinzugefügt. (Wird bei $l(\mathcal{C}_-)$ nicht mitgezählt $\rightarrow$ (i) erfüllt.)
+\end{proof}
+\subsection{Die 4 Ereignisse von cost($\mathcal{C}$)}
+\begin{enumerate}
+\item Knoten aus $F_+$ bekommt einen neuen Elternknoten in $F_+$
+\item Knoten aus $F_-$ bekommt einen neuen Elternknoten in $F_-$
+\item Knoten aus $F_-$, dessen Elternknoten in $F_-$ lag, bekommt einen neuen Elternknoten in $F_+$
+\item Knoten aus $F_-$, dessen Elternknoten in $F_+$ lag, bekommt einen neuen Elternknoten in $F_+$
+\end{enumerate}
+Anmerkungen: 3. und 4. treten höchstens 1x pro Pfad auf. 4. hat die Zusatzbedingung, dass es nur eintritt, wenn die Pfade einen neuen Pfad in $P_+ \in C_+$
+\begin{enumerate}
+\item[Stufe 0] $F$ Wald mit $n$ Knoten, Rang $\leq r$\\
+$cost(\mathcal{C}) \leq r * n$\\
+$cost(\mathcal{C_+}) \leq |F_+|*r \leq \frac{n}{r}*r = n$
+\begin{proof}
+$cost(\mathcal{C})$ zählt, wie oft ein Knoten einen neuen Elternknoten bekommt. Der Rand des Elternknotens muss um $\geq 1$ steigen. $\Rightarrow \leq r$ mal pro Knoten.
+\end{proof}
+\item[Stufe 1] Zerlegungslemma für $s = \lceil \log_2 r \rceil$, $r = $ Schranke für den Rang in $F$.\\
+% Bild V
+$cost(\mathcal{C}) \leq \underbrace{ cost(\mathcal{C}_+) }_{\leq n}+ cost(\mathcal{C}_-) + \underbrace{ |F_-| }_{\leq n} + \underbrace{ l (\mathcal{C_+}) }_{l(\mathcal{C}) - l (\mathcal{C}_-)}$\\
+$|F_+| $ = Knoten mit Rang $\geq s+ 1 \leq \frac{n}{2^{s+1}} \frac{n}{r}$\\
+$[cost(\mathcal{C} - l (\mathcal{C})] \leq 2n + [cost(\mathcal{C_-}) - l (\mathcal{C_-})]$\\
+$[cost(\mathcal{C}_- - l (\mathcal{C}_-)] \leq 2n + [cost(\mathcal{C_{--}}) - l (\mathcal{C_{--}})]$\\
+Gleiches Spiel mit $F_- = \underbrace{F_{--}}_{F_{\leq s'}} \cup F_{> s'} $\\
+$s' = \lceil \log 2 s \rceil	= \lceil \log \log r \rceil$\\
+$F...$ Rang $\geq r$\\
+$F_-...$ Rang $\geq \log r$\\
+$F_{--}...$ Rang $\geq \log \log r$\\
+$...$\\
+$F_0$ Rang $\leq 1$\\ 
+$\rightarrow \log^*$ Mal.\\
+$\Rightarrow cost(\mathcal{C}) \leq l(\mathcal{C}) + 2n \log^*r$  
+\end{enumerate}
+$L_0(r) = \lceil \log_2 r \rceil$\\
+$L_j(r) = $ wie oft muss ich $L_{j-1}$ auf $r$ anwenden, bis das Ergebnis $\leq 1$ wird.\\
+$L_1(r) = \log^* r$\\
+$L_j(r) = \begin{cases} 0, &\text{falls } r \leq 1 \\ 1 + L_j(L_{j-1}(r), &r \geq 2) \end{cases}$
+\begin{enumerate}
+\item[Stufe $j$]: Lemma: $j \geq 1$, Wald mit Rand $\leq r$\\
+$cost(\mathcal{C}) \leq j l (\mathcal{C}) + 2n L_j(r)$\\
+Stufe 1 \checkmark \\
+Beweis nach Induktion nach $j$.
+\begin{proof}
+$s = \lceil \log_2 L_j(r) \rceil$\\
+$cost(\mathcal{C}) \leq cost(\mathcal{C}_+) + cost(\mathcal{C}_-) + \underbrace{ |F_-|}_{\leq n} + l(\mathcal{C_+})$
+$cost(\mathcal{C}) \leq j l (C_+) + \upperbrace{2 \underbrace{ |F_+| }_{ \leq \frac{n}{2^{s+1}} \leq \frac{n}{2L_j(r)}} L_j(r)}^n$
+$cost(\mathcal{C}) \leq j l(\mathcal{C}_+) + n +n + l(\mathcal{C_+})$
+$=2n + (j+1) l(\mathcal{C}_+)$, mit $ l(\mathcal{C}_+) = l (\mathcal{C}) - l ( l(\mathcal{C}_-))$\\
+$[cost(\mathcal{C})-(j+1)l(\mathcal{C})] \leq 2n + [cost(\mathcal{C}_-)-(j+1)l(\mathcal{C}_i)]$\\
+\end{proof}
+\end{enumerate}
+Wie oft muss ich $r \rightarrow \lceil log L_j(r) \rceil$ anwenden, bis $\leq 1$ ist?\\
+$log_2 x \leq x$ für $x \geq 1$\\
