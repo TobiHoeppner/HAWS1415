@@ -103,9 +103,71 @@
 \begin{document} 
 \maketitle 
 
+\subsubsection*{NP-Übung}
+Teilgraphisomorphie $\in $ NP?
+
 \subsubsection*{Partition}
 
 Eingabe: $a_1,...,a_n \in \mathbb{N}$\\
 Frage: $\exists I_i J $ Partition von $\{1,...,n\} \sum_{i \in I} a_i = \sum_{i \in J} a_i$ ?\\
 
+\subsubsection*{79. Zollstock}
+Teilmengensumme $\leq_p$ Partition\\
+$f: \{a_1,...,a_n, b\} \rightarrow \{a_1,...,a_n, (b+1),(S-b+1)\}$, wobei $S := \sum_{i=1}^n a_i$\\
+$f$ ist in polynomialzeit berechenbar, weil nur $S$ berechnet werden muss.\\
+Beweis:\\
+x-Ja Instanz $\Leftrightarrow$ f(x) Ja-Instanz\\
+$\Rightarrow \exists I \subseteq \{1,...,n\}$:\\
+$\sum_{i \in I} a_i = b$\\
+$I' := I \cup \{n+2\}$\\
+$I' := \{1,...,n+2\} \setminus I'$\\
+$\sum_{i \in I'} a_i = b + S - b +1 = s+1$\\
+$\sum_{i \in J'} a_i = \sum_{i=1}^{n+2} a_i - \sum_{i \in I'} a_i = s + (b+1)+(s-b+1)-(s+1) = s+1$\\
+$\leftarrow f(x)$-Ja-Instanz:
+$\exists I, J $ Partition von $\{1,...,n+2\}$\\
+$\sum_{i \in I} a_i = \sum_{i \in J} a_i = S+1$\\
+$a_{n+1} + a_{n+2} = s+2$\\
+d.h. $(n+1)$ und $(n+2)$ in unterschiedlichen $I,J$\\
+o.B.d.A: $(n+2) \in I$\\
+$\sum_{i \in I} a_i - a_{n+2} = (s+1)-(s-b+1) = b$\\
+$I' := I \setminus \{n+2\}$\\
+
+Partition $\leq_p$ Zollstock\\
+$f_ \{a_1,...,a_n\} \rightarrow $  Zollstockelemente in $T$ aufteilen\\
+$T:=2\sum_{i=1}^n a_i$\\
+Futterallänge $=T$
+$x \in $ Partition $\iff f(x) \in$ Zollstock\\
+$\Rightarrow x \in $ Partition\\
+$\Rightarrow \exists I, J$ Partition von $\{1,...,n\}$\\
+$\sum_{i \in I} a_i = \sum_{i \in J} a_i$\\
+Falte Glieder in $I$ nach rechts.\\   
+Falte Glieder in $J$ nach links.\\
+$\Rightarrow$ Faltung passt in das Futteral. \\
+$\Leftarrow$ $f(x) \in $ Zollstock\\
+Sei eine Faltung gegeben, die in das Futteral passt $\Rightarrow$ erstes und letztes Glied passen übereinander. $\Rightarrow$ Mittelteil Anfang und Ende sind an der selben Stelle.\\
+$I := \{i | a_i $ nach rechts gefaltet.$\}$\\
+$J := \{i | a_i $ nach links gefaltet.$\}$\\
+Zollstock $\in$ NP\\
+Zeuge: Faltung\\
+Algorithmus: Überprüfe die Faltung, merke linkesten und rechtesten Punkt. Abstand $\leq $ Futterallänge.\\
+
+\subsubsection*{80.}
+\begin{enumerate}
+\item[a.)] $n-1=00000...1011$\\
+$n=0000...1100$\\
+Worstcase, wenn $n$ $k$-Bits hat.\\
+$01111...1 = m-1$\\
+$\underbrace{10.....0}_{k} = m$\\
+$00000$\\
+$00001 \leftarrow$ nach dem ersten Aufruf\\
+$(b_{k-1},b_{k-2},b_{0}) = n$\\
+$2^{k-1} \leq n < 2^k$\\
+$\Rightarrow k = \lfloor \log_n \rfloor +1$\\
+$T_m = $\# Bitoperationen im i-ten Schritt\\
+$f(n) := \max_{1 \leq m \leq n} T_m $\\
+$2 (\lfloor \log_n \rfloor +1 )$
+\item[b.)] $0 \rightarrow 1$ genau einmal pro Aufruf.\\
+$1 \rightarrow 0$ höchstens $n$-mal bei dem ersten $n$-Aufrufen.\\
+$g(n) = \sum_{k=1}^n \frac{T_k}{n} \leq \frac{4n}{n} = 4$\\
+\end{enumerate}
 \end{document}

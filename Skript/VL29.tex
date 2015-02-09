@@ -1,0 +1,92 @@
+\section{Geometrie \tiny (Vorlesung 29 am 06.02.)}
+\subsection{Konvexe Hülle}
+Gegeben sind $n$ Punkte $P_i=(x_i/y_i)$ in der Ebene. Die konvexe Hülle ist die kleinste konvexe Menge, die die gegebenen Punkte enthält.\\
+Eine Menge ist konvex, wenn sie mit je zwei Punkte $x,y$ auch die gesamte Verbindungsstrecke enthält.\\
+\subsubsection{Einfacher Algorithmus - Einwickeln (gift-wrapping) - Jarvis March}
+Beginne bei einem Punkt und berechne jeweils die Strecken zu anderen Punkten. Suche anschließend die Strecke aus, die ganz außen liegt.\\
+$\mathcal{O}(n)$ Zeit pro gefundene Ecke. $\mathcal{O}(n^2)$ Zeit insgesamt.
+\subsubsection{Besserer Algorithmus - Variante von Grahamscan ohne Winkel.}
+$L,R$ sei der linkeste und rechteste Punkt. $L$ und $R$ zerlegen die konvexe Hülle in die untere Hülle und die obere Hülle.\\
+\begin{enumerate}
+\item[a)] Berechnung der unteren Hülle (obere Hülle analog):\\
+Sortieren nach $x$-Koordinate. Annahme:\\
+$x_1 < x_2 < ... < x_n$ (alle $x$-Koordinaten verschieden!)\\
+$P_1 = L, P_N = R$\\
+Inkrementelle Berechnung der unteren Hülle von $P_1,P_2,...,P_k$\\
+$k=1,2,...,n$\\
+Hinzufügen eines Punktes $P_{k+1}$:\\
+untere Hülle von $(P_1,...,P_k)$ liegt auf einem Stapel.\\
+while: letzte Kante der untere Hülle (mit mindestens 2 Punkten) macht mit $P_{k+1}$ einen Rechtsknick.\\
+do: entferne letzte Ecke und Kante der Unteren Hülle.\\
+stapel $s[1],s[2],...,s[l]$\\
+$s[1] = P_1, l = 1$\\
+for $k=2,3,...,n$\\
+while $l \geq 2$ and $s[l-1],s[l],P_k$ macht einen Rechtsknick.\\
+do: $l=l-1$\\
+$l=l+1,s[l]=p_k$\\
+untere Hülle ist $s[1],s[2],...,s[l]$\\
+\textbf{Sonderfälle:}
+gleiche x-Koordinate.
+\begin{enumerate}
+\item drehen
+\item überlappen
+\end{enumerate}
+3 Punkte auf einer Geraten oder kein Knick.\\
+amortisierte Laufzeit für das Hinzufügen von $P_k$ ist $\mathcal{O}(1)$\\
+Potentialfunktion $\Psi = l = $Länge der unteren Hülle.\\
+tatsächliche Laufzeit: $\mathcal{O}(1)+\mathcal{O}(\#$Tests in der while-Schleife$)$.\\
+$\Delta \Psi = \Psi{vor} - \Psi{nachher} = \#$Tests$-2$\\
+amortisiere Laufzeit = tatsächliche - $\Psi^{vor}+\Psi{nach} = 1 +\#$Tests$-\#$Tests$+2=3$\\
+$\Psi_0=1, \Psi \geq 1$\\
+tatsächliche Laufzeit für untere Hülle $= \mathcal{O}(n)$, Gesamtlaufzeit $= \mathcal{O}(n \log n)$\\
+\end{enumerate}
+\subsubsection{Orientierungstests für drei Punkte}
+$P_1= (x_1,y_1),P_2= (x_2,y_2),P_3= (x_3,y_3)$
+$D=$
+\begin{matrix}
+$
+1 & 1 & 1 \\
+x_1 & x_2 & x_3 \\
+y_1 & y_2 & y_3 \\
+$ 
+\end{matrix}
+$=$
+\begin{matrix}
+$
+1 & 0 & 0\\
+x_1 & x_2-x_1 & x_3-x_1\\
+y_1 & y_2-y_1 & y_3-y_1\\
+$
+\end{matrix}
+$=$
+\begin{matrix}
+$
+x_2 -x_1 & x_3-x_1\\
+y_2-y_1 & y_3 - y_1\\
+$
+\end{matrix}
+$= (x_2-x_1)(y_3-y_1) - (x_3-x_1)(y_2-y_1)$
+
+$D=0 \iff P_1,P_2,P_3$ liegen auf einer Geraden.\\
+$D>0 \iff P_1,P_2,P_3$ ist gegen den Uhrzeigersinn orientiert\\
+$D>0 \iff P_3$ liegt links von der orientierten Geraden $(P_1,P_2)$\\
+$D<0$ analog\\
+$\frac{1}{2}|D|=$Fläche des Dreiecks $P_1,P_2,P_3$\\
+$n=(P_3-P_1)^\bot$ (um $90°$ nach links gedreht) $= \binom{y_3-y_1}{-(x_3-x_1)}$\\
+$h=$ Höhe des Dreiecks $=$ Projektion von $P_2-P_1$ auf die Richtung von $n$.\\
+$h=\frac{(n,P_2-P_1)}{||n||}$\\
+Fläche = $\frac{\text{Grundfälche}*h}{2} = \frac{||P_3-P_1||*h}{2}=\frac{1}{2}(n,P_2-P_1)=\frac{1}{2}... = \frac{D}{2}$\\
+\subsection{Nächstes Paar - Problem (Teile und Herrsche)}
+(engl. closest pair)\\
+$n$-Punkte, gesucht ist $i,j$ mit kleinstem Abstand $||P_i-P_j||$\\
+Teile und Herrsche: Zerlegen in 2 Hälften nach $x$-Koordinaten\\
+Rekursiv:\\
+$d_L = $kleinster Abstand links\\
+$d_R = $kleinster Abstand rechts.\\
+$d = \min(d_L,d_R)$ Abstände zwischen linken und rechten Punkten.\\
+Es reichen die Punkte in einem Streifen der Breite $2d$ um die Trennungsgerade.\\
+Sortiere die Punkte des Steifens nach $y$-Koordinate $\rightarrow$Liste$L$, Berechne den Abstand jedes Punktes zu seinem $7$ Nachbarn in der Liste und merke dir das Minimum $d_{\min}$.\\
+Vorverarbeitung: Sortieren nach $x$(erleichtert das rekursive zerlegen) $\mathcal{O}(n \log n)$\\
+Sortieren nach y: nach y sortierte Liste wird zerlegt und den Teilproblemen mitgegeben: $\mathcal{O}(n)}$\\
+Teilliste $L$ kann in $\mathcal{O}(n)$ Zeit aus der sortierten Liste extrahiert werden. \\
+$T(n) = 2 T(\frac{n}{2}) + \mathcal{O}(n) \rightarrow T(n) = \mathcal{O}(n \log n)$+Vorverarbitung $\mathcal{O}(n\log n)$
