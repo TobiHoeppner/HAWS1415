@@ -1,0 +1,52 @@
+\section{Systematisches durchsuchen von Lösungsbäumen \tiny (Vorlesung 30 am 09.02.)}
+\subsection{Rucksackproblem}
+$n=5$, Gewichte $g_1,...,g_5$, Schranke $G$, Werte $w_1,...,w_5$\\
+$\max\{\Sum_{i=1}^n w_ix_i|\sum g_ix_i \leq G \}, x_i \in \{0,1\}$\\
+Lösungsbaum: in der Wurzel stehen Gesamtgewicht und Wert, in jedem Knoten stehen $x_i, g, w$ mit entsprechenden Zwischenwerten.\\
+Das Erstellen des Baumes und das Absuchen der Blätter dauert $\mathcal{O}(2^n)$\\
+
+Bei Problemen, die eine eigene Schranke besitzen, hat es wenig Sinn, wenn wir die Pfade weiter berechnen, die bereits die Gesamtschranke überschreiten. Wir brechen also vorher die Berechnung der Pfade ab.\\
+Berechnung von oberen Schranke $s$ für jeden Knoten:
+spezifischen Wert von $i$: $\frac{w_i}{g_i}$, freie Kapazität: $G-g$, multipliziert mit $\max\{ \frac{w_{i+1}}{g_{i+1}},\frac{w_{i+2}}{g_{i+1}},...,\frac{w_{i+n}}{g_{i+n}} \}$, addiert zu $W$.\\
+$s=w+(G-g)*\max...$\\
+Ein Knoten dessen Schranke $\leq$ beste bisher gefundenen Lösung $W^*$, braucht nicht weiter erforscht werden.\\
+Verbesserungsmöglichkeit: Knoten mit hoher Schranke bevorzugen.\\
+Zweite Verbesserung: Gegenstände absteigend nach $\frac{w_i}{g_i}$ sortieren.\\
+Viele Ideen sind möglich, aber welcher Aufwand bringt wirklich Gewinn?\\
+Greedy-Lösung für das gebrochene Rucksackproblem:\\
+Aufwand = $\mathcal{O}(\log n)$ nach der Vorverarbeitung.\\
+Zulässige Ausgangslösung mit einer schnellen Heuristik (z.B. Greedy)\\
+Vorzeitiges Abbrechen liefert gute Lösung mit Qualitätsgarantie: (größte verbleibende obere Schranke $s$)\\
+
+\subsection{Heuristische Suchverfahren}
+\begin{enumerate}
+\item lokale Suche
+\item steilster Abstieg
+\item simulated annealing
+\item genetische Algorithmen
+\end{enumerate}
+Algorithmus $A^*$ (heuristische Suche im allgemeineren Sinn)\\
+Lösungsraum $\mathcal{L}$\\
+Nachbarschaft: Für jedes $x \in \mathcal{L}$ gibt es eine Menge $N(x) \subseteq \mathcal{L}$ von Nachbarlösungen die sich aus $x$ durch \emph{kleine Änderungen} ergeben.\\
+Beispiel Rundreiseproblem 2OPT-Nachbarschaft.\\
+$|N(x)|=\mathcal{O}(n^2)$\\
+Wichtig: Der Nachbarschaftsgraph muss zusammenhängend sein.\\
+Zielfunktion $z(x) \rightarrow \min$\\
+\begin{enumerate}
+\item lokale Suche:\\
+Wähle Ausgangslösung $x$\\
+Schleife: ersetze $x$ durch ein $y \in N(x)$ mit $z(y) < z(x)$\\
+Terminierung: keine Verbesserung möglich: \emph{lokales Minimum}.\\
+\item simulated annealing (Physik, Metropolis-Algorithmus)\\
+$x$ gegeben, wähle zufällig ein $y \in N(x)$, if $z(y) < z(x)$, dann akzeptiere $y$:$x=y$, wenn nicht akzeptiere mit Wahrscheinlichkeit $e^{-\frac{z(y)-z(x)}{T}}$, wobei $T$ die Temperatur ist.\\
+Typischer Weise senkt man die Temperatur nach 100 Schritten auf $T=0,9 * T$\\
+Wenn in 100 Schritten keine Änderung akzeptiert wurde, dann bricht man ab. (beste bisher gefundene Lösung)\\
+\item genetische Algorithmen\\
+Die Lösung ist durch eine Zeichenkette kodiert.\\
+Pool von Lösungen:
+\begin{enumerate}
+\item Mutationen (zufällig)
+\item Kreuzungen (bewusst)
+\item Selektion
+\end{enumerate}
+\end{enumerate}
