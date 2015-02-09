@@ -41,30 +41,24 @@ $\Psi_0=1, \Psi \geq 1$\\
 tatsächliche Laufzeit für untere Hülle $= \mathcal{O}(n)$, Gesamtlaufzeit $= \mathcal{O}(n \log n)$\\
 \end{enumerate}
 \subsubsection{Orientierungstests für drei Punkte}
-$P_1= (x_1,y_1),P_2= (x_2,y_2),P_3= (x_3,y_3)$
+$P_1= (x_1,y_1),P_2= (x_2,y_2),P_3= (x_3,y_3)$\\
 $D=$
-\begin{matrix}
-$
+$\begin{matrix}
 1 & 1 & 1 \\
 x_1 & x_2 & x_3 \\
 y_1 & y_2 & y_3 \\
-$ 
-\end{matrix}
+\end{matrix}$
 $=$
-\begin{matrix}
-$
+$\begin{matrix}
 1 & 0 & 0\\
 x_1 & x_2-x_1 & x_3-x_1\\
 y_1 & y_2-y_1 & y_3-y_1\\
-$
-\end{matrix}
+\end{matrix}$
 $=$
-\begin{matrix}
-$
+$\begin{matrix}
 x_2 -x_1 & x_3-x_1\\
 y_2-y_1 & y_3 - y_1\\
-$
-\end{matrix}
+\end{matrix}$
 $= (x_2-x_1)(y_3-y_1) - (x_3-x_1)(y_2-y_1)$
 
 $D=0 \iff P_1,P_2,P_3$ liegen auf einer Geraden.\\
@@ -72,7 +66,7 @@ $D>0 \iff P_1,P_2,P_3$ ist gegen den Uhrzeigersinn orientiert\\
 $D>0 \iff P_3$ liegt links von der orientierten Geraden $(P_1,P_2)$\\
 $D<0$ analog\\
 $\frac{1}{2}|D|=$Fläche des Dreiecks $P_1,P_2,P_3$\\
-$n=(P_3-P_1)^\bot$ (um $90°$ nach links gedreht) $= \binom{y_3-y_1}{-(x_3-x_1)}$\\
+$n=(P_3-P_1)^\bot$ (um $90^\circ$ nach links gedreht) $= \binom{y_3-y_1}{-(x_3-x_1)}$\\
 $h=$ Höhe des Dreiecks $=$ Projektion von $P_2-P_1$ auf die Richtung von $n$.\\
 $h=\frac{(n,P_2-P_1)}{||n||}$\\
 Fläche = $\frac{\text{Grundfälche}*h}{2} = \frac{||P_3-P_1||*h}{2}=\frac{1}{2}(n,P_2-P_1)=\frac{1}{2}... = \frac{D}{2}$\\
@@ -87,6 +81,6 @@ $d = \min(d_L,d_R)$ Abstände zwischen linken und rechten Punkten.\\
 Es reichen die Punkte in einem Streifen der Breite $2d$ um die Trennungsgerade.\\
 Sortiere die Punkte des Steifens nach $y$-Koordinate $\rightarrow$Liste$L$, Berechne den Abstand jedes Punktes zu seinem $7$ Nachbarn in der Liste und merke dir das Minimum $d_{\min}$.\\
 Vorverarbeitung: Sortieren nach $x$(erleichtert das rekursive zerlegen) $\mathcal{O}(n \log n)$\\
-Sortieren nach y: nach y sortierte Liste wird zerlegt und den Teilproblemen mitgegeben: $\mathcal{O}(n)}$\\
+Sortieren nach y: nach y sortierte Liste wird zerlegt und den Teilproblemen mitgegeben: $\mathcal{O}(n)$\\
 Teilliste $L$ kann in $\mathcal{O}(n)$ Zeit aus der sortierten Liste extrahiert werden. \\
 $T(n) = 2 T(\frac{n}{2}) + \mathcal{O}(n) \rightarrow T(n) = \mathcal{O}(n \log n)$+Vorverarbitung $\mathcal{O}(n\log n)$

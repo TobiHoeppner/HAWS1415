@@ -1,7 +1,7 @@
 \section{Systematisches durchsuchen von Lösungsbäumen \tiny (Vorlesung 30 am 09.02.)}
 \subsection{Rucksackproblem}
 $n=5$, Gewichte $g_1,...,g_5$, Schranke $G$, Werte $w_1,...,w_5$\\
-$\max\{\Sum_{i=1}^n w_ix_i|\sum g_ix_i \leq G \}, x_i \in \{0,1\}$\\
+$\max\{\sum_{i=1}^n w_ix_i|\sum g_ix_i \leq G \}, x_i \in \{0,1\}$\\
 Lösungsbaum: in der Wurzel stehen Gesamtgewicht und Wert, in jedem Knoten stehen $x_i, g, w$ mit entsprechenden Zwischenwerten.\\
 Das Erstellen des Baumes und das Absuchen der Blätter dauert $\mathcal{O}(2^n)$\\
 

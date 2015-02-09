@@ -84,8 +84,8 @@ Beweis nach Induktion nach $j$.
 \begin{proof}
 $s = \lceil \log_2 L_j(r) \rceil$\\
 $cost(\mathcal{C}) \leq cost(\mathcal{C}_+) + cost(\mathcal{C}_-) + \underbrace{ |F_-|}_{\leq n} + l(\mathcal{C_+})$
-$cost(\mathcal{C}) \leq j l (C_+) + \upperbrace{2 \underbrace{ |F_+| }_{ \leq \frac{n}{2^{s+1}} \leq \frac{n}{2L_j(r)}} L_j(r)}^n$
-$cost(\mathcal{C}) \leq j l(\mathcal{C}_+) + n +n + l(\mathcal{C_+})$
+$cost(\mathcal{C}) \leq j l (C_{+}) + \underbrace{2 \underbrace{ |F_+| }_{ \leq \frac{n}{2^{s+1}} \leq \frac{n}{2L_j(r)}} L_j(r)}^n$
+$cost(\mathcal{C}) \leq j l(\mathcal{C}_+) + n +n + l(\mathcal{C}_+)$
 $=2n + (j+1) l(\mathcal{C}_+)$, mit $ l(\mathcal{C}_+) = l (\mathcal{C}) - l ( l(\mathcal{C}_-))$\\
 $[cost(\mathcal{C})-(j+1)l(\mathcal{C})] \leq 2n + [cost(\mathcal{C}_-)-(j+1)l(\mathcal{C}_i)]$\\
 \end{proof}
