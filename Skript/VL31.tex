@@ -1,0 +1,78 @@
+\section{Ausblick \tiny (Vorlesung 31 am 13.02.)}
+\subsection{Gebiete}
+\begin{enumerate}
+\item Algorithmen auf Graphen
+\item Kombinatorische Optimierung
+\item Zeichenketten
+\item Arithmetik
+\item lineare Optimierung
+\item Netzwerke, Flüsse in Netzen
+\item Geometrie
+\end{enumerate}
+\subsection{Techniken}
+\begin{enumerate}
+\item randomisierte Algorithmen
+\item Approximationsalgorithmen
+\item andere Rechner-/Datenmodelle
+\begin{enumerate}
+\item parallele Algorithmen
+\item externer Speicher
+\item Datenströme
+\end{enumerate}
+\end{enumerate}
+
+\subsection{Approximationsalgorithmen}
+\subsubsection{Rundreise Problem}
+\emph{2x Spannbaum-Heuristik.}
+Annahme: Kostenmatrix erfüllt die Dreiecksungleichung $c_{ij}+c_{jk} \geq c_{ik}$\\
+symmetrisch: $c_{ij}:= c_{ji} $\\
+\begin{enumerate}
+\item berechne kürzesten Spannbaum $T$\\
+\item durchlaufe in einem geschlossenen Zyklus jede Kante von $T$ einmal in jeder Richtung.\\
+\item[$\rightarrow$] Kreis, der jeden Knoten mindestens $1x$ besucht. Kosten = $2 c(T)$\\
+\item Streiche mehrfache Besuche und kürze den Weg ab.\\
+\item[$\rightarrow$] liefert eine Rundreise $R$ mit $c(R) \leq 2 c(R^{OPT})$ ($R^{OPT}$ - optimale Rundreise)\\
+\end{enumerate}
+Dieser Algorithmus ist eine sogenannte 2-Approximation. Verbessern kann man das mit einer $\frac{3}{2}$-Approximation\\
+\begin{proof}
+\begin{align*}
+c(T) \leq & c(R^{OPT})\\
+sogar & \leq c(R^{OPT}) - \frac{n-1}{n}\\
+c(R) \leq 2c(T) \leq 2c(R^{OPT})\\
+\end{align*}
+\end{proof}
+\subsubsection{Rucksackproblem}
+\subsubsection*{dynamische Programmierung}
+$\mathcal{O}(n*b)$ Zeit\\
+Teilprobleme: maximaler Wert, der mit Gewicht $g$ aus den Gegenständen $1,...,i$ gebildet werden kann.
+\subsubsection*{alternative}
+$W = \sum w_i$ in $\mathcal{O}(n*W)$ Zeit.\\
+Teilprobleme: kleinstes Gewicht, mit dem man aus den Gegenständen $1,...,i$ einen Wert $w$ bilden kann.\\
+$= f_{i,w}$, wobei $i = 1,...,n$ und $w = 0,1,...,W$\\
+Rekursion: $f_{i,w} = \min\{ f_{i-1,w},f_{i-1,w-w_i} +g_i\}$...mit Randbedingungen\\
+Lösung: $\max\{ w | f_{n,w} \leq b\}$\\
+Werte auf vielfache von $\alpha$ runden: $w_i \rightart \lfloor \frac{w_i}{\alpha}\rfloor - \alpha$ Rundungsfehler $< \alpha$\\
+Laufzeit: $W' = \sum w'_i = \sum \lfloor \frac{w_i}{\alpha} = \sum \frac{w_i}{\alpha} = \frac{W}{\alpha}$, $w'_i \in \mathbb{Z}$.\\
+Rundungsfehler $\rightarrow$ Fehler in der Lösung. $\leq n*\alpha$ (absoluter Fehler)\\
+\subsubsection{Beispiel: Absolute Fehlerschwelle $\Delta$ vorgeben}
+$\alpha$ ausreichen aus $n*\alpha \leq \Delta$.\\
+relativer Fehler?\\
+$\Delta = n*\alpha$ in Berechnung einsetzen zum Optimalwert $W^*$\\
+$W_{\max} \leq W^* \leq n*w_{\max}$\\
+$w_{\max}$ das größte Gewicht eines Gegenstandes $i$ mit $g_i \leq b$\\
+Wir wollen eine $1-\epsilon$Approximation $S$: $W(S) \geq (1-\epsilon)W*^$(umgekehrt wie beim Rundreiseproblem, weil Maximum)\\
+$\Delta \leq \epsilon*w_{\max}$ ist ausreichend.\\
+$\Rightarrow \Delta \leq \epsilon W^*$... Das gerundete Gewicht der ursprünglichen Optimallösung ist:
+\begin{align*}
+w'(S^{OPT}) \geq & W^* - \Delta \Rightarrow \text{Approximationsalgorithmus liefert} S\\
+\text{mit } \underbrace{ w'(S)}_{\text{gewichtetes Gewicht}} \geq W^* -\Delta \text{(optimiert das gerundete Gewicht!)}\\ 
+w(S) \geq & w'(S) \geq W^* - \epsilon W^* = W^*(1-\epsilon)\\
+\end{align*}
+$\Delta := \epsilon w_{\max}$\\
+$\alpha := \frac{\Delta}{n} = \frac{\epsilon * w_{\max}}{n}$\\
+Laufzeit: $\mathcal{O}(\frac{n*W}{\alpha}) = \mathcal{O}(n*W * \frac{n}{\epsilon*w_{\max	}}) = \mathcal{O}(n*n*w_{\max}*\frac{n}{\epsilon*w_{\max}}) = \mathcal{O}(n^3 * \frac{1}{\epsilon})$\\
+\begin{enumerate}
+\item[-] polynomiell in $n$ und $\frac{1}{\epsilon}$ ($\epsilon$ = relativer Fehler)\\
+Ein polynomielles Approixmationsschema (für jedes $\epsilon > 0$) PTAS
+\item[-] sogar ein voll- polynomielles Approixmationsschema (auch polynomiell in $\frac{1}{\epsilon}$ ist) - FPTAS
+\end{enumerate}
